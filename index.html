@@ -133,36 +133,9 @@
         // --- PUNKTACJA DRAFT (OSTATECZNA) ---
         const getDraftPoints = (rank) => {
             if (!rank || rank === "-" || isNaN(rank)) return 0;
-            if (rank === 1) return 33;
-            if (rank === 2) return 32;
-            if (rank === 3) return 31;
-            if (rank === 4) return 27;
-            if (rank === 5) return 26;
-            if (rank === 6) return 25;
-            if (rank === 7) return 24;
-            if (rank === 8) return 23;
-            if (rank === 9) return 22;
-            if (rank === 10) return 21;
-            if (rank === 11) return 20;
-            if (rank === 12) return 19;
-            if (rank === 13) return 18;
-            if (rank === 14) return 17;
-            if (rank === 15) return 16;
-            if (rank === 16) return 15;
-            if (rank === 17) return 14;
-            if (rank === 18) return 13;
-            if (rank === 19) return 12;
-            if (rank === 20) return 11;
-            if (rank === 21) return 10;
-            if (rank === 22) return 9;
-            if (rank === 23) return 8;
-            if (rank === 24) return 7;
-            if (rank === 25) return 6;
-            if (rank === 26) return 5;
-            if (rank === 27) return 4;
-            if (rank === 28) return 3;
-            if (rank === 29) return 2;
-            if (rank === 30) return 1;
+            if (rank >= 1 && rank <= 30) {
+                return 31 - rank;
+            }
             return 0;
         };
 
@@ -632,7 +605,7 @@
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 10:43</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 11:00</span>
                                     </span>
                                 </div>
                             </div>
