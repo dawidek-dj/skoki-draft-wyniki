@@ -50,9 +50,11 @@
             Medal: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
             Calendar: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>,
             Snowflake: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="2" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="22"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></svg>,
-            ExternalLink: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+            ExternalLink: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>,
+            Info: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>,
+            RefreshCw: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
         };
-        const { Trophy, Users, Table, Medal, Calendar, Snowflake, ExternalLink } = Icons;
+        const { Trophy, Users, Table, Medal, Calendar, Snowflake, ExternalLink, Info, RefreshCw } = Icons;
 
         // --- 2. DEFINICJE DANYCH I FUNKCJI POMOCNICZYCH ---
         
@@ -69,12 +71,12 @@
             "artti aigro": "ee",
             "antti aalto": "fi", "vilho palosaari": "fi",
             "kamil stoch": "pl", "dawid kubacki": "pl", "kacper tomasiak": "pl", "piotr zyla": "pl", "pawel wasek": "pl", "aleksander zniszczol": "pl",
-            "anze lanisek": "si", "domen prevc": "si", "timi zajc": "si", "rok oblak": "si",
+            "anze lanisek": "si", "domen prevc": "si", "timi zajc": "si", "rok oblak": "si", "lovro kos": "si",
             "johann andre forfang": "no", "marius lindvik": "no", "halvor egner granerud": "no", "kristoffer eriksen sundal": "no", "benjamin oestvold": "no",
             "gregor deschwanden": "ch", "simon ammann": "ch", "juri kesseli": "ch", "sandro hauswirth": "ch", "felix trunz": "ch",
             "vladimir zografski": "bg",
             "tate frantz": "us", "erik belshaw": "us", "jason colby": "us", "kevin bickner": "us", "andrew urlaub": "us",
-            "valentin foubert": "fr", "jules chervet": "fr",
+            "valentin foubert": "fr", "jules chervet": "fr", "louis obersteiner": "fr",
             "alex insam": "it", "giovanni bresadola": "it",
             "roman koudelka": "cz",
             "ilya mizernykh": "kz", "danil vassilyev": "kz", "vitaliy kalinichenko": "ua", "yeven marusiak": "ua",
@@ -109,7 +111,7 @@
             "Dawid": ["Daniel Tschofenig", "Domen Prevc", "Stephan Embacher", "Kacper Tomasiak", "Andreas Wellinger", "Gregor Deschwanden"]
         };
         
-        // KOLORY ZESPOŁÓW (Poprawione)
+        // KOLORY ZESPOŁÓW
         const TEAM_STYLES = {
             "Dawid": "bg-blue-200 text-blue-900 border-l-4 border-blue-700 font-bold", 
             "Tomasz P.": "bg-green-200 text-green-900 border-l-4 border-green-700", // Zielony
@@ -141,6 +143,20 @@
         };
 
         const getFisPoints = (rank) => (!rank || rank === "-") ? 0 : FIS_POINTS[rank] || 0;
+
+        // --- LISTA AKTUALIZACJI ---
+        const APP_UPDATES = [
+            {
+                date: "26.11.2025 11:21",
+                version: "v1.2",
+                desc: "Korekta punktacji (30-1 pkt), dodanie zakładki 'Wyniki szczegółowo'."
+            },
+            {
+                date: "26.11.2025 21:05",
+                version: "v1.3",
+                desc: "Dodanie wyników konkursu Falun HS 132. Przebudowa nawigacji (dwie linie). Dodanie zakładek 'Zasady' i 'Aktualizacje'. Poprawa nazwy konkursu Falun HS 95."
+            }
+        ];
 
         // --- DANE KONKURSÓW ---
         const INITIAL_CONTESTS = [
@@ -205,7 +221,7 @@
             {
                 id: 2,
                 date: "25.11.2025",
-                location: "Falun (SWE)",
+                location: "Falun (SWE) - HS 95 (K-90)",
                 hill: "HS 95",
                 results: [
                     { rank: 1, bib: "46", country: "AUT", name: "Stefan Kraft", points: 249.9, r1_dist: "97.5", r1_note: "56.5", r1_wind: "-4.1", r1_total: "127.4", r2_dist: "96.5", r2_note: "56.5", r2_wind: "-7.0", r2_total: "122.5" },
@@ -258,6 +274,64 @@
                     { rank: 48, bib: "25", country: "GER", name: "Karl Geiger", points: 97.6, r1_dist: "84.0", r1_note: "51.0", r1_wind: "-1.4", r1_total: "97.6" },
                     { rank: 48, bib: "14", country: "UKR", name: "Vitaliy Kalinichenko", points: 97.6, r1_dist: "85.5", r1_note: "48.0", r1_wind: "-1.4", r1_total: "97.6" },
                     { rank: 50, bib: "3", country: "ITA", name: "Alex Insam", points: 96.5, r1_dist: "85.5", r1_note: "50.5", r1_wind: "-5.0", r1_total: "96.5" }
+                ]
+            },
+            {
+                id: 3,
+                date: "26.11.2025",
+                location: "Falun (SWE) - HS 132 (K-120)",
+                hill: "HS 132",
+                results: [
+                    { rank: 1, bib: "46", country: "SLO", name: "Anze Lanisek", points: 262.9, r1_dist: "129.0", r1_note: "55.5", r1_wind: "-0.1", r1_total: "131.6", r2_dist: "129.0", r2_note: "56.0", r2_wind: "-2.1", r2_total: "131.3" },
+                    { rank: 2, bib: "42", country: "AUT", name: "Stephan Embacher", points: 259.9, r1_dist: "128.5", r1_note: "54.0", r1_wind: "0.01", r1_total: "127.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "0.19", r2_total: "132.7" },
+                    { rank: 3, bib: "45", country: "SLO", name: "Domen Prevc", points: 258.7, r1_dist: "129.0", r1_note: "52.0", r1_wind: "-0.06", r1_total: "129.2", r2_dist: "129.0", r2_note: "55.0", r2_wind: "0.51", r2_total: "129.5" },
+                    { rank: 4, bib: "48", country: "AUT", name: "Daniel Tschofenig", points: 256.6, r1_dist: "127.0", r1_note: "56.0", r1_wind: "-2.4", r1_total: "126.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "0.47", r2_total: "130.4" },
+                    { rank: 5, bib: "47", country: "AUT", name: "Jan Hoerl", points: 252.2, r1_dist: "125.0", r1_note: "54.0", r1_wind: "2.8", r1_total: "125.8", r2_dist: "126.5", r2_note: "54.0", r2_wind: "-3.1", r2_total: "126.4" },
+                    { rank: 6, bib: "49", country: "JPN", name: "Ryoyu Kobayashi", points: 249.9, r1_dist: "127.5", r1_note: "55.0", r1_wind: "-3.7", r1_total: "124.8", r2_dist: "127.5", r2_note: "55.0", r2_wind: "0.67", r2_total: "125.1" },
+                    { rank: 7, bib: "40", country: "AUT", name: "Manuel Fettner", points: 249.2, r1_dist: "128.0", r1_note: "53.5", r1_wind: "0.02", r1_total: "127.7", r2_dist: "123.5", r2_note: "54.0", r2_wind: "0.24", r2_total: "121.5" },
+                    { rank: 8, bib: "41", country: "JPN", name: "Ren Nikaido", points: 249.1, r1_dist: "130.0", r1_note: "55.0", r1_wind: "-3.6", r1_total: "129.4", r2_dist: "124.5", r2_note: "54.5", r2_wind: "0.62", r2_total: "119.7" },
+                    { rank: 9, bib: "50", country: "AUT", name: "Stefan Kraft", points: 243.0, r1_dist: "133.0", r1_note: "57.0", r1_wind: "-3.5", r1_total: "136.9", r2_dist: "119.0", r2_note: "54.0", r2_wind: "0.92", r2_total: "106.1" },
+                    { rank: 10, bib: "32", country: "SUI", name: "Gregor Deschwanden", points: 239.6, r1_dist: "128.0", r1_note: "52.0", r1_wind: "0.48", r1_total: "121.2", r2_dist: "125.5", r2_note: "52.5", r2_wind: "0.37", r2_total: "118.4" },
+                    { rank: 11, bib: "44", country: "GER", name: "Philipp Raimund", points: 239.0, r1_dist: "125.5", r1_note: "54.0", r1_wind: "0.07", r1_total: "123.1", r2_dist: "125.5", r2_note: "52.0", r2_wind: "0.56", r2_total: "115.9" },
+                    { rank: 12, bib: "43", country: "GER", name: "Felix Hoffmann", points: 237.7, r1_dist: "128.5", r1_note: "50.0", r1_wind: "0.14", r1_total: "123.8", r2_dist: "121.0", r2_note: "52.5", r2_wind: "0.39", r2_total: "113.9" },
+                    { rank: 13, bib: "24", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 235.1, r1_dist: "124.5", r1_note: "53.5", r1_wind: "-4.0", r1_total: "117.6", r2_dist: "124.5", r2_note: "54.0", r2_wind: "-4.6", r2_total: "117.5" },
+                    { rank: 14, bib: "27", country: "GER", name: "Pius Paschke", points: 234.5, r1_dist: "121.0", r1_note: "53.0", r1_wind: "5.0", r1_total: "119.8", r2_dist: "123.0", r2_note: "53.0", r2_wind: "0.34", r2_total: "114.7" },
+                    { rank: 15, bib: "34", country: "POL", name: "Kacper Tomasiak", points: 234.3, r1_dist: "121.0", r1_note: "52.5", r1_wind: "2.9", r1_total: "117.2", r2_dist: "124.5", r2_note: "53.5", r2_wind: "-4.5", r2_total: "117.1" },
+                    { rank: 16, bib: "38", country: "POL", name: "Kamil Stoch", points: 233.8, r1_dist: "122.5", r1_note: "53.0", r1_wind: "-1.0", r1_total: "116.5", r2_dist: "125.5", r2_note: "52.5", r2_wind: "0.47", r2_total: "117.3" },
+                    { rank: 17, bib: "36", country: "JPN", name: "Naoki Nakamura", points: 231.5, r1_dist: "124.5", r1_note: "53.0", r1_wind: "0.23", r1_total: "118.6", r2_dist: "122.5", r2_note: "54.0", r2_wind: "0.52", r2_total: "112.9" },
+                    { rank: 18, bib: "37", country: "NOR", name: "Marius Lindvik", points: 229.4, r1_dist: "125.5", r1_note: "54.0", r1_wind: "-1.6", r1_total: "122.3", r2_dist: "122.0", r2_note: "51.5", r2_wind: "0.74", r2_total: "107.1" },
+                    { rank: 19, bib: "30", country: "FRA", name: "Valentin Foubert", points: 228.2, r1_dist: "122.0", r1_note: "52.5", r1_wind: "0.39", r1_total: "111.9", r2_dist: "124.0", r2_note: "53.0", r2_wind: "-3.9", r2_total: "116.3" },
+                    { rank: 20, bib: "20", country: "NOR", name: "Johann Andre Forfang", points: 228.0, r1_dist: "121.0", r1_note: "52.5", r1_wind: "-0.18", r1_total: "117.2", r2_dist: "121.5", r2_note: "52.5", r2_wind: "0.41", r2_total: "110.8" },
+                    { rank: 21, bib: "22", country: "SLO", name: "Rok Oblak", points: 226.4, r1_dist: "123.0", r1_note: "54.0", r1_wind: "0.16", r1_total: "117.7", r2_dist: "120.0", r2_note: "52.0", r2_wind: "0.31", r2_total: "108.7" },
+                    { rank: 22, bib: "13", country: "JPN", name: "Tomofumi Naito", points: 226.1, r1_dist: "122.0", r1_note: "52.0", r1_wind: "0.00", r1_total: "115.6", r2_dist: "122.5", r2_note: "51.5", r2_wind: "-5.5", r2_total: "110.5" },
+                    { rank: 23, bib: "26", country: "USA", name: "Jason Colby", points: 223.5, r1_dist: "117.5", r1_note: "51.5", r1_wind: "5.7", r1_total: "112.7", r2_dist: "122.0", r2_note: "53.5", r2_wind: "0.58", r2_total: "110.8" },
+                    { rank: 24, bib: "39", country: "BUL", name: "Vladimir Zografski", points: 222.0, r1_dist: "120.0", r1_note: "52.5", r1_wind: "-0.03", r1_total: "113.0", r2_dist: "121.5", r2_note: "53.0", r2_wind: "-6.7", r2_total: "109.0" },
+                    { rank: 25, bib: "33", country: "AUT", name: "Maximilian Ortner", points: 221.1, r1_dist: "120.0", r1_note: "51.5", r1_wind: "-1.5", r1_total: "110.0", r2_dist: "122.0", r2_note: "52.5", r2_wind: "0.46", r2_total: "111.1" },
+                    { rank: 26, bib: "35", country: "EST", name: "Artti Aigro", points: 218.9, r1_dist: "121.5", r1_note: "52.5", r1_wind: "0.27", r1_total: "112.3", r2_dist: "120.5", r2_note: "51.5", r2_wind: "-5.8", r2_total: "106.6" },
+                    { rank: 27, bib: "15", country: "JPN", name: "Yukiya Sato", points: 218.0, r1_dist: "119.5", r1_note: "51.0", r1_wind: "0.5", r1_total: "110.6", r2_dist: "121.5", r2_note: "51.0", r2_wind: "0.58", r2_total: "107.4" },
+                    { rank: 28, bib: "29", country: "POL", name: "Dawid Kubacki", points: 217.4, r1_dist: "119.0", r1_note: "52.5", r1_wind: "0.09", r1_total: "109.7", r2_dist: "120.5", r2_note: "52.5", r2_wind: "-5.7", r2_total: "107.7" },
+                    { rank: 29, bib: "25", country: "POL", name: "Piotr Zyla", points: 216.6, r1_dist: "119.0", r1_note: "51.0", r1_wind: "-0.04", r1_total: "109.8", r2_dist: "121.5", r2_note: "51.0", r2_wind: "-6.9", r2_total: "106.8" },
+                    { rank: 30, bib: "3", country: "USA", name: "Kevin Bickner", points: 214.8, r1_dist: "122.5", r1_note: "51.5", r1_wind: "-3.5", r1_total: "112.5", r2_dist: "119.0", r2_note: "49.5", r2_wind: "-5.4", r2_total: "102.3" },
+                    { rank: 31, bib: "19", country: "POL", name: "Pawel Wasek", points: 109.3, r1_dist: "118.5", r1_note: "52.0", r1_wind: "0.00", r1_total: "109.3" },
+                    { rank: 32, bib: "2", country: "SUI", name: "Sandro Hauswirth", points: 108.5, r1_dist: "118.5", r1_note: "51.5", r1_wind: "0.03", r1_total: "108.5" },
+                    { rank: 33, bib: "28", country: "JPN", name: "Sakutaro Kobayashi", points: 107.6, r1_dist: "117.5", r1_note: "51.0", r1_wind: "-0.07", r1_total: "107.6" },
+                    { rank: 34, bib: "18", country: "NOR", name: "Halvor Egner Granerud", points: 107.5, r1_dist: "117.5", r1_note: "51.5", r1_wind: "-0.03", r1_total: "107.5" },
+                    { rank: 35, bib: "10", country: "SUI", name: "Felix Trunz", points: 107.1, r1_dist: "121.5", r1_note: "52.0", r1_wind: "0.70", r1_total: "107.1" },
+                    { rank: 36, bib: "7", country: "SUI", name: "Simon Ammann", points: 106.6, r1_dist: "118.5", r1_note: "49.5", r1_wind: "0.02", r1_total: "106.6" },
+                    { rank: 37, bib: "31", country: "FIN", name: "Antti Aalto", points: 106.2, r1_dist: "119.0", r1_note: "51.5", r1_wind: "0.32", r1_total: "106.2" },
+                    { rank: 38, bib: "17", country: "USA", name: "Andrew Urlaub", points: 104.1, r1_dist: "117.0", r1_note: "50.5", r1_wind: "0.09", r1_total: "104.1" },
+                    { rank: 39, bib: "11", country: "SLO", name: "Lovro Kos", points: 102.9, r1_dist: "119.5", r1_note: "50.0", r1_wind: "0.57", r1_total: "102.9" },
+                    { rank: 40, bib: "23", country: "GER", name: "Andreas Wellinger", points: 100.6, r1_dist: "115.5", r1_note: "51.0", r1_wind: "0.21", r1_total: "100.6" },
+                    { rank: 41, bib: "21", country: "GER", name: "Karl Geiger", points: 100.3, r1_dist: "115.0", r1_note: "50.5", r1_wind: "0.11", r1_total: "100.3" },
+                    { rank: 42, bib: "5", country: "UKR", name: "Vitaliy Kalinichenko", points: 99.8, r1_dist: "114.0", r1_note: "49.5", r1_wind: "-0.07", r1_total: "99.8" },
+                    { rank: 43, bib: "8", country: "CZE", name: "Roman Koudelka", points: 99.2, r1_dist: "117.5", r1_note: "52.0", r1_wind: "0.77", r1_total: "99.2" },
+                    { rank: 44, bib: "4", country: "FRA", name: "Louis Obersteiner", points: 97.4, r1_dist: "114.0", r1_note: "50.0", r1_wind: "0.17", r1_total: "97.4" },
+                    { rank: 45, bib: "12", country: "SVK", name: "Hektor Kapustik", points: 95.7, r1_dist: "113.5", r1_note: "50.0", r1_wind: "0.24", r1_total: "95.7" },
+                    { rank: 46, bib: "16", country: "NOR", name: "Benjamin Oestvold", points: 94.6, r1_dist: "112.5", r1_note: "49.5", r1_wind: "0.13", r1_total: "94.6" },
+                    { rank: 47, bib: "1", country: "KAZ", name: "Ilya Mizernykh", points: 93.2, r1_dist: "109.5", r1_note: "49.0", r1_wind: "-0.19", r1_total: "93.2" },
+                    { rank: 48, bib: "14", country: "SUI", name: "Juri Kesseli", points: 92.4, r1_dist: "111.0", r1_note: "48.0", r1_wind: "-0.04", r1_total: "92.4" },
+                    { rank: 49, bib: "9", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 90.6, r1_dist: "113.0", r1_note: "49.5", r1_wind: "0.58", r1_total: "90.6" },
+                    { rank: 50, bib: "1", country: "KAZ", name: "Danil Vassilyev", points: 82.7, r1_dist: "105.0", r1_note: "45.5", r1_wind: "-0.26", r1_total: "82.7" }
                 ]
             }
         ];
@@ -427,8 +501,8 @@
         };
 
         const OfficialResults = ({ contests }) => {
-            const [selectedContestId, setSelectedContestId] = useState(contests[0]?.id || 1);
-            const [pointsMode, setPointsMode] = useState('draft'); // 'draft' | 'fis'
+            const [selectedContestId, setSelectedContestId] = useState(contests[contests.length-1].id);
+            const [pointsMode, setPointsMode] = useState('draft'); 
             
             const activeContest = useMemo(() => {
                 return contests.find(c => c.id === parseInt(selectedContestId)) || contests[contests.length-1];
@@ -521,7 +595,7 @@
         };
 
         const TeamDetails = ({ contests }) => {
-            const [selectedContestId, setSelectedContestId] = useState(contests[0]?.id || 1);
+            const [selectedContestId, setSelectedContestId] = useState(contests[contests.length-1].id);
             const [scoreType, setScoreType] = useState('draft'); 
             
             const activeContest = useMemo(() => {
@@ -611,6 +685,73 @@
             );
         };
 
+        const Rules = () => {
+            return (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="bg-indigo-100 p-2 rounded-lg"><Info className="text-indigo-600" /></div>
+                            <h2 className="text-xl font-bold text-slate-800">Zasady Punktacji</h2>
+                        </div>
+                        
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 className="font-bold text-slate-700 mb-3 border-b pb-2">Punktacja Draft (Ligi Prywatnej)</h3>
+                                <ul className="space-y-2 text-sm text-slate-600">
+                                    <li className="flex justify-between items-center bg-slate-50 p-2 rounded"><span>1. miejsce</span> <span className="font-bold text-blue-600">30 pkt</span></li>
+                                    <li className="flex justify-between items-center bg-slate-50 p-2 rounded"><span>2. miejsce</span> <span className="font-bold text-blue-600">29 pkt</span></li>
+                                    <li className="flex justify-between items-center bg-slate-50 p-2 rounded"><span>3. miejsce</span> <span className="font-bold text-blue-600">28 pkt</span></li>
+                                    <li className="flex justify-between items-center px-2 py-1 italic text-xs text-center">...malejąco co 1 pkt...</li>
+                                    <li className="flex justify-between items-center bg-slate-50 p-2 rounded"><span>30. miejsce</span> <span className="font-bold text-blue-600">1 pkt</span></li>
+                                    <li className="flex justify-between items-center p-2 rounded text-slate-400"><span>> 30. miejsce</span> <span>0 pkt</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 className="font-bold text-slate-700 mb-3 border-b pb-2">Zasady Zespołowe</h3>
+                                <div className="space-y-4 text-sm text-slate-600">
+                                    <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                                        <p className="font-semibold text-orange-800 mb-1">Top 5 z 6</p>
+                                        <p>Do wyniku drużyny w każdym konkursie wliczane są punkty 5 najlepszych zawodników z 6 posiadanych w składzie.</p>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                        <p className="font-semibold text-slate-800 mb-1">Brak zawodnika</p>
+                                        <p>Jeśli zawodnik nie wystartuje w konkursie (DNS) lub nie zakwalifikuje się (NQ), otrzymuje 0 punktów.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Updates = () => {
+            return (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="bg-emerald-100 p-2 rounded-lg"><RefreshCw className="text-emerald-600" /></div>
+                            <h2 className="text-xl font-bold text-slate-800">Dziennik Aktualizacji</h2>
+                        </div>
+                        
+                        <div className="relative border-l-2 border-slate-200 ml-3 space-y-8">
+                            {APP_UPDATES.slice().reverse().map((update, idx) => (
+                                <div key={idx} className="ml-6 relative">
+                                    <span className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-4 border-blue-500"></span>
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mb-2">
+                                        <span className="font-mono text-xs font-bold bg-slate-800 text-white px-2 py-0.5 rounded">{update.version}</span>
+                                        <span className="text-xs text-slate-400 font-mono">{update.date}</span>
+                                    </div>
+                                    <p className="text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">{update.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const App = () => {
             const [activeTab, setActiveTab] = useState('standings');
             const [contests, setContests] = useState(INITIAL_CONTESTS);
@@ -630,7 +771,7 @@
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 11:21</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 21:05</span>
                                     </span>
                                 </div>
                             </div>
@@ -638,11 +779,17 @@
                     </header>
 
                     <main className="max-w-6xl mx-auto px-2 md:px-4 -mt-12 relative z-20">
-                        <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-1 mb-6 flex overflow-x-auto no-scrollbar md:grid md:grid-cols-4 gap-1">
-                            <button onClick={() => setActiveTab('standings')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'standings' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Trophy size={16} /> <span className="hidden md:inline">Klasyfikacja</span><span className="md:hidden">Ranking</span></button>
-                            <button onClick={() => setActiveTab('teams')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'teams' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Users size={16} /> <span className="hidden md:inline">Zespoły</span><span className="md:hidden">Zespoły</span></button>
-                            <button onClick={() => setActiveTab('official')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'official' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden md:inline">Oficjalne Wyniki</span><span className="md:hidden">Wyniki</span></button>
-                            <button onClick={() => setActiveTab('detailed')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'detailed' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><ExternalLink size={16} /> <span className="hidden md:inline">Wyniki szczegółowo</span><span className="md:hidden">Szczegóły</span></button>
+                        <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-1 mb-6">
+                            <div className="grid grid-cols-3 gap-1 mb-1">
+                                <button onClick={() => setActiveTab('standings')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'standings' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Trophy size={16} /> <span className="hidden sm:inline">Klasyfikacja</span></button>
+                                <button onClick={() => setActiveTab('teams')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'teams' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Users size={16} /> <span className="hidden sm:inline">Zespoły</span></button>
+                                <button onClick={() => setActiveTab('official')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'official' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden sm:inline">Wyniki</span></button>
+                            </div>
+                            <div className="grid grid-cols-3 gap-1">
+                                <button onClick={() => setActiveTab('detailed')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'detailed' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><ExternalLink size={16} /> <span className="hidden sm:inline">Szczegóły</span></button>
+                                <button onClick={() => setActiveTab('rules')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'rules' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Info size={16} /> <span className="hidden sm:inline">Zasady</span></button>
+                                <button onClick={() => setActiveTab('updates')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'updates' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><RefreshCw size={16} /> <span className="hidden sm:inline">Aktualizacje</span></button>
+                            </div>
                         </div>
 
                         <div className="animate-fade-in">
@@ -655,6 +802,8 @@
                             {activeTab === 'teams' && <TeamDetails contests={contests} /> }
                             {activeTab === 'official' && <OfficialResults contests={contests} /> }
                             {activeTab === 'detailed' && <DetailedResults /> }
+                            {activeTab === 'rules' && <Rules /> }
+                            {activeTab === 'updates' && <Updates /> }
                         </div>
                     </main>
                     
