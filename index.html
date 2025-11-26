@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fantasy Skoki Narciarskie 2025/26</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        
+        // --- 1. DEFINICJE IKON ---
+        const Icons = {
+            Trophy: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></svg>,
+            Users: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
+            Table: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-7z"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></svg>,
+            Medal: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
+            Calendar: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>,
+            Snowflake: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="2" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="22"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></svg>
+        };
+        const { Trophy, Users, Table, Medal, Calendar, Snowflake } = Icons;
+
+        // --- 2. DEFINICJE DANYCH I FUNKCJI POMOCNICZYCH ---
+        
+        const normalizeName = (name) => {
+            if (!name) return "";
+            return name.trim().toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).sort().join(' ');
+        };
+
+        const NATIONALITIES = {
+            "jp": "jp", "at": "at", "de": "de", "ee": "ee", "fi": "fi", "pl": "pl", "si": "si", "no": "no", "ch": "ch", "bg": "bg", "us": "us", "fr": "fr", "it": "it", "cz": "cz", "kz": "kz", "ua": "ua", "sk": "sk", "ca": "ca", "se": "se", "ro": "ro", "tr": "tr",
+            "ryoyu kobayashi": "jp", "sakutaro kobayashi": "jp", "naoki nakamura": "jp", "ren nikaido": "jp", "yukiya sato": "jp", "tomofumi naito": "jp",
+            "stefan kraft": "at", "jan hoerl": "at", "daniel tschofenig": "at", "stephan embacher": "at", "manuel fettner": "at", "maximilian ortner": "at",
+            "philipp raimund": "de", "felix hoffmann": "de", "pius paschke": "de", "andreas wellinger": "de", "karl geiger": "de",
+            "artti aigro": "ee",
+            "antti aalto": "fi", "vilho palosaari": "fi",
+            "kamil stoch": "pl", "dawid kubacki": "pl", "kacper tomasiak": "pl", "piotr zyla": "pl", "pawel wasek": "pl", "aleksander zniszczol": "pl",
+            "anze lanisek": "si", "domen prevc": "si", "timi zajc": "si", "rok oblak": "si",
+            "johann andre forfang": "no", "marius lindvik": "no", "halvor egner granerud": "no", "kristoffer eriksen sundal": "no", "benjamin oestvold": "no",
+            "gregor deschwanden": "ch", "simon ammann": "ch", "juri kesseli": "ch", "sandro hauswirth": "ch", "felix trunz": "ch",
+            "vladimir zografski": "bg",
+            "tate frantz": "us", "erik belshaw": "us", "jason colby": "us", "kevin bickner": "us", "andrew urlaub": "us",
+            "valentin foubert": "fr", "jules chervet": "fr",
+            "alex insam": "it", "giovanni bresadola": "it",
+            "roman koudelka": "cz",
+            "ilya mizernykh": "kz", "danil vassilyev": "kz", "vitaliy kalinichenko": "ua", "yeven marusiak": "ua",
+            "hektor kapustik": "sk",
+            "mackenzie boyd-clowes": "ca"
+        };
+
+        const getFlagUrl = (name, countryCode) => {
+            if (countryCode && countryCode.length === 2) {
+                return `https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`;
+            }
+            const fisMap = { "JPN": "jp", "AUT": "at", "GER": "de", "SLO": "si", "POL": "pl", "NOR": "no", "FIN": "fi", "EST": "ee", "SUI": "ch", "USA": "us", "ITA": "it", "FRA": "fr", "BUL": "bg", "CZE": "cz", "KAZ": "kz", "SVK": "sk", "CAN": "ca", "UKR": "ua", "ROU": "ro", "TUR": "tr", "SWE": "se" };
+            if (countryCode && fisMap[countryCode]) {
+                return `https://flagcdn.com/24x18/${fisMap[countryCode]}.png`;
+            }
+            const norm = normalizeName(name);
+            const code = NATIONALITIES[norm] || "un"; 
+            if (code === "un") return null;
+            return `https://flagcdn.com/24x18/${code}.png`;
+        };
+
+        const Flag = ({ name, country }) => {
+            const url = getFlagUrl(name, country);
+            if (!url) return <span className="w-6 inline-block text-center text-xs text-gray-300 mr-1">🏳️</span>;
+            return <img src={url} alt={country || name} className="inline-block w-5 h-3.5 object-cover mr-2 shadow-sm rounded-sm" />;
+        };
+
+        const TEAMS = {
+            "Tomasz P.": ["Stefan Kraft", "Philipp Raimund", "Felix Hoffmann", "Sakutaro Kobayashi", "Artti Aigro", "Antti Aalto"],
+            "Tomasz J.": ["Ryoyu Kobayashi", "Kamil Stoch", "Anze Lanisek", "Pius Paschke", "Naoki Nakamura", "Manuel Fettner"],
+            "Madzia": ["Jan Hoerl", "Johann Andre Forfang", "Marius Lindvik", "Dawid Kubacki", "Timi Zajc", "Ren Nikaido"],
+            "Dawid": ["Daniel Tschofenig", "Domen Prevc", "Stephan Embacher", "Kacper Tomasiak", "Andreas Wellinger", "Gregor Deschwanden"]
+        };
+        
+        // KOLORY ZESPOŁÓW (Poprawione)
+        const TEAM_STYLES = {
+            "Dawid": "bg-blue-200 text-blue-900 border-l-4 border-blue-700 font-bold", 
+            "Tomasz P.": "bg-green-200 text-green-900 border-l-4 border-green-700", // Zielony
+            "Tomasz J.": "bg-amber-200 text-amber-900 border-l-4 border-amber-600", // Złoty/Bursztynowy
+            "Madzia": "bg-pink-200 text-pink-900 border-l-4 border-pink-600" // Różowy
+        };
+        
+        const getJumperOwner = (jumperName) => {
+            const normJumper = normalizeName(jumperName);
+            for (const [team, members] of Object.entries(TEAMS)) {
+                if (members.some(m => normalizeName(m) === normJumper)) return team;
+            }
+            return null;
+        };
+
+        const FIS_POINTS = {
+            1: 100, 2: 80, 3: 60, 4: 50, 5: 45, 6: 40, 7: 36, 8: 32, 9: 29, 10: 26,
+            11: 24, 12: 22, 13: 20, 14: 18, 15: 16, 16: 15, 17: 14, 18: 13, 19: 12, 20: 11,
+            21: 10, 22: 9, 23: 8, 24: 7, 25: 6, 26: 5, 27: 4, 28: 3, 29: 2, 30: 1
+        };
+
+        // --- PUNKTACJA DRAFT (OSTATECZNA) ---
+        const getDraftPoints = (rank) => {
+            if (!rank || rank === "-" || isNaN(rank)) return 0;
+            if (rank === 1) return 33;
+            if (rank === 2) return 32;
+            if (rank === 3) return 31;
+            if (rank === 4) return 27;
+            if (rank === 5) return 26;
+            if (rank === 6) return 25;
+            if (rank === 7) return 24;
+            if (rank === 8) return 23;
+            if (rank === 9) return 22;
+            if (rank === 10) return 21;
+            if (rank === 11) return 20;
+            if (rank === 12) return 19;
+            if (rank === 13) return 18;
+            if (rank === 14) return 17;
+            if (rank === 15) return 16;
+            if (rank === 16) return 15;
+            if (rank === 17) return 14;
+            if (rank === 18) return 13;
+            if (rank === 19) return 12;
+            if (rank === 20) return 11;
+            if (rank === 21) return 10;
+            if (rank === 22) return 9;
+            if (rank === 23) return 8;
+            if (rank === 24) return 7;
+            if (rank === 25) return 6;
+            if (rank === 26) return 5;
+            if (rank === 27) return 4;
+            if (rank === 28) return 3;
+            if (rank === 29) return 2;
+            if (rank === 30) return 1;
+            return 0;
+        };
+
+        const getFisPoints = (rank) => (!rank || rank === "-") ? 0 : FIS_POINTS[rank] || 0;
+
+        // --- DANE KONKURSÓW ---
+        const INITIAL_CONTESTS = [
+            {
+                id: 1,
+                date: "23.11.2025",
+                location: "Lillehammer (NOR)",
+                hill: "HS 140",
+                results: [
+                    { rank: 1, bib: "65", country: "JPN", name: "Ryoyu Kobayashi", points: 290.5, r1_dist: "138.0", r1_note: "56.5", r1_wind: "-5.1", r1_total: "144.4", r2_dist: "139.5", r2_note: "57.0", r2_wind: "-0.6", r2_total: "146.1" },
+                    { rank: 2, bib: "66", country: "SLO", name: "Domen Prevc", points: 287.3, r1_dist: "140.0", r1_note: "54.0", r1_wind: "-2.7", r1_total: "147.9", r2_dist: "139.0", r2_note: "53.0", r2_wind: "-2.4", r2_total: "139.4" },
+                    { rank: 3, bib: "60", country: "GER", name: "Felix Hoffmann", points: 286.2, r1_dist: "139.0", r1_note: "55.5", r1_wind: "-6.5", r1_total: "143.8", r2_dist: "138.0", r2_note: "57.0", r2_wind: "-1.6", r2_total: "142.4" },
+                    { rank: 4, bib: "64", country: "GER", name: "Philipp Raimund", points: 285.4, r1_dist: "134.5", r1_note: "55.5", r1_wind: "-5.6", r1_total: "144.1", r2_dist: "137.5", r2_note: "57.0", r2_wind: "-1.8", r2_total: "141.3" },
+                    { rank: 5, bib: "67", country: "AUT", name: "Stefan Kraft", points: 282.7, r1_dist: "135.5", r1_note: "56.5", r1_wind: "-2.4", r1_total: "142.6", r2_dist: "135.0", r2_note: "57.0", r2_wind: "1.5", r2_total: "140.1" },
+                    { rank: 6, bib: "63", country: "SLO", name: "Anze Lanisek", points: 280.2, r1_dist: "138.5", r1_note: "56.5", r1_wind: "-6.9", r1_total: "143.5", r2_dist: "135.0", r2_note: "55.5", r2_wind: "0.0", r2_total: "136.7" },
+                    { rank: 7, bib: "69", country: "AUT", name: "Daniel Tschofenig", points: 271.4, r1_dist: "129.5", r1_note: "54.0", r1_wind: "-2.4", r1_total: "129.3", r2_dist: "137.5", r2_note: "57.0", r2_wind: "-1.0", r2_total: "142.1" },
+                    { rank: 8, bib: "68", country: "AUT", name: "Jan Hoerl", points: 268.0, r1_dist: "136.5", r1_note: "54.0", r1_wind: "0.2", r1_total: "142.2", r2_dist: "129.0", r2_note: "54.0", r2_wind: "1.0", r2_total: "125.8" },
+                    { rank: 9, bib: "59", country: "AUT", name: "Stephan Embacher", points: 262.7, r1_dist: "139.0", r1_note: "54.0", r1_wind: "-5.4", r1_total: "137.4", r2_dist: "130.0", r2_note: "53.0", r2_wind: "-0.3", r2_total: "125.3" },
+                    { rank: 10, bib: "50", country: "JPN", name: "Ren Nikaido", points: 256.7, r1_dist: "131.0", r1_note: "54.0", r1_wind: "-0.1", r1_total: "128.3", r2_dist: "133.0", r2_note: "54.5", r2_wind: "-3.0", r2_total: "128.4" },
+                    { rank: 11, bib: "43", country: "JPN", name: "Naoki Nakamura", points: 256.1, r1_dist: "131.5", r1_note: "54.0", r1_wind: "-0.9", r1_total: "129.5", r2_dist: "130.5", r2_note: "54.0", r2_wind: "-0.9", r2_total: "126.6" },
+                    { rank: 12, bib: "57", country: "POL", name: "Kamil Stoch", points: 253.1, r1_dist: "138.5", r1_note: "56.5", r1_wind: "-6.6", r1_total: "137.8", r2_dist: "123.5", r2_note: "54.0", r2_wind: "0.4", r2_total: "115.3" },
+                    { rank: 13, bib: "62", country: "SLO", name: "Timi Zajc", points: 245.9, r1_dist: "134.5", r1_note: "54.0", r1_wind: "-9.8", r1_total: "130.9", r2_dist: "123.0", r2_note: "53.5", r2_wind: "1.5", r2_total: "115.0" },
+                    { rank: 14, bib: "56", country: "EST", name: "Artti Aigro", points: 245.1, r1_dist: "132.5", r1_note: "55.0", r1_wind: "-5.7", r1_total: "126.4", r2_dist: "127.0", r2_note: "52.5", r2_wind: "-1.0", r2_total: "118.7" },
+                    { rank: 15, bib: "61", country: "AUT", name: "Manuel Fettner", points: 244.0, r1_dist: "131.0", r1_note: "52.5", r1_wind: "-8.7", r1_total: "124.2", r2_dist: "127.5", r2_note: "52.0", r2_wind: "0.0", r2_total: "119.8" },
+                    { rank: 16, bib: "45", country: "FRA", name: "Valentin Foubert", points: 243.1, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-1.7", r1_total: "125.8", r2_dist: "126.0", r2_note: "54.0", r2_wind: "-2.1", r2_total: "117.3" },
+                    { rank: 17, bib: "54", country: "NOR", name: "Marius Lindvik", points: 243.0, r1_dist: "134.0", r1_note: "54.0", r1_wind: "-8.1", r1_total: "125.7", r2_dist: "125.0", r2_note: "52.5", r2_wind: "0.0", r2_total: "117.3" },
+                    { rank: 18, bib: "47", country: "AUT", name: "Maximilian Ortner", points: 242.9, r1_dist: "128.0", r1_note: "53.0", r1_wind: "-4.0", r1_total: "118.0", r2_dist: "131.0", r2_note: "54.0", r2_wind: "-3.5", r2_total: "124.9" },
+                    { rank: 19, bib: "5", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 241.4, r1_dist: "130.0", r1_note: "52.5", r1_wind: "-4.1", r1_total: "121.0", r2_dist: "127.5", r2_note: "53.5", r2_wind: "-1.2", r2_total: "120.4" },
+                    { rank: 20, bib: "48", country: "POL", name: "Dawid Kubacki", points: 238.8, r1_dist: "128.0", r1_note: "54.0", r1_wind: "-5.1", r1_total: "117.9", r2_dist: "129.0", r2_note: "53.0", r2_wind: "-2.9", r2_total: "120.9" },
+                    { rank: 21, bib: "46", country: "FIN", name: "Antti Aalto", points: 235.1, r1_dist: "127.5", r1_note: "53.5", r1_wind: "-1.3", r1_total: "120.3", r2_dist: "125.5", r2_note: "52.0", r2_wind: "-1.7", r2_total: "114.8" },
+                    { rank: 22, bib: "52", country: "POL", name: "Kacper Tomasiak", points: 234.8, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-4.3", r1_total: "123.2", r2_dist: "123.5", r2_note: "52.0", r2_wind: "-1.3", r2_total: "111.6" },
+                    { rank: 23, bib: "38", country: "GER", name: "Karl Geiger", points: 234.2, r1_dist: "127.0", r1_note: "52.5", r1_wind: "-2.4", r1_total: "117.3", r2_dist: "126.5", r2_note: "53.0", r2_wind: "-2.4", r2_total: "116.9" },
+                    { rank: 24, bib: "58", country: "BUL", name: "Vladimir Zografski", points: 233.7, r1_dist: "130.0", r1_note: "54.0", r1_wind: "-6.9", r1_total: "119.7", r2_dist: "125.5", r2_note: "53.5", r2_wind: "-4.0", r2_total: "114.0" },
+                    { rank: 25, bib: "55", country: "SUI", name: "Gregor Deschwanden", points: 233.6, r1_dist: "126.5", r1_note: "52.0", r1_wind: "-4.6", r1_total: "113.7", r2_dist: "129.5", r2_note: "52.0", r2_wind: "-3.8", r2_total: "119.9" },
+                    { rank: 26, bib: "49", country: "USA", name: "Jason Colby", points: 232.4, r1_dist: "130.0", r1_note: "54.0", r1_wind: "-2.2", r1_total: "124.4", r2_dist: "121.0", r2_note: "51.5", r2_wind: "0.1", r2_total: "108.0" },
+                    { rank: 27, bib: "14", country: "GER", name: "Pius Paschke", points: 229.7, r1_dist: "128.0", r1_note: "53.0", r1_wind: "-1.9", r1_total: "120.1", r2_dist: "122.5", r2_note: "52.5", r2_wind: "-2.0", r2_total: "109.6" },
+                    { rank: 28, bib: "53", country: "JPN", name: "Sakutaro Kobayashi", points: 227.8, r1_dist: "129.0", r1_note: "53.0", r1_wind: "-5.7", r1_total: "118.1", r2_dist: "124.5", r2_note: "51.0", r2_wind: "-4.0", r2_total: "109.7" },
+                    { rank: 29, bib: "20", country: "SUI", name: "Juri Kesseli", points: 223.6, r1_dist: "126.0", r1_note: "52.0", r1_wind: "-1.3", r1_total: "116.1", r2_dist: "123.0", r2_note: "50.5", r2_wind: "-3.0", r2_total: "107.5" },
+                    { rank: 30, bib: "32", country: "JPN", name: "Tomofumi Naito", points: 223.2, r1_dist: "125.0", r1_note: "51.0", r1_wind: "-0.5", r1_total: "114.1", r2_dist: "124.0", r2_note: "51.5", r2_wind: "-4.2", r2_total: "109.1" },
+                    { rank: 31, bib: "33", country: "USA", name: "Kevin Bickner", points: 113.6, r1_dist: "126.5", r1_note: "47.5", r1_wind: "-0.2", r1_total: "113.6" },
+                    { rank: 32, bib: "18", country: "SUI", name: "Sandro Hauswirth", points: 111.9, r1_dist: "124.0", r1_note: "52.0", r1_wind: "-1.9", r1_total: "111.9" },
+                    { rank: 32, bib: "3", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 111.9, r1_dist: "126.5", r1_note: "49.0", r1_wind: "-3.4", r1_total: "111.9" },
+                    { rank: 34, bib: "44", country: "NOR", name: "Halvor Egner Granerud", points: 111.4, r1_dist: "124.0", r1_note: "52.5", r1_wind: "-2.9", r1_total: "111.4" },
+                    { rank: 35, bib: "51", country: "POL", name: "Piotr Zyla", points: 111.2, r1_dist: "124.5", r1_note: "50.5", r1_wind: "-2.0", r1_total: "111.2" },
+                    { rank: 36, bib: "42", country: "POL", name: "Pawel Wasek", points: 111.1, r1_dist: "125.5", r1_note: "51.0", r1_wind: "-4.4", r1_total: "111.1" },
+                    { rank: 37, bib: "27", country: "USA", name: "Tate Frantz", points: 110.6, r1_dist: "123.0", r1_note: "50.0", r1_wind: "0.6", r1_total: "110.6" },
+                    { rank: 38, bib: "2", country: "FRA", name: "Jules Chervet", points: 109.8, r1_dist: "125.0", r1_note: "51.5", r1_wind: "-5.3", r1_total: "109.8" },
+                    { rank: 39, bib: "37", country: "SUI", name: "Simon Ammann", points: 109.6, r1_dist: "124.5", r1_note: "50.5", r1_wind: "-3.6", r1_total: "109.6" },
+                    { rank: 40, bib: "8", country: "GER", name: "Andreas Wellinger", points: 109.5, r1_dist: "123.5", r1_note: "52.5", r1_wind: "-3.9", r1_total: "109.5" },
+                    { rank: 41, bib: "10", country: "JPN", name: "Yukiya Sato", points: 106.9, r1_dist: "123.0", r1_note: "51.0", r1_wind: "-4.1", r1_total: "106.9" },
+                    { rank: 42, bib: "1", country: "ITA", name: "Alex Insam", points: 105.2, r1_dist: "122.5", r1_note: "50.0", r1_wind: "-3.9", r1_total: "105.2" },
+                    { rank: 43, bib: "22", country: "CZE", name: "Roman Koudelka", points: 104.7, r1_dist: "120.0", r1_note: "48.5", r1_wind: "1.6", r1_total: "104.7" },
+                    { rank: 44, bib: "16", country: "ITA", name: "Giovanni Bresadola", points: 103.1, r1_dist: "121.5", r1_note: "48.0", r1_wind: "-2.2", r1_total: "103.1" },
+                    { rank: 45, bib: "12", country: "SLO", name: "Rok Oblak", points: 100.0, r1_dist: "118.5", r1_note: "51.0", r1_wind: "-2.9", r1_total: "100.0" },
+                    { rank: 46, bib: "35", country: "KAZ", name: "Ilya Mizernykh", points: 96.7, r1_dist: "116.0", r1_note: "50.0", r1_wind: "-0.7", r1_total: "96.7" },
+                    { rank: 47, bib: "31", country: "FIN", name: "Vilho Palosaari", points: 96.6, r1_dist: "117.0", r1_note: "48.0", r1_wind: "-0.6", r1_total: "96.6" },
+                    { rank: 48, bib: "11", country: "USA", name: "Andrew Urlaub", points: 96.1, r1_dist: "118.5", r1_note: "46.5", r1_wind: "-2.3", r1_total: "96.1" },
+                    { rank: 49, bib: "28", country: "KAZ", name: "Danil Vassilyev", points: 95.7, r1_dist: "117.0", r1_note: "48.5", r1_wind: "-2.0", r1_total: "95.7" },
+                    { rank: 50, bib: "21", country: "POL", name: "Aleksander Zniszczol", points: 91.8, r1_dist: "114.5", r1_note: "49.0", r1_wind: "-1.9", r1_total: "91.8" }
+                ]
+            },
+            {
+                id: 2,
+                date: "25.11.2025",
+                location: "Falun (SWE)",
+                hill: "HS 95",
+                results: [
+                    { rank: 1, bib: "46", country: "AUT", name: "Stefan Kraft", points: 249.9, r1_dist: "97.5", r1_note: "56.5", r1_wind: "-4.1", r1_total: "127.4", r2_dist: "96.5", r2_note: "56.5", r2_wind: "-7.0", r2_total: "122.5" },
+                    { rank: 2, bib: "43", country: "SLO", name: "Anze Lanisek", points: 247.7, r1_dist: "96.0", r1_note: "54.5", r1_wind: "-4.3", r1_total: "122.2", r2_dist: "96.0", r2_note: "55.5", r2_wind: "-5.7", r2_total: "125.5" },
+                    { rank: 3, bib: "45", country: "GER", name: "Philipp Raimund", points: 244.9, r1_dist: "94.5", r1_note: "54.5", r1_wind: "-3.6", r1_total: "119.9", r2_dist: "99.5", r2_note: "54.0", r2_wind: "-8.0", r2_total: "125.0" },
+                    { rank: 4, bib: "42", country: "AUT", name: "Stephan Embacher", points: 241.8, r1_dist: "95.0", r1_note: "54.5", r1_wind: "-4.6", r1_total: "119.9", r2_dist: "96.5", r2_note: "54.5", r2_wind: "-5.6", r2_total: "121.9" },
+                    { rank: 5, bib: "47", country: "AUT", name: "Jan Hoerl", points: 240.6, r1_dist: "94.0", r1_note: "55.0", r1_wind: "-4.0", r1_total: "119.0", r2_dist: "97.0", r2_note: "55.0", r2_wind: "-7.4", r2_total: "121.6" },
+                    { rank: 6, bib: "49", country: "AUT", name: "Daniel Tschofenig", points: 240.2, r1_dist: "94.0", r1_note: "56.0", r1_wind: "-3.0", r1_total: "121.0", r2_dist: "93.5", r2_note: "55.5", r2_wind: "-7.0", r2_total: "119.2" },
+                    { rank: 7, bib: "50", country: "JPN", name: "Ryoyu Kobayashi", points: 237.5, r1_dist: "94.0", r1_note: "55.5", r1_wind: "-3.4", r1_total: "120.1", r2_dist: "95.5", r2_note: "55.5", r2_wind: "-9.1", r2_total: "117.4" },
+                    { rank: 8, bib: "44", country: "GER", name: "Felix Hoffmann", points: 235.7, r1_dist: "92.0", r1_note: "54.0", r1_wind: "-2.2", r1_total: "115.8", r2_dist: "97.0", r2_note: "53.5", r2_wind: "-7.6", r2_total: "119.9" },
+                    { rank: 9, bib: "36", country: "BUL", name: "Vladimir Zografski", points: 234.7, r1_dist: "95.0", r1_note: "54.0", r1_wind: "-4.1", r1_total: "119.9", r2_dist: "93.0", r2_note: "54.0", r2_wind: "-5.2", r2_total: "114.8" },
+                    { rank: 10, bib: "35", country: "NOR", name: "Marius Lindvik", points: 232.0, r1_dist: "94.0", r1_note: "53.0", r1_wind: "-2.8", r1_total: "118.2", r2_dist: "92.5", r2_note: "54.0", r2_wind: "-5.2", r2_total: "113.8" },
+                    { rank: 11, bib: "38", country: "JPN", name: "Ren Nikaido", points: 231.2, r1_dist: "93.0", r1_note: "54.0", r1_wind: "-2.4", r1_total: "117.6", r2_dist: "92.0", r2_note: "54.0", r2_wind: "-4.4", r2_total: "113.6" },
+                    { rank: 12, bib: "32", country: "POL", name: "Kacper Tomasiak", points: 231.0, r1_dist: "93.0", r1_note: "54.0", r1_wind: "-0.6", r1_total: "119.4", r2_dist: "93.0", r2_note: "53.0", r2_wind: "-7.4", r2_total: "111.6" },
+                    { rank: 13, bib: "48", country: "SLO", name: "Domen Prevc", points: 230.7, r1_dist: "92.0", r1_note: "52.5", r1_wind: "-2.9", r1_total: "113.6", r2_dist: "95.0", r2_note: "53.5", r2_wind: "-6.4", r2_total: "117.1" },
+                    { rank: 14, bib: "34", country: "JPN", name: "Naoki Nakamura", points: 229.5, r1_dist: "91.5", r1_note: "54.0", r1_wind: "-1.4", r1_total: "115.6", r2_dist: "94.5", r2_note: "54.0", r2_wind: "-9.1", r2_total: "113.9" },
+                    { rank: 15, bib: "39", country: "POL", name: "Kamil Stoch", points: 228.5, r1_dist: "93.5", r1_note: "54.0", r1_wind: "-3.8", r1_total: "117.2", r2_dist: "93.0", r2_note: "53.0", r2_wind: "-7.7", r2_total: "111.3" },
+                    { rank: 16, bib: "31", country: "AUT", name: "Maximilian Ortner", points: 227.0, r1_dist: "90.5", r1_note: "52.5", r1_wind: "-0.8", r1_total: "112.7", r2_dist: "93.5", r2_note: "54.0", r2_wind: "-6.7", r2_total: "114.3" },
+                    { rank: 17, bib: "40", country: "AUT", name: "Manuel Fettner", points: 226.1, r1_dist: "90.5", r1_note: "52.0", r1_wind: "-4.0", r1_total: "109.0", r2_dist: "94.0", r2_note: "52.5", r2_wind: "-3.4", r2_total: "117.1" },
+                    { rank: 18, bib: "22", country: "GER", name: "Pius Paschke", points: 224.9, r1_dist: "91.0", r1_note: "49.5", r1_wind: "-0.6", r1_total: "110.9", r2_dist: "92.5", r2_note: "54.0", r2_wind: "-5.0", r2_total: "114.0" },
+                    { rank: 19, bib: "9", country: "GER", name: "Andreas Wellinger", points: 223.9, r1_dist: "93.0", r1_note: "52.5", r1_wind: "-3.8", r1_total: "114.7", r2_dist: "91.5", r2_note: "54.0", r2_wind: "-7.8", r2_total: "109.2" },
+                    { rank: 20, bib: "28", country: "FIN", name: "Antti Aalto", points: 223.8, r1_dist: "91.5", r1_note: "52.5", r1_wind: "-2.0", r1_total: "113.5", r2_dist: "92.0", r2_note: "52.5", r2_wind: "-6.2", r2_total: "110.3" },
+                    { rank: 21, bib: "7", country: "SLO", name: "Rok Oblak", points: 222.5, r1_dist: "91.5", r1_note: "53.0", r1_wind: "-4.5", r1_total: "111.5", r2_dist: "92.0", r2_note: "51.5", r2_wind: "-4.5", r2_total: "111.0" },
+                    { rank: 22, bib: "37", country: "EST", name: "Artti Aigro", points: 222.2, r1_dist: "93.0", r1_note: "53.5", r1_wind: "-3.4", r1_total: "116.1", r2_dist: "90.0", r2_note: "51.5", r2_wind: "-5.4", r2_total: "106.1" },
+                    { rank: 23, bib: "33", country: "SUI", name: "Gregor Deschwanden", points: 221.2, r1_dist: "91.5", r1_note: "52.0", r1_wind: "-1.5", r1_total: "113.5", r2_dist: "91.5", r2_note: "50.5", r2_wind: "-5.8", r2_total: "107.7" },
+                    { rank: 24, bib: "41", country: "SLO", name: "Timi Zajc", points: 220.1, r1_dist: "91.5", r1_note: "53.5", r1_wind: "-4.5", r1_total: "112.0", r2_dist: "90.0", r2_note: "51.5", r2_wind: "-3.4", r2_total: "108.1" },
+                    { rank: 25, bib: "18", country: "NOR", name: "Johann Andre Forfang", points: 218.8, r1_dist: "90.0", r1_note: "52.0", r1_wind: "-3.0", r1_total: "109.0", r2_dist: "90.0", r2_note: "52.5", r2_wind: "-2.7", r2_total: "109.8" },
+                    { rank: 26, bib: "5", country: "USA", name: "Andrew Urlaub", points: 214.8, r1_dist: "90.0", r1_note: "51.5", r1_wind: "-3.4", r1_total: "108.1", r2_dist: "88.5", r2_note: "51.5", r2_wind: "-1.8", r2_total: "106.7" },
+                    { rank: 27, bib: "21", country: "POL", name: "Pawel Wasek", points: 214.2, r1_dist: "88.5", r1_note: "51.0", r1_wind: "-0.03", r1_total: "108.4", r2_dist: "90.0", r2_note: "51.0", r2_wind: "-5.2", r2_total: "105.8" },
+                    { rank: 28, bib: "10", country: "USA", name: "Tate Frantz", points: 212.7, r1_dist: "89.5", r1_note: "52.5", r1_wind: "-3.4", r1_total: "108.1", r2_dist: "88.0", r2_note: "51.5", r2_wind: "-2.9", r2_total: "104.6" },
+                    { rank: 29, bib: "8", country: "JPN", name: "Yukiya Sato", points: 212.5, r1_dist: "90.5", r1_note: "51.5", r1_wind: "-3.5", r1_total: "109.0", r2_dist: "88.5", r2_note: "51.0", r2_wind: "-4.5", r2_total: "103.5" },
+                    { rank: 30, bib: "24", country: "NOR", name: "Halvor Egner Granerud", points: 207.4, r1_dist: "88.5", r1_note: "52.5", r1_wind: "-1.5", r1_total: "108.0", r2_dist: "85.5", r2_note: "51.5", r2_wind: "-3.1", r2_total: "99.4" },
+                    { rank: 31, bib: "17", country: "POL", name: "Aleksander Zniszczol", points: 107.8, r1_dist: "89.5", r1_note: "51.5", r1_wind: "-2.7", r1_total: "107.8" },
+                    { rank: 32, bib: "23", country: "NOR", name: "Benjamin Oestvold", points: 107.0, r1_dist: "88.0", r1_note: "51.0", r1_wind: "0.0", r1_total: "107.0" },
+                    { rank: 33, bib: "30", country: "POL", name: "Dawid Kubacki", points: 106.8, r1_dist: "88.5", r1_note: "52.5", r1_wind: "-2.7", r1_total: "106.8" },
+                    { rank: 33, bib: "1", country: "SUI", name: "Simon Ammann", points: 106.8, r1_dist: "89.0", r1_note: "51.0", r1_wind: "-2.2", r1_total: "106.8" },
+                    { rank: 35, bib: "26", country: "POL", name: "Piotr Zyla", points: 106.5, r1_dist: "88.0", r1_note: "51.0", r1_wind: "-0.5", r1_total: "106.5" },
+                    { rank: 36, bib: "27", country: "USA", name: "Jason Colby", points: 106.4, r1_dist: "88.5", r1_note: "51.5", r1_wind: "-2.1", r1_total: "106.4" },
+                    { rank: 37, bib: "15", country: "SUI", name: "Sandro Hauswirth", points: 106.3, r1_dist: "89.5", r1_note: "51.0", r1_wind: "-3.7", r1_total: "106.3" },
+                    { rank: 38, bib: "12", country: "FIN", name: "Vilho Palosaari", points: 105.7, r1_dist: "88.0", r1_note: "51.5", r1_wind: "-1.8", r1_total: "105.7" },
+                    { rank: 39, bib: "16", country: "KAZ", name: "Danil Vassilyev", points: 105.2, r1_dist: "88.5", r1_note: "52.0", r1_wind: "-3.8", r1_total: "105.2" },
+                    { rank: 40, bib: "19", country: "JPN", name: "Tomofumi Naito", points: 105.1, r1_dist: "88.0", r1_note: "50.5", r1_wind: "-1.4", r1_total: "105.1" },
+                    { rank: 41, bib: "2", country: "SUI", name: "Felix Trunz", points: 104.6, r1_dist: "88.0", r1_note: "51.5", r1_wind: "-2.9", r1_total: "104.6" },
+                    { rank: 42, bib: "6", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 104.5, r1_dist: "90.0", r1_note: "48.5", r1_wind: "-4.0", r1_total: "104.5" },
+                    { rank: 43, bib: "11", country: "FRA", name: "Jules Chervet", points: 104.0, r1_dist: "87.5", r1_note: "51.0", r1_wind: "-2.0", r1_total: "104.0" },
+                    { rank: 44, bib: "29", country: "JPN", name: "Sakutaro Kobayashi", points: 100.0, r1_dist: "86.0", r1_note: "50.0", r1_wind: "-2.0", r1_total: "100.0" },
+                    { rank: 45, bib: "13", country: "SVK", name: "Hektor Kapustik", points: 99.6, r1_dist: "86.0", r1_note: "49.5", r1_wind: "-1.9", r1_total: "99.6" },
+                    { rank: 46, bib: "20", country: "SUI", name: "Juri Kesseli", points: 99.5, r1_dist: "83.5", r1_note: "50.0", r1_wind: "2.5", r1_total: "99.5" },
+                    { rank: 47, bib: "4", country: "USA", name: "Erik Belshaw", points: 98.5, r1_dist: "86.5", r1_note: "50.0", r1_wind: "-4.5", r1_total: "98.5" },
+                    { rank: 48, bib: "25", country: "GER", name: "Karl Geiger", points: 97.6, r1_dist: "84.0", r1_note: "51.0", r1_wind: "-1.4", r1_total: "97.6" },
+                    { rank: 48, bib: "14", country: "UKR", name: "Vitaliy Kalinichenko", points: 97.6, r1_dist: "85.5", r1_note: "48.0", r1_wind: "-1.4", r1_total: "97.6" },
+                    { rank: 50, bib: "3", country: "ITA", name: "Alex Insam", points: 96.5, r1_dist: "85.5", r1_note: "50.5", r1_wind: "-5.0", r1_total: "96.5" }
+                ]
+            }
+        ];
+
+        // --- 4. KOMPONENTY APLIKACJI ---
+
+        const Dashboard = ({ contests }) => {
+            const [mode, setMode] = useState('draft');
+
+            const standings = useMemo(() => {
+                const scores = {};
+                Object.keys(TEAMS).forEach(team => scores[team] = 0);
+                contests.forEach(contest => {
+                    Object.keys(TEAMS).forEach(teamName => {
+                        const teamMembers = TEAMS[teamName];
+                        const memberScores = teamMembers.map(jumperName => {
+                            const result = contest.results.find(r => normalizeName(r.name) === normalizeName(jumperName));
+                            if (!result) return 0;
+                            return mode === 'draft' ? getDraftPoints(result.rank) : getFisPoints(result.rank);
+                        });
+                        memberScores.sort((a, b) => b - a);
+                        scores[teamName] += memberScores.slice(0, 5).reduce((a, b) => a + b, 0);
+                    });
+                });
+                return Object.entries(scores).sort(([, a], [, b]) => b - a);
+            }, [contests, mode]);
+
+            return (
+                <div className="space-y-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 gap-4">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800"><Trophy className="text-yellow-500" /> Klasyfikacja Generalna</h2>
+                        <div className="flex bg-slate-100 p-1 rounded-lg">
+                            <button onClick={() => setMode('draft')} className={`px-4 py-2 rounded-md text-sm font-medium ${mode === 'draft' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Fantasy</button>
+                            <button onClick={() => setMode('fis')} className={`px-4 py-2 rounded-md text-sm font-medium ${mode === 'fis' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Oficjalne FIS</button>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
+                        <table className="w-full text-left min-w-[350px]">
+                            <thead className="bg-slate-50 border-b border-slate-200">
+                                <tr>
+                                    <th className="px-6 py-4 font-semibold text-slate-600 whitespace-nowrap">M-ce</th>
+                                    <th className="px-6 py-4 font-semibold text-slate-600">Drużyna</th>
+                                    <th className="px-6 py-4 font-semibold text-slate-600 text-right">Punkty</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {standings.map(([team, points], index) => (
+                                    <tr key={team} className="hover:bg-slate-50">
+                                        <td className="px-6 py-4 font-bold text-slate-500">{index + 1}.</td>
+                                        <td className="px-6 py-4 font-medium flex items-center gap-3">
+                                            <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${
+                                                team === 'Tomasz P.' ? 'bg-green-600' : 
+                                                team === 'Tomasz J.' ? 'bg-amber-600' : 
+                                                team === 'Madzia' ? 'bg-pink-600' : 'bg-blue-600'
+                                            }`}>{team.charAt(0)}</div>
+                                            {team}
+                                        </td>
+                                        <td className="px-6 py-4 font-bold text-right text-lg">{points}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        const JumperStandings = ({ contests }) => {
+            const [sortMode, setSortMode] = useState('draft'); 
+            const [filterMode, setFilterMode] = useState('all'); 
+
+            const jumperScores = useMemo(() => {
+                const scores = {};
+                const owners = {};
+                const countries = {};
+                
+                contests.forEach(contest => {
+                    contest.results.forEach(r => {
+                        const name = r.name;
+                        if (!scores[name]) {
+                             scores[name] = { draft: 0, fis: 0 };
+                             owners[name] = getJumperOwner(name);
+                             countries[name] = r.country;
+                        }
+                        scores[name].draft += getDraftPoints(r.rank);
+                        scores[name].fis += getFisPoints(r.rank);
+                    });
+                });
+                
+                let list = Object.entries(scores)
+                    .map(([name, pts]) => ({ 
+                        name, 
+                        draft: pts.draft, 
+                        fis: pts.fis, 
+                        owner: owners[name],
+                        country: countries[name]
+                    }))
+                    .sort((a, b) => b[sortMode] - a[sortMode]);
+
+                // Assign global rank first
+                list = list.map((item, index) => ({ ...item, globalRank: index + 1 }));
+
+                if (filterMode !== 'all') {
+                    list = list.filter(j => j.owner === filterMode);
+                }
+                
+                return list;
+
+            }, [contests, sortMode, filterMode]);
+
+            return (
+                <div className="space-y-6 mt-8">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+                        <h2 className="text-xl font-bold flex items-center gap-2"><Medal className="text-orange-500" /> Indywidualnie</h2>
+                        <div className="flex gap-2 text-sm flex-wrap">
+                            <select value={sortMode} onChange={(e) => setSortMode(e.target.value)} className="p-2 border rounded bg-white">
+                                <option value="draft">Sortuj: Draft Pkt</option>
+                                <option value="fis">Sortuj: FIS Pkt</option>
+                            </select>
+                            <select value={filterMode} onChange={(e) => setFilterMode(e.target.value)} className="p-2 border rounded bg-white">
+                                <option value="all">Wszyscy Skoczkowie</option>
+                                {Object.keys(TEAMS).map(team => (
+                                    <option key={team} value={team}>Tylko: {team}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
+                        <table className="w-full text-left text-sm min-w-[500px]">
+                            <thead className="bg-slate-50 border-b border-slate-200">
+                                <tr>
+                                    <th className="px-4 py-3 whitespace-nowrap">M-ce (Global)</th>
+                                    <th className="px-4 py-3">Zawodnik</th>
+                                    <th className="px-4 py-3">Właściciel</th>
+                                    <th className="px-4 py-3 text-right">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {jumperScores.map((j) => (
+                                    <tr key={j.name} className="hover:bg-slate-50">
+                                        <td className="px-4 py-3 text-slate-500 font-bold">{j.globalRank}.</td>
+                                        <td className="px-4 py-3 font-medium whitespace-nowrap flex items-center">
+                                            <Flag name={j.name} country={j.country} /> {j.name}
+                                        </td>
+                                        <td className="px-4 py-3 text-slate-500 text-xs">
+                                            {j.owner ? (
+                                                <span className={`px-2 py-0.5 rounded-full ${
+                                                    j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
+                                                    j.owner === 'Tomasz P.' ? 'bg-green-100 text-green-800' :
+                                                    j.owner === 'Tomasz J.' ? 'bg-amber-100 text-amber-800' :
+                                                    'bg-pink-100 text-pink-800'
+                                                }`}>
+                                                    {j.owner}
+                                                </span>
+                                            ) : "-"}
+                                        </td>
+                                        <td className="px-4 py-3 text-right font-bold text-blue-600">
+                                            {sortMode === 'draft' ? j.draft : j.fis}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        const OfficialResults = ({ contests }) => {
+            const [selectedContestId, setSelectedContestId] = useState(contests[0]?.id || 1);
+            const [pointsMode, setPointsMode] = useState('draft'); // 'draft' | 'fis'
+            
+            const activeContest = useMemo(() => {
+                return contests.find(c => c.id === parseInt(selectedContestId)) || contests[contests.length-1];
+            }, [contests, selectedContestId]);
+
+            return (
+                <div className="space-y-6">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Table className="text-indigo-500" />
+                            <h2 className="font-bold text-slate-800">Oficjalne Wyniki Konkursu</h2>
+                        </div>
+                        <div className="flex gap-2">
+                             <select value={pointsMode} onChange={(e) => setPointsMode(e.target.value)} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50">
+                                <option value="draft">Pokaż punkty: Draft</option>
+                                <option value="fis">Pokaż punkty: FIS</option>
+                            </select>
+                            <select value={selectedContestId} onChange={(e) => setSelectedContestId(Number(e.target.value))} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 min-w-[200px] w-full md:w-auto">
+                                {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
+                        <table className="w-full text-xs md:text-sm text-left whitespace-nowrap">
+                            <thead className="bg-slate-900 text-slate-200">
+                                <tr>
+                                    <th colSpan="3" className="bg-slate-900"></th>
+                                    <th colSpan="4" className="text-center bg-slate-800 border-l border-r border-slate-600 py-2 text-slate-300 uppercase text-xs tracking-wider">I Seria</th>
+                                    <th colSpan="4" className="text-center bg-slate-800 border-l border-r border-slate-600 py-2 text-slate-300 uppercase text-xs tracking-wider">II Seria</th>
+                                    <th colSpan="2" className="bg-slate-900"></th>
+                                </tr>
+                                <tr>
+                                    <th className="px-2 py-3 sticky left-0 bg-slate-900 z-10">#</th>
+                                    <th className="px-2 py-3 sticky left-8 bg-slate-900 z-10">Nazwisko</th>
+                                    <th className="px-2 py-3">Kraj</th>
+                                    
+                                    <th className="px-2 py-3 bg-slate-800 border-l border-slate-600 text-center text-xs" title="Dystans">Dyst.</th>
+                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Nota Sędziowska">Nota</th>
+                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Kompensata (Belka/Wiatr)">Komp.</th>
+                                    <th className="px-2 py-3 bg-slate-800 border-r border-slate-600 text-center font-bold text-xs">Pkt.</th>
+
+                                    <th className="px-2 py-3 bg-slate-800 border-l border-slate-600 text-center text-xs" title="Dystans">Dyst.</th>
+                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Nota Sędziowska">Nota</th>
+                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Kompensata (Belka/Wiatr)">Komp.</th>
+                                    <th className="px-2 py-3 bg-slate-800 border-r border-slate-600 text-center font-bold text-xs">Pkt.</th>
+
+                                    <th className="px-3 py-3 font-bold text-white text-right bg-slate-900 sticky right-0">Nota Total</th>
+                                    <th className="px-2 py-3 bg-blue-900 text-center">{pointsMode === 'draft' ? 'Draft' : 'FIS'}</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {activeContest && activeContest.results.sort((a,b)=>a.rank-b.rank).map((r) => {
+                                    const owner = getJumperOwner(r.name);
+                                    const rowClass = owner ? TEAM_STYLES[owner] : "hover:bg-slate-50";
+                                    
+                                    return (
+                                        <tr key={`${r.rank}-${r.name}`} className={`${rowClass} transition-colors border-b border-slate-100`}>
+                                            <td className="px-2 py-2 font-mono font-bold sticky left-0 bg-inherit z-10">{r.rank}.</td>
+                                            <td className="px-2 py-2 font-medium sticky left-8 bg-inherit z-10 max-w-[160px] truncate" title={r.name}>
+                                                {r.name} 
+                                                {owner && <span className="text-[10px] uppercase opacity-70 block font-bold tracking-wide">{owner}</span>}
+                                            </td>
+                                            <td className="px-2 py-2"><Flag name={r.name} country={r.country} /></td>
+                                            
+                                            {/* Seria 1 */}
+                                            <td className="px-2 py-2 border-l border-slate-200 text-center">{r.r1_dist || "-"} m</td>
+                                            <td className="px-2 py-2 text-center opacity-70">{r.r1_note || "-"}</td>
+                                            <td className="px-2 py-2 text-center text-xs opacity-60">{r.r1_wind || "-"}</td>
+                                            <td className="px-2 py-2 border-r border-slate-200 text-center font-semibold">{r.r1_total || "-"}</td>
+
+                                            {/* Seria 2 */}
+                                            <td className="px-2 py-2 border-l border-slate-200 text-center">{r.r2_dist || "-"} m</td>
+                                            <td className="px-2 py-2 text-center opacity-70">{r.r2_note || "-"}</td>
+                                            <td className="px-2 py-2 text-center text-xs opacity-60">{r.r2_wind || "-"}</td>
+                                            <td className="px-2 py-2 border-r border-slate-200 text-center font-semibold">{r.r2_total || "-"}</td>
+
+                                            <td className="px-3 py-2 font-bold text-right sticky right-0 bg-inherit">{r.points}</td>
+                                            <td className="px-2 py-2 text-center font-bold bg-white/50 rounded-l shadow-sm">
+                                                {pointsMode === 'draft' ? getDraftPoints(r.rank) : getFisPoints(r.rank)}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        const TeamDetails = ({ contests }) => {
+            const [selectedContestId, setSelectedContestId] = useState(contests[0]?.id || 1);
+            const [scoreType, setScoreType] = useState('draft'); 
+            
+            const activeContest = useMemo(() => {
+                const found = contests.find(c => c.id === parseInt(selectedContestId));
+                return found || contests[contests.length - 1];
+            }, [contests, selectedContestId]);
+
+            if (!activeContest) return <div className="p-8 text-center text-slate-500 animate-pulse">Ładowanie danych zespołów...</div>;
+
+            return (
+                <div className="space-y-6">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <div className="flex items-center gap-2"><Calendar className="text-blue-500" /><h2 className="font-bold text-slate-800">Wyniki Zespołów</h2></div>
+                        <div className="flex gap-2">
+                            <select value={scoreType} onChange={(e) => setScoreType(e.target.value)} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50">
+                                <option value="draft">Draft Pkt (30-1)</option>
+                                <option value="fis">FIS Pkt (100-1)</option>
+                            </select>
+                            <select value={selectedContestId} onChange={(e) => setSelectedContestId(Number(e.target.value))} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 min-w-[200px]">
+                                {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {Object.entries(TEAMS).map(([teamName, members]) => {
+                            const scores = members.map(m => {
+                                const res = activeContest.results.find(r => normalizeName(r.name) === normalizeName(m));
+                                const rank = res ? res.rank : 999;
+                                const pts = scoreType === 'draft' ? getDraftPoints(rank) : getFisPoints(rank);
+                                return { name: m, rank: res ? res.rank : "-", points: pts, country: res ? res.country : null };
+                            }).sort((a, b) => b.points - a.points);
+                            
+                            const top5 = scores.slice(0, 5);
+                            const top5Sum = top5.reduce((acc, curr) => acc + curr.points, 0);
+
+                            return (
+                                <div key={teamName} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                                    <div className={`px-4 py-3 border-b border-slate-200 flex justify-between items-center ${TEAM_STYLES[teamName].replace('border-l-4', 'border-b-2')}`}>
+                                        <h3 className="font-bold">{teamName}</h3>
+                                        <span className="text-xs md:text-sm bg-white/80 px-2 py-1 rounded font-semibold border border-slate-200 text-slate-800">Suma (Top 5): {top5Sum}</span>
+                                    </div>
+                                    <div className="p-0">
+                                        <table className="w-full text-sm">
+                                            <thead><tr className="text-slate-500 border-b border-slate-100 bg-slate-50/50"><th className="px-3 py-2 text-left">Zawodnik</th><th className="px-2 py-2 text-center">M-ce</th><th className="px-2 py-2 text-center text-blue-600">Pkt</th></tr></thead>
+                                            <tbody>
+                                                {scores.map((jumper, i) => (
+                                                    <tr key={jumper.name} className={`border-b border-slate-50 last:border-0 ${i < 5 && jumper.rank !== '-' ? 'bg-slate-50/50' : ''}`}>
+                                                        <td className="px-3 py-2 font-medium truncate flex items-center">
+                                                            <Flag name={jumper.name} country={jumper.country} /> {jumper.name}
+                                                        </td>
+                                                        <td className="px-2 py-2 text-center font-mono text-slate-500">{jumper.rank}</td>
+                                                        <td className="px-2 py-2 text-center font-bold text-blue-600">{jumper.points > 0 ? jumper.points : "-"}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('standings');
+            const [contests, setContests] = useState(INITIAL_CONTESTS);
+            
+            return (
+                <div className="min-h-screen bg-slate-100 pb-12 content-fade-in">
+                    <header className="bg-slate-900 text-white pb-20 pt-6 px-4 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-white/10 p-3 rounded-xl backdrop-blur-sm"><Snowflake className="h-8 w-8 text-blue-300" /></div>
+                                <div>
+                                    <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Fantasy Skoki 2025/26</h1>
+                                    <p className="text-slate-400 text-sm font-medium">Manager Ligi Prywatnej</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
+                                    <span className="text-xs text-slate-400 font-mono">
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 10:43</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-6xl mx-auto px-2 md:px-4 -mt-12 relative z-20">
+                        <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-1 mb-6 flex overflow-x-auto no-scrollbar md:grid md:grid-cols-3 gap-1">
+                            <button onClick={() => setActiveTab('standings')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'standings' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Trophy size={16} /> <span className="hidden md:inline">Klasyfikacja</span><span className="md:hidden">Ranking</span></button>
+                            <button onClick={() => setActiveTab('teams')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'teams' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Users size={16} /> <span className="hidden md:inline">Zespoły</span><span className="md:hidden">Zespoły</span></button>
+                            <button onClick={() => setActiveTab('official')} className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'official' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden md:inline">Oficjalne Wyniki</span><span className="md:hidden">Wyniki</span></button>
+                        </div>
+
+                        <div className="animate-fade-in">
+                            {activeTab === 'standings' && (
+                                <>
+                                    <Dashboard contests={contests} />
+                                    <JumperStandings contests={contests} />
+                                </>
+                            )}
+                            {activeTab === 'teams' && <TeamDetails contests={contests} /> }
+                            {activeTab === 'official' && <OfficialResults contests={contests} /> }
+                        </div>
+                    </main>
+                    
+                    <footer className="text-center text-slate-400 mt-12 text-xs pb-8 px-4">
+                        <p>Fantasy Draft Skoki Narciarskie 2025/26 • Zasady: Top 5 z 6</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
