@@ -157,9 +157,9 @@
                 desc: "Dodanie wyników konkursu Falun HS 132. Przebudowa nawigacji (dwie linie). Dodanie zakładek 'Zasady' i 'Aktualizacje'. Poprawa nazwy konkursu Falun HS 95."
             },
             {
-                date: "26.11.2025 21:35",
+                date: "26.11.2025 23:25",
                 version: "v1.4",
-                desc: "Poprawki mobilne: zwężenie tabeli indywidualnej, lepsze sortowanie widoku zespołów, naprawa 'uciekającej' kolumny Nota Total, poprawa wyświetlania nazw zespołów (brak łamania wiersza)."
+                desc: "Poprawki dla urządzeń mobilnych: zwężenie tabeli indywidualnej, włączenie łamania wierszy przy długich nazwiskach dla lepszej widoczności punktów. Optymalizacja widoku 'Oficjalne Wyniki' (lepsza widoczność dystansu podczas przewijania). Aktualizacja nazwy skoczni Lillehammer."
             }
         ];
 
@@ -168,7 +168,7 @@
             {
                 id: 1,
                 date: "23.11.2025",
-                location: "Lillehammer (NOR)",
+                location: "Lillehammer (NOR) - HS 140 (K-123)",
                 hill: "HS 140",
                 results: [
                     { rank: 1, bib: "65", country: "JPN", name: "Ryoyu Kobayashi", points: 290.5, r1_dist: "138.0", r1_note: "56.5", r1_wind: "-5.1", r1_total: "144.4", r2_dist: "139.5", r2_note: "57.0", r2_wind: "-0.6", r2_total: "146.1" },
@@ -465,25 +465,27 @@
                         </div>
                     </div>
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-left text-sm min-w-[500px]">
+                        <table className="w-full text-left text-sm min-w-[350px]">
                             <thead className="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th className="px-2 py-3 whitespace-nowrap text-xs md:text-sm">M-ce</th>
-                                    <th className="px-4 py-3">Zawodnik</th>
-                                    <th className="px-4 py-3">Właściciel</th>
-                                    <th className="px-4 py-3 text-right">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
+                                    <th className="px-2 py-3 whitespace-nowrap text-xs md:text-sm pl-4">M-ce</th>
+                                    <th className="px-2 py-3">Zawodnik</th>
+                                    <th className="px-2 py-3">Właściciel</th>
+                                    <th className="px-2 py-3 text-right pr-4">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {jumperScores.map((j) => (
                                     <tr key={j.name} className="hover:bg-slate-50">
                                         <td className="px-2 py-3 text-slate-500 font-bold pl-4">{j.globalRank}.</td>
-                                        <td className="px-4 py-3 font-medium whitespace-nowrap flex items-center">
-                                            <Flag name={j.name} country={j.country} /> {j.name}
+                                        <td className="px-2 py-2 font-medium whitespace-normal leading-tight min-w-[100px]">
+                                            <div className="flex items-center">
+                                                <Flag name={j.name} country={j.country} /> <span className="ml-1">{j.name}</span>
+                                            </div>
                                         </td>
-                                        <td className="px-4 py-3 text-slate-500 text-xs">
+                                        <td className="px-2 py-3 text-slate-500 text-xs">
                                             {j.owner ? (
-                                                <span className={`px-2 py-0.5 rounded-full ${
+                                                <span className={`px-2 py-0.5 rounded-full whitespace-nowrap ${
                                                     j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
                                                     j.owner === 'Tomasz P.' ? 'bg-green-100 text-green-800' :
                                                     j.owner === 'Tomasz J.' ? 'bg-amber-100 text-amber-800' :
@@ -493,7 +495,7 @@
                                                 </span>
                                             ) : "-"}
                                         </td>
-                                        <td className="px-4 py-3 text-right font-bold text-blue-600">
+                                        <td className="px-2 py-3 text-right font-bold text-blue-600 pr-4">
                                             {sortMode === 'draft' ? j.draft : j.fis}
                                         </td>
                                     </tr>
@@ -541,8 +543,8 @@
                                     <th colSpan="2" className="bg-slate-900"></th>
                                 </tr>
                                 <tr>
-                                    <th className="px-2 py-3 sticky left-0 bg-slate-900 z-10">#</th>
-                                    <th className="px-2 py-3 sticky left-8 bg-slate-900 z-10">Nazwisko</th>
+                                    <th className="px-2 py-3 sticky left-0 bg-slate-900 z-10 w-8">#</th>
+                                    <th className="px-2 py-3 sticky left-8 bg-slate-900 z-10 shadow-lg border-r border-slate-700">Nazwisko</th>
                                     <th className="px-2 py-3">Kraj</th>
                                     
                                     <th className="px-2 py-3 bg-slate-800 border-l border-slate-600 text-center text-xs" title="Dystans">Dyst.</th>
@@ -566,8 +568,8 @@
                                     
                                     return (
                                         <tr key={`${r.rank}-${r.name}`} className={`${rowClass} transition-colors border-b border-slate-100`}>
-                                            <td className="px-2 py-2 font-mono font-bold sticky left-0 bg-inherit z-10">{r.rank}.</td>
-                                            <td className="px-2 py-2 font-medium sticky left-8 bg-inherit z-10 max-w-[160px] truncate" title={r.name}>
+                                            <td className="px-2 py-2 font-mono font-bold sticky left-0 bg-inherit z-10 w-8">{r.rank}.</td>
+                                            <td className="px-2 py-2 font-medium sticky left-8 bg-inherit z-10 max-w-[110px] md:max-w-[160px] truncate shadow-lg border-r border-slate-200/50" title={r.name}>
                                                 {r.name} 
                                                 {owner && <span className="text-[10px] uppercase opacity-70 block font-bold tracking-wide">{owner}</span>}
                                             </td>
@@ -776,7 +778,7 @@
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 21:35</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 23:25</span>
                                     </span>
                                 </div>
                             </div>
