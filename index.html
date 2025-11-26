@@ -159,7 +159,7 @@
             {
                 date: "26.11.2025 23:25",
                 version: "v1.4",
-                desc: "Poprawki dla urządzeń mobilnych: zwężenie tabeli indywidualnej, włączenie łamania wierszy przy długich nazwiskach dla lepszej widoczności punktów. Optymalizacja widoku 'Oficjalne Wyniki' (lepsza widoczność dystansu podczas przewijania). Aktualizacja nazwy skoczni Lillehammer."
+                desc: "Poprawki dla urządzeń mobilnych: zwężenie tabeli indywidualnej, włączenie łamania wierszy przy długich nazwiskach dla lepszej widoczności punktów. Optymalizacja widoku 'Oficjalne Wyniki' (lepsza widoczność dystansu, naprawa przenikania flag przez przyklejone kolumny). Aktualizacja nazwy skoczni Lillehammer."
             }
         ];
 
@@ -564,7 +564,7 @@
                             <tbody className="divide-y divide-slate-100">
                                 {activeContest && activeContest.results.sort((a,b)=>a.rank-b.rank).map((r) => {
                                     const owner = getJumperOwner(r.name);
-                                    const rowClass = owner ? TEAM_STYLES[owner] : "hover:bg-slate-50";
+                                    const rowClass = owner ? TEAM_STYLES[owner] : "bg-white hover:bg-slate-50";
                                     
                                     return (
                                         <tr key={`${r.rank}-${r.name}`} className={`${rowClass} transition-colors border-b border-slate-100`}>
