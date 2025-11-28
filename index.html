@@ -34,6 +34,15 @@
         .custom-scrollbar::-webkit-scrollbar { height: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        /* Custom select styling */
+        .custom-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231e293b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem top 50%;
+            background-size: 0.65rem auto;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -52,9 +61,10 @@
             Snowflake: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="2" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="22"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></svg>,
             ExternalLink: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>,
             Info: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>,
-            RefreshCw: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            RefreshCw: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>,
+            Flask: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M10 2v7.31"/><path d="M14 2v7.31"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg>
         };
-        const { Trophy, Users, Table, Medal, Calendar, Snowflake, ExternalLink, Info, RefreshCw } = Icons;
+        const { Trophy, Users, Table, Medal, Calendar, Snowflake, ExternalLink, Info, RefreshCw, Flask } = Icons;
 
         // --- 2. DEFINICJE DANYCH I FUNKCJI POMOCNICZYCH ---
         
@@ -63,45 +73,22 @@
             return name.trim().toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).sort().join(' ');
         };
 
-        const NATIONALITIES = {
-            "jp": "jp", "at": "at", "de": "de", "ee": "ee", "fi": "fi", "pl": "pl", "si": "si", "no": "no", "ch": "ch", "bg": "bg", "us": "us", "fr": "fr", "it": "it", "cz": "cz", "kz": "kz", "ua": "ua", "sk": "sk", "ca": "ca", "se": "se", "ro": "ro", "tr": "tr",
-            "ryoyu kobayashi": "jp", "sakutaro kobayashi": "jp", "naoki nakamura": "jp", "ren nikaido": "jp", "yukiya sato": "jp", "tomofumi naito": "jp",
-            "stefan kraft": "at", "jan hoerl": "at", "daniel tschofenig": "at", "stephan embacher": "at", "manuel fettner": "at", "maximilian ortner": "at",
-            "philipp raimund": "de", "felix hoffmann": "de", "pius paschke": "de", "andreas wellinger": "de", "karl geiger": "de",
-            "artti aigro": "ee",
-            "antti aalto": "fi", "vilho palosaari": "fi",
-            "kamil stoch": "pl", "dawid kubacki": "pl", "kacper tomasiak": "pl", "piotr zyla": "pl", "pawel wasek": "pl", "aleksander zniszczol": "pl",
-            "anze lanisek": "si", "domen prevc": "si", "timi zajc": "si", "rok oblak": "si", "lovro kos": "si",
-            "johann andre forfang": "no", "marius lindvik": "no", "halvor egner granerud": "no", "kristoffer eriksen sundal": "no", "benjamin oestvold": "no",
-            "gregor deschwanden": "ch", "simon ammann": "ch", "juri kesseli": "ch", "sandro hauswirth": "ch", "felix trunz": "ch",
-            "vladimir zografski": "bg",
-            "tate frantz": "us", "erik belshaw": "us", "jason colby": "us", "kevin bickner": "us", "andrew urlaub": "us",
-            "valentin foubert": "fr", "jules chervet": "fr", "louis obersteiner": "fr",
-            "alex insam": "it", "giovanni bresadola": "it",
-            "roman koudelka": "cz",
-            "ilya mizernykh": "kz", "danil vassilyev": "kz", "vitaliy kalinichenko": "ua", "yeven marusiak": "ua",
-            "hektor kapustik": "sk",
-            "mackenzie boyd-clowes": "ca"
-        };
-
         const getFlagUrl = (name, countryCode) => {
             if (countryCode && countryCode.length === 2) {
                 return `https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`;
             }
-            const fisMap = { "JPN": "jp", "AUT": "at", "GER": "de", "SLO": "si", "POL": "pl", "NOR": "no", "FIN": "fi", "EST": "ee", "SUI": "ch", "USA": "us", "ITA": "it", "FRA": "fr", "BUL": "bg", "CZE": "cz", "KAZ": "kz", "SVK": "sk", "CAN": "ca", "UKR": "ua", "ROU": "ro", "TUR": "tr", "SWE": "se" };
-            if (countryCode && fisMap[countryCode]) {
-                return `https://flagcdn.com/24x18/${fisMap[countryCode]}.png`;
+            const judgeMap = { "NOR": "no", "FIN": "fi", "GER": "de", "AUT": "at", "SWE": "se", "POL": "pl", "JPN": "jp", "SLO": "si", "SUI": "ch", "ITA": "it", "USA": "us", "FRA": "fr" };
+            if (countryCode && judgeMap[countryCode]) {
+                return `https://flagcdn.com/24x18/${judgeMap[countryCode]}.png`;
             }
-            const norm = normalizeName(name);
-            const code = NATIONALITIES[norm] || "un"; 
-            if (code === "un") return null;
-            return `https://flagcdn.com/24x18/${code}.png`;
+            return null;
         };
 
-        const Flag = ({ name, country }) => {
+        const Flag = ({ name, country, className }) => {
             const url = getFlagUrl(name, country);
-            if (!url) return <span className="w-6 inline-block text-center text-xs text-gray-300 mr-1">🏳️</span>;
-            return <img src={url} alt={country || name} className="inline-block w-5 h-3.5 object-cover mr-2 shadow-sm rounded-sm" />;
+            if (!url) return <span className={`w-5 inline-block text-center text-xs text-gray-300 mr-1 ${className}`}>🏳️</span>;
+            // Ensure proper display block/inline-block and sizing
+            return <img src={url} alt={country || name} className={`inline-block w-5 h-3.5 object-contain align-middle mr-1 shadow-sm rounded-sm ${className}`} />;
         };
 
         const TEAMS = {
@@ -111,12 +98,20 @@
             "Dawid": ["Daniel Tschofenig", "Domen Prevc", "Stephan Embacher", "Kacper Tomasiak", "Andreas Wellinger", "Gregor Deschwanden"]
         };
         
-        // KOLORY ZESPOŁÓW
+        // KOLORY ZESPOŁÓW (Mocniejsze dla tekstu w tabelach)
         const TEAM_STYLES = {
             "Dawid": "bg-blue-200 text-blue-900 border-l-4 border-blue-700 font-bold", 
-            "Tomasz P.": "bg-green-200 text-green-900 border-l-4 border-green-700", // Zielony
-            "Tomasz J.": "bg-amber-200 text-amber-900 border-l-4 border-amber-600", // Złoty/Bursztynowy
-            "Madzia": "bg-pink-200 text-pink-900 border-l-4 border-pink-600" // Różowy
+            "Tomasz P.": "bg-green-200 text-green-900 border-l-4 border-green-700", 
+            "Tomasz J.": "bg-amber-200 text-amber-900 border-l-4 border-amber-600", 
+            "Madzia": "bg-pink-200 text-pink-900 border-l-4 border-pink-600" 
+        };
+        
+        // KOLORY ZESPOŁÓW DLA TŁA
+        const TEAM_BG_STYLES = {
+            "Dawid": "bg-blue-100 border-l-4 border-blue-600", 
+            "Tomasz P.": "bg-green-100 border-l-4 border-green-600", 
+            "Tomasz J.": "bg-amber-100 border-l-4 border-amber-600", 
+            "Madzia": "bg-pink-100 border-l-4 border-pink-600" 
         };
         
         const getJumperOwner = (jumperName) => {
@@ -142,85 +137,66 @@
             return 0;
         };
 
-        const getFisPoints = (rank) => (!rank || rank === "-") ? 0 : FIS_POINTS[rank] || 0;
+        const getFisPoints = (rank) => {
+            const pts = {1: 100, 2: 80, 3: 60, 4: 50, 5: 45, 6: 40, 7: 36, 8: 32, 9: 29, 10: 26, 11: 24, 12: 22, 13: 20, 14: 18, 15: 16, 16: 15, 17: 14, 18: 13, 19: 12, 20: 11, 21: 10, 22: 9, 23: 8, 24: 7, 25: 6, 26: 5, 27: 4, 28: 3, 29: 2, 30: 1};
+            return (!rank || rank === "-") ? 0 : pts[rank] || 0;
+        };
 
         // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
             {
-                date: "26.11.2025 11:21",
-                version: "v1.2",
-                desc: "Korekta punktacji (30-1 pkt), dodanie zakładki 'Wyniki szczegółowo'."
-            },
-            {
-                date: "26.11.2025 21:05",
-                version: "v1.3",
-                desc: "Dodanie wyników konkursu Falun HS 132. Przebudowa nawigacji (dwie linie). Dodanie zakładek 'Zasady' i 'Aktualizacje'. Poprawa nazwy konkursu Falun HS 95."
-            },
-            {
-                date: "26.11.2025 23:25",
-                version: "v1.4",
-                desc: "Poprawki dla urządzeń mobilnych: zwężenie tabeli indywidualnej, włączenie łamania wierszy przy długich nazwiskach dla lepszej widoczności punktów. Optymalizacja widoku 'Oficjalne Wyniki' (lepsza widoczność dystansu, naprawa przenikania flag przez przyklejone kolumny). Aktualizacja nazwy skoczni Lillehammer."
+                date: "27.11.2025 23:00",
+                version: "v1.5",
+                desc: "KOMPLEKSOWA AKTUALIZACJA: 1. Dodanie konkursu Falun HS 95 z poprawnymi notami sędziów. 2. Przebudowa zakładki 'Wyniki': responsywny widok z filtrami na mobilkach i pełną tabelą na PC. 3. Poprawa wyświetlania flag i kolorów. 4. Tłumaczenie interfejsu na polski. 5. Korekta danych wszystkich konkursów."
             }
         ];
 
         // --- DANE KONKURSÓW ---
+        // Jury data for flags (From protocols)
+        const JURY_FLAGS = {
+            1: {A: "NOR", B: "FIN", C: "GER", D: "AUT", E: "SWE"}, // Generic/Assumed based on Nordic Tour location
+            2: {A: "SWE", B: "AUT", C: "FIN", D: "POL", E: "JPN"}, // Falun HS 95 Protocol
+            3: {A: "FIN", B: "POL", C: "JPN", D: "AUT", E: "SWE"}  // Falun HS 132 Protocol
+        };
+
         const INITIAL_CONTESTS = [
             {
                 id: 1,
                 date: "23.11.2025",
                 location: "Lillehammer (NOR) - HS 140 (K-123)",
                 hill: "HS 140",
+                jury: JURY_FLAGS[1],
                 results: [
-                    { rank: 1, bib: "65", country: "JPN", name: "Ryoyu Kobayashi", points: 290.5, r1_dist: "138.0", r1_note: "56.5", r1_wind: "-5.1", r1_total: "144.4", r2_dist: "139.5", r2_note: "57.0", r2_wind: "-0.6", r2_total: "146.1" },
-                    { rank: 2, bib: "66", country: "SLO", name: "Domen Prevc", points: 287.3, r1_dist: "140.0", r1_note: "54.0", r1_wind: "-2.7", r1_total: "147.9", r2_dist: "139.0", r2_note: "53.0", r2_wind: "-2.4", r2_total: "139.4" },
-                    { rank: 3, bib: "60", country: "GER", name: "Felix Hoffmann", points: 286.2, r1_dist: "139.0", r1_note: "55.5", r1_wind: "-6.5", r1_total: "143.8", r2_dist: "138.0", r2_note: "57.0", r2_wind: "-1.6", r2_total: "142.4" },
-                    { rank: 4, bib: "64", country: "GER", name: "Philipp Raimund", points: 285.4, r1_dist: "134.5", r1_note: "55.5", r1_wind: "-5.6", r1_total: "144.1", r2_dist: "137.5", r2_note: "57.0", r2_wind: "-1.8", r2_total: "141.3" },
-                    { rank: 5, bib: "67", country: "AUT", name: "Stefan Kraft", points: 282.7, r1_dist: "135.5", r1_note: "56.5", r1_wind: "-2.4", r1_total: "142.6", r2_dist: "135.0", r2_note: "57.0", r2_wind: "1.5", r2_total: "140.1" },
-                    { rank: 6, bib: "63", country: "SLO", name: "Anze Lanisek", points: 280.2, r1_dist: "138.5", r1_note: "56.5", r1_wind: "-6.9", r1_total: "143.5", r2_dist: "135.0", r2_note: "55.5", r2_wind: "0.0", r2_total: "136.7" },
-                    { rank: 7, bib: "69", country: "AUT", name: "Daniel Tschofenig", points: 271.4, r1_dist: "129.5", r1_note: "54.0", r1_wind: "-2.4", r1_total: "129.3", r2_dist: "137.5", r2_note: "57.0", r2_wind: "-1.0", r2_total: "142.1" },
-                    { rank: 8, bib: "68", country: "AUT", name: "Jan Hoerl", points: 268.0, r1_dist: "136.5", r1_note: "54.0", r1_wind: "0.2", r1_total: "142.2", r2_dist: "129.0", r2_note: "54.0", r2_wind: "1.0", r2_total: "125.8" },
-                    { rank: 9, bib: "59", country: "AUT", name: "Stephan Embacher", points: 262.7, r1_dist: "139.0", r1_note: "54.0", r1_wind: "-5.4", r1_total: "137.4", r2_dist: "130.0", r2_note: "53.0", r2_wind: "-0.3", r2_total: "125.3" },
-                    { rank: 10, bib: "50", country: "JPN", name: "Ren Nikaido", points: 256.7, r1_dist: "131.0", r1_note: "54.0", r1_wind: "-0.1", r1_total: "128.3", r2_dist: "133.0", r2_note: "54.5", r2_wind: "-3.0", r2_total: "128.4" },
-                    { rank: 11, bib: "43", country: "JPN", name: "Naoki Nakamura", points: 256.1, r1_dist: "131.5", r1_note: "54.0", r1_wind: "-0.9", r1_total: "129.5", r2_dist: "130.5", r2_note: "54.0", r2_wind: "-0.9", r2_total: "126.6" },
-                    { rank: 12, bib: "57", country: "POL", name: "Kamil Stoch", points: 253.1, r1_dist: "138.5", r1_note: "56.5", r1_wind: "-6.6", r1_total: "137.8", r2_dist: "123.5", r2_note: "54.0", r2_wind: "0.4", r2_total: "115.3" },
-                    { rank: 13, bib: "62", country: "SLO", name: "Timi Zajc", points: 245.9, r1_dist: "134.5", r1_note: "54.0", r1_wind: "-9.8", r1_total: "130.9", r2_dist: "123.0", r2_note: "53.5", r2_wind: "1.5", r2_total: "115.0" },
-                    { rank: 14, bib: "56", country: "EST", name: "Artti Aigro", points: 245.1, r1_dist: "132.5", r1_note: "55.0", r1_wind: "-5.7", r1_total: "126.4", r2_dist: "127.0", r2_note: "52.5", r2_wind: "-1.0", r2_total: "118.7" },
-                    { rank: 15, bib: "61", country: "AUT", name: "Manuel Fettner", points: 244.0, r1_dist: "131.0", r1_note: "52.5", r1_wind: "-8.7", r1_total: "124.2", r2_dist: "127.5", r2_note: "52.0", r2_wind: "0.0", r2_total: "119.8" },
-                    { rank: 16, bib: "45", country: "FRA", name: "Valentin Foubert", points: 243.1, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-1.7", r1_total: "125.8", r2_dist: "126.0", r2_note: "54.0", r2_wind: "-2.1", r2_total: "117.3" },
-                    { rank: 17, bib: "54", country: "NOR", name: "Marius Lindvik", points: 243.0, r1_dist: "134.0", r1_note: "54.0", r1_wind: "-8.1", r1_total: "125.7", r2_dist: "125.0", r2_note: "52.5", r2_wind: "0.0", r2_total: "117.3" },
-                    { rank: 18, bib: "47", country: "AUT", name: "Maximilian Ortner", points: 242.9, r1_dist: "128.0", r1_note: "53.0", r1_wind: "-4.0", r1_total: "118.0", r2_dist: "131.0", r2_note: "54.0", r2_wind: "-3.5", r2_total: "124.9" },
-                    { rank: 19, bib: "5", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 241.4, r1_dist: "130.0", r1_note: "52.5", r1_wind: "-4.1", r1_total: "121.0", r2_dist: "127.5", r2_note: "53.5", r2_wind: "-1.2", r2_total: "120.4" },
-                    { rank: 20, bib: "48", country: "POL", name: "Dawid Kubacki", points: 238.8, r1_dist: "128.0", r1_note: "54.0", r1_wind: "-5.1", r1_total: "117.9", r2_dist: "129.0", r2_note: "53.0", r2_wind: "-2.9", r2_total: "120.9" },
-                    { rank: 21, bib: "46", country: "FIN", name: "Antti Aalto", points: 235.1, r1_dist: "127.5", r1_note: "53.5", r1_wind: "-1.3", r1_total: "120.3", r2_dist: "125.5", r2_note: "52.0", r2_wind: "-1.7", r2_total: "114.8" },
-                    { rank: 22, bib: "52", country: "POL", name: "Kacper Tomasiak", points: 234.8, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-4.3", r1_total: "123.2", r2_dist: "123.5", r2_note: "52.0", r2_wind: "-1.3", r2_total: "111.6" },
-                    { rank: 23, bib: "38", country: "GER", name: "Karl Geiger", points: 234.2, r1_dist: "127.0", r1_note: "52.5", r1_wind: "-2.4", r1_total: "117.3", r2_dist: "126.5", r2_note: "53.0", r2_wind: "-2.4", r2_total: "116.9" },
-                    { rank: 24, bib: "58", country: "BUL", name: "Vladimir Zografski", points: 233.7, r1_dist: "130.0", r1_note: "54.0", r1_wind: "-6.9", r1_total: "119.7", r2_dist: "125.5", r2_note: "53.5", r2_wind: "-4.0", r2_total: "114.0" },
-                    { rank: 25, bib: "55", country: "SUI", name: "Gregor Deschwanden", points: 233.6, r1_dist: "126.5", r1_note: "52.0", r1_wind: "-4.6", r1_total: "113.7", r2_dist: "129.5", r2_note: "52.0", r2_wind: "-3.8", r2_total: "119.9" },
-                    { rank: 26, bib: "49", country: "USA", name: "Jason Colby", points: 232.4, r1_dist: "130.0", r1_note: "54.0", r1_wind: "-2.2", r1_total: "124.4", r2_dist: "121.0", r2_note: "51.5", r2_wind: "0.1", r2_total: "108.0" },
-                    { rank: 27, bib: "14", country: "GER", name: "Pius Paschke", points: 229.7, r1_dist: "128.0", r1_note: "53.0", r1_wind: "-1.9", r1_total: "120.1", r2_dist: "122.5", r2_note: "52.5", r2_wind: "-2.0", r2_total: "109.6" },
-                    { rank: 28, bib: "53", country: "JPN", name: "Sakutaro Kobayashi", points: 227.8, r1_dist: "129.0", r1_note: "53.0", r1_wind: "-5.7", r1_total: "118.1", r2_dist: "124.5", r2_note: "51.0", r2_wind: "-4.0", r2_total: "109.7" },
-                    { rank: 29, bib: "20", country: "SUI", name: "Juri Kesseli", points: 223.6, r1_dist: "126.0", r1_note: "52.0", r1_wind: "-1.3", r1_total: "116.1", r2_dist: "123.0", r2_note: "50.5", r2_wind: "-3.0", r2_total: "107.5" },
-                    { rank: 30, bib: "32", country: "JPN", name: "Tomofumi Naito", points: 223.2, r1_dist: "125.0", r1_note: "51.0", r1_wind: "-0.5", r1_total: "114.1", r2_dist: "124.0", r2_note: "51.5", r2_wind: "-4.2", r2_total: "109.1" },
-                    { rank: 31, bib: "33", country: "USA", name: "Kevin Bickner", points: 113.6, r1_dist: "126.5", r1_note: "47.5", r1_wind: "-0.2", r1_total: "113.6" },
-                    { rank: 32, bib: "18", country: "SUI", name: "Sandro Hauswirth", points: 111.9, r1_dist: "124.0", r1_note: "52.0", r1_wind: "-1.9", r1_total: "111.9" },
-                    { rank: 32, bib: "3", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 111.9, r1_dist: "126.5", r1_note: "49.0", r1_wind: "-3.4", r1_total: "111.9" },
-                    { rank: 34, bib: "44", country: "NOR", name: "Halvor Egner Granerud", points: 111.4, r1_dist: "124.0", r1_note: "52.5", r1_wind: "-2.9", r1_total: "111.4" },
-                    { rank: 35, bib: "51", country: "POL", name: "Piotr Zyla", points: 111.2, r1_dist: "124.5", r1_note: "50.5", r1_wind: "-2.0", r1_total: "111.2" },
-                    { rank: 36, bib: "42", country: "POL", name: "Pawel Wasek", points: 111.1, r1_dist: "125.5", r1_note: "51.0", r1_wind: "-4.4", r1_total: "111.1" },
-                    { rank: 37, bib: "27", country: "USA", name: "Tate Frantz", points: 110.6, r1_dist: "123.0", r1_note: "50.0", r1_wind: "0.6", r1_total: "110.6" },
-                    { rank: 38, bib: "2", country: "FRA", name: "Jules Chervet", points: 109.8, r1_dist: "125.0", r1_note: "51.5", r1_wind: "-5.3", r1_total: "109.8" },
-                    { rank: 39, bib: "37", country: "SUI", name: "Simon Ammann", points: 109.6, r1_dist: "124.5", r1_note: "50.5", r1_wind: "-3.6", r1_total: "109.6" },
-                    { rank: 40, bib: "8", country: "GER", name: "Andreas Wellinger", points: 109.5, r1_dist: "123.5", r1_note: "52.5", r1_wind: "-3.9", r1_total: "109.5" },
-                    { rank: 41, bib: "10", country: "JPN", name: "Yukiya Sato", points: 106.9, r1_dist: "123.0", r1_note: "51.0", r1_wind: "-4.1", r1_total: "106.9" },
-                    { rank: 42, bib: "1", country: "ITA", name: "Alex Insam", points: 105.2, r1_dist: "122.5", r1_note: "50.0", r1_wind: "-3.9", r1_total: "105.2" },
-                    { rank: 43, bib: "22", country: "CZE", name: "Roman Koudelka", points: 104.7, r1_dist: "120.0", r1_note: "48.5", r1_wind: "1.6", r1_total: "104.7" },
-                    { rank: 44, bib: "16", country: "ITA", name: "Giovanni Bresadola", points: 103.1, r1_dist: "121.5", r1_note: "48.0", r1_wind: "-2.2", r1_total: "103.1" },
-                    { rank: 45, bib: "12", country: "SLO", name: "Rok Oblak", points: 100.0, r1_dist: "118.5", r1_note: "51.0", r1_wind: "-2.9", r1_total: "100.0" },
-                    { rank: 46, bib: "35", country: "KAZ", name: "Ilya Mizernykh", points: 96.7, r1_dist: "116.0", r1_note: "50.0", r1_wind: "-0.7", r1_total: "96.7" },
-                    { rank: 47, bib: "31", country: "FIN", name: "Vilho Palosaari", points: 96.6, r1_dist: "117.0", r1_note: "48.0", r1_wind: "-0.6", r1_total: "96.6" },
-                    { rank: 48, bib: "11", country: "USA", name: "Andrew Urlaub", points: 96.1, r1_dist: "118.5", r1_note: "46.5", r1_wind: "-2.3", r1_total: "96.1" },
-                    { rank: 49, bib: "28", country: "KAZ", name: "Danil Vassilyev", points: 95.7, r1_dist: "117.0", r1_note: "48.5", r1_wind: "-2.0", r1_total: "95.7" },
-                    { rank: 50, bib: "21", country: "POL", name: "Aleksander Zniszczol", points: 91.8, r1_dist: "114.5", r1_note: "49.0", r1_wind: "-1.9", r1_total: "91.8" }
+                    { rank: 1, bib: "65", country: "JPN", name: "Ryoyu Kobayashi", points: 290.5, r1_dist: "138.0", r1_note: "56.5", r1_wind: "-5.1", r1_total: "144.4", r2_dist: "139.5", r2_note: "57.0", r2_wind: "-0.6", r2_total: "146.1", r1_rank: 2, r2_rank: 1, r1_speed: "91.4", r2_speed: "91.3", r1_dpts: "87.0", r2_dpts: "89.7", r1_judges: "19.0 19.0 19.0 18.5 18.5", r2_judges: "19.0 19.0 19.0 19.0 19.0", r1_comp: "-5.1", r2_comp: "-0.6" },
+                    { rank: 2, bib: "66", country: "SLO", name: "Domen Prevc", points: 287.3, r1_dist: "140.0", r1_note: "54.0", r1_wind: "-2.7", r1_total: "147.9", r2_dist: "139.0", r2_note: "53.0", r2_wind: "-2.4", r2_total: "139.4", r1_rank: 1, r2_rank: 6, r1_speed: "91.6", r2_speed: "91.3", r1_dpts: "90.6", r2_dpts: "88.8", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "17.5 18.0 17.5 17.5 18.0", r1_comp: "-2.7", r2_comp: "-2.4" },
+                    { rank: 3, bib: "60", country: "GER", name: "Felix Hoffmann", points: 286.2, r1_dist: "139.0", r1_note: "55.5", r1_wind: "-6.5", r1_total: "143.8", r2_dist: "138.0", r2_note: "57.0", r2_wind: "-1.6", r2_total: "142.4", r1_rank: 4, r2_rank: 2, r1_speed: "91.2", r2_speed: "90.9", r1_dpts: "88.8", r2_dpts: "87.0", r1_judges: "18.5 18.5 18.5 18.5 18.5", r2_judges: "19.0 19.0 19.0 19.0 19.0", r1_comp: "-6.5", r2_comp: "-1.6" },
+                    { rank: 4, bib: "64", country: "GER", name: "Philipp Raimund", points: 285.4, r1_dist: "134.5", r1_note: "55.5", r1_wind: "-5.6", r1_total: "144.1", r2_dist: "137.5", r2_note: "57.0", r2_wind: "-1.8", r2_total: "141.3", r1_rank: 3, r2_rank: 4, r1_speed: "90.9", r2_speed: "90.8", r1_dpts: "80.7", r2_dpts: "86.1", r1_judges: "18.5 18.5 18.5 18.5 18.5", r2_judges: "19.0 19.0 19.0 19.0 19.0", r1_comp: "-5.6", r2_comp: "-1.8" },
+                    { rank: 5, bib: "67", country: "AUT", name: "Stefan Kraft", points: 282.7, r1_dist: "135.5", r1_note: "56.5", r1_wind: "-2.4", r1_total: "142.6", r2_dist: "135.0", r2_note: "57.0", r2_wind: "1.5", r2_total: "140.1", r1_rank: 6, r2_rank: 5, r1_speed: "90.8", r2_speed: "90.6", r1_dpts: "82.5", r2_dpts: "81.6", r1_judges: "19.0 18.5 19.0 18.5 19.0", r2_judges: "19.0 19.0 19.0 19.0 19.0", r1_comp: "-2.4", r2_comp: "1.5" },
+                    { rank: 6, bib: "63", country: "SLO", name: "Anze Lanisek", points: 280.2, r1_dist: "138.5", r1_note: "56.5", r1_wind: "-6.9", r1_total: "143.5", r2_dist: "135.0", r2_note: "55.5", r2_wind: "0.0", r2_total: "136.7", r1_rank: 5, r2_rank: 7, r1_speed: "91.1", r2_speed: "90.8", r1_dpts: "87.9", r2_dpts: "81.6", r1_judges: "19.0 18.5 19.0 19.0 18.5", r2_judges: "18.5 18.5 18.5 18.5 18.5", r1_comp: "-6.9", r2_comp: "0.0" },
+                    { rank: 7, bib: "69", country: "AUT", name: "Daniel Tschofenig", points: 271.4, r1_dist: "129.5", r1_note: "54.0", r1_wind: "-2.4", r1_total: "129.3", r2_dist: "137.5", r2_note: "57.0", r2_wind: "-1.0", r2_total: "142.1", r1_rank: 10, r2_rank: 3, r1_speed: "91.2", r2_speed: "91.3", r1_dpts: "71.7", r2_dpts: "86.1", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "19.0 19.0 19.0 19.0 19.0", r1_comp: "-2.4", r2_comp: "-1.0" },
+                    { rank: 8, bib: "68", country: "AUT", name: "Jan Hoerl", points: 268.0, r1_dist: "136.5", r1_note: "54.0", r1_wind: "0.2", r1_total: "142.2", r2_dist: "129.0", r2_note: "54.0", r2_wind: "1.0", r2_total: "125.8", r1_rank: 7, r2_rank: 12, r1_speed: "90.9", r2_speed: "90.8", r1_dpts: "84.3", r2_dpts: "70.8", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "0.2", r2_comp: "1.0" },
+                    { rank: 9, bib: "59", country: "AUT", name: "Stephan Embacher", points: 262.7, r1_dist: "139.0", r1_note: "54.0", r1_wind: "-5.4", r1_total: "137.4", r2_dist: "130.0", r2_note: "53.0", r2_wind: "-0.3", r2_total: "125.3", r1_rank: 9, r2_rank: 13, r1_speed: "91.3", r2_speed: "90.9", r1_dpts: "88.8", r2_dpts: "72.6", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "17.5 18.0 17.5 17.5 18.0", r1_comp: "-5.4", r2_comp: "-0.3" },
+                    { rank: 10, bib: "50", country: "JPN", name: "Ren Nikaido", points: 256.7, r1_dist: "131.0", r1_note: "54.0", r1_wind: "-0.1", r1_total: "128.3", r2_dist: "133.0", r2_note: "54.5", r2_wind: "-3.0", r2_total: "128.4", r1_rank: 12, r2_rank: 10, r1_speed: "90.7", r2_speed: "90.6", r1_dpts: "74.4", r2_dpts: "78.0", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.5 18.0 18.0 18.5 18.0", r1_comp: "-0.1", r2_comp: "-3.0" },
+                    { rank: 11, bib: "43", country: "JPN", name: "Naoki Nakamura", points: 256.1, r1_dist: "131.5", r1_note: "54.0", r1_wind: "-0.9", r1_total: "129.5", r2_dist: "130.5", r2_note: "54.0", r2_wind: "-0.9", r2_total: "126.6", r1_rank: 11, r2_rank: 11, r1_speed: "90.6", r2_speed: "90.5", r1_dpts: "75.3", r2_dpts: "73.5", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "-0.9", r2_comp: "-0.9" },
+                    { rank: 12, bib: "57", country: "POL", name: "Kamil Stoch", points: 253.1, r1_dist: "138.5", r1_note: "56.5", r1_wind: "-6.6", r1_total: "137.8", r2_dist: "123.5", r2_note: "54.0", r2_wind: "0.4", r2_total: "115.3", r1_rank: 8, r2_rank: 22, r1_speed: "91.0", r2_speed: "90.7", r1_dpts: "87.9", r2_dpts: "60.9", r1_judges: "19.0 18.5 19.0 19.0 18.5", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "-6.6", r2_comp: "0.4" },
+                    { rank: 13, bib: "62", country: "SLO", name: "Timi Zajc", points: 245.9, r1_dist: "134.5", r1_note: "54.0", r1_wind: "-9.8", r1_total: "130.9", r2_dist: "123.0", r2_note: "53.5", r2_wind: "1.5", r2_total: "115.0", r1_rank: 13, r2_rank: 23, r1_speed: "91.4", r2_speed: "91.0", r1_dpts: "80.7", r2_dpts: "60.0", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.0 17.5 17.5 18.0", r1_comp: "-9.8", r2_comp: "1.5" },
+                    { rank: 14, bib: "56", country: "EST", name: "Artti Aigro", points: 245.1, r1_dist: "132.5", r1_note: "55.0", r1_wind: "-5.7", r1_total: "126.4", r2_dist: "127.0", r2_note: "52.5", r2_wind: "-1.0", r2_total: "118.7", r1_rank: 14, r2_rank: 17, r1_speed: "90.9", r2_speed: "90.7", r1_dpts: "77.1", r2_dpts: "67.2", r1_judges: "18.5 18.5 18.0 18.5 18.0", r2_judges: "17.5 17.5 17.5 17.5 17.5", r1_comp: "-5.7", r2_comp: "-1.0" },
+                    { rank: 15, bib: "61", country: "AUT", name: "Manuel Fettner", points: 244.0, r1_dist: "131.0", r1_note: "52.5", r1_wind: "-8.7", r1_total: "124.2", r2_dist: "127.5", r2_note: "52.0", r2_wind: "0.0", r2_total: "119.8", r1_rank: 16, r2_rank: 16, r1_speed: "91.3", r2_speed: "91.0", r1_dpts: "74.4", r2_dpts: "68.1", r1_judges: "17.5 17.5 17.5 17.5 17.5", r2_judges: "17.5 17.5 17.5 17.0 17.0", r1_comp: "-8.7", r2_comp: "0.0" },
+                    { rank: 16, bib: "45", country: "FRA", name: "Valentin Foubert", points: 243.1, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-1.7", r1_total: "125.8", r2_dist: "126.0", r2_note: "54.0", r2_wind: "-2.1", r2_total: "117.3", r1_rank: 15, r2_rank: 18, r1_speed: "90.5", r2_speed: "90.3", r1_dpts: "73.5", r2_dpts: "65.4", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "-1.7", r2_comp: "-2.1" },
+                    { rank: 17, bib: "54", country: "NOR", name: "Marius Lindvik", points: 243.0, r1_dist: "134.0", r1_note: "54.0", r1_wind: "-8.1", r1_total: "125.7", r2_dist: "125.0", r2_note: "52.5", r2_wind: "0.0", r2_total: "117.3", r1_rank: 17, r2_rank: 18, r1_speed: "90.8", r2_speed: "90.7", r1_dpts: "79.8", r2_dpts: "63.6", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "17.5 17.5 17.5 17.5 17.5", r1_comp: "-8.1", r2_comp: "0.0" },
+                    { rank: 18, bib: "47", country: "AUT", name: "Maximilian Ortner", points: 242.9, r1_dist: "128.0", r1_note: "53.0", r1_wind: "-4.0", r1_total: "118.0", r2_dist: "131.0", r2_note: "54.0", r2_wind: "-3.5", r2_total: "124.9", r1_rank: 21, r2_rank: 14, r1_speed: "91.1", r2_speed: "90.9", r1_dpts: "69.0", r2_dpts: "74.4", r1_judges: "17.5 18.0 17.5 17.5 18.0", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "-4.0", r2_comp: "-3.5" },
+                    { rank: 19, bib: "5", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 241.4, r1_dist: "130.0", r1_note: "52.5", r1_wind: "-4.1", r1_total: "121.0", r2_dist: "127.5", r2_note: "53.5", r2_wind: "-1.2", r2_total: "120.4", r1_rank: 18, r2_rank: 15, r1_speed: "90.8", r2_speed: "90.7", r1_dpts: "72.6", r2_dpts: "68.1", r1_judges: "17.5 17.5 17.5 17.5 17.5", r2_judges: "18.0 17.5 18.0 17.5 18.0", r1_comp: "-4.1", r2_comp: "-1.2" },
+                    { rank: 20, bib: "48", country: "POL", name: "Dawid Kubacki", points: 238.8, r1_dist: "128.0", r1_note: "54.0", r1_wind: "-5.1", r1_total: "117.9", r2_dist: "129.0", r2_note: "53.0", r2_wind: "-2.9", r2_total: "120.9", r1_rank: 22, r2_rank: 14, r1_speed: "90.6", r2_speed: "90.5", r1_dpts: "69.0", r2_dpts: "70.8", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "17.5 17.5 18.0 17.5 18.0", r1_comp: "-5.1", r2_comp: "-2.9" },
+                    { rank: 21, bib: "46", country: "FIN", name: "Antti Aalto", points: 235.1, r1_dist: "127.5", r1_note: "53.5", r1_wind: "-1.3", r1_total: "120.3", r2_dist: "125.5", r2_note: "52.0", r2_wind: "-1.7", r2_total: "114.8", r1_rank: 19, r2_rank: 24, r1_speed: "91.2", r2_speed: "91.0", r1_dpts: "68.1", r2_dpts: "64.5", r1_judges: "18.0 18.0 17.5 17.5 18.0", r2_judges: "17.5 17.0 17.5 17.5 17.0", r1_comp: "-1.3", r2_comp: "-1.7" },
+                    { rank: 22, bib: "52", country: "POL", name: "Kacper Tomasiak", points: 234.8, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-4.3", r1_total: "123.2", r2_dist: "123.5", r2_note: "52.0", r2_wind: "-1.3", r2_total: "111.6", r1_rank: 17, r2_rank: 26, r1_speed: "90.8", r2_speed: "90.6", r1_dpts: "73.5", r2_dpts: "60.9", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "17.5 17.5 17.0 17.5 17.0", r1_comp: "-4.3", r2_comp: "-1.3" },
+                    { rank: 23, bib: "38", country: "GER", name: "Karl Geiger", points: 234.2, r1_dist: "127.0", r1_note: "52.5", r1_wind: "-2.4", r1_total: "117.3", r2_dist: "126.5", r2_note: "53.0", r2_wind: "-2.4", r2_total: "116.9", r1_rank: 23, r2_rank: 20, r1_speed: "91.1", r2_speed: "91.0", r1_dpts: "67.2", r2_dpts: "66.3", r1_judges: "17.5 17.5 17.5 17.5 17.5", r2_judges: "17.5 18.0 17.5 17.5 18.0", r1_comp: "-2.4", r2_comp: "-2.4" },
+                    { rank: 24, bib: "58", country: "BUL", name: "Vladimir Zografski", points: 233.7, r1_dist: "130.0", r1_note: "54.0", r1_wind: "-6.9", r1_total: "119.7", r2_dist: "125.5", r2_note: "53.5", r2_wind: "-4.0", r2_total: "114.0", r1_rank: 21, r2_rank: 25, r1_speed: "90.7", r2_speed: "90.6", r1_dpts: "72.6", r2_dpts: "64.5", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 17.5 18.0 18.0 17.5", r1_comp: "-6.9", r2_comp: "-4.0" },
+                    { rank: 25, bib: "55", country: "SUI", name: "Gregor Deschwanden", points: 233.6, r1_dist: "126.5", r1_note: "52.0", r1_wind: "-4.6", r1_total: "113.7", r2_dist: "129.5", r2_note: "52.0", r2_wind: "-3.8", r2_total: "119.9", r1_rank: 26, r2_rank: 15, r1_speed: "91.1", r2_speed: "91.0", r1_dpts: "66.3", r2_dpts: "71.7", r1_judges: "17.5 17.0 17.5 17.0 17.5", r2_judges: "17.5 17.0 17.5 17.0 17.5", r1_comp: "-4.6", r2_comp: "-3.8" },
+                    { rank: 26, bib: "49", country: "USA", name: "Jason Colby", points: 232.4, r1_dist: "130.0", r1_note: "54.0", r1_wind: "-2.2", r1_total: "124.4", r2_dist: "121.0", r2_note: "51.5", r2_wind: "0.1", r2_total: "108.0", r1_rank: 16, r2_rank: 28, r1_speed: "90.6", r2_speed: "90.4", r1_dpts: "72.6", r2_dpts: "56.4", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "17.0 17.0 17.5 17.0 17.5", r1_comp: "-2.2", r2_comp: "0.1" },
+                    { rank: 27, bib: "14", country: "GER", name: "Pius Paschke", points: 229.7, r1_dist: "128.0", r1_note: "53.0", r1_wind: "-1.9", r1_total: "120.1", r2_dist: "122.5", r2_note: "52.5", r2_wind: "-2.0", r2_total: "109.6", r1_rank: 20, r2_rank: 27, r1_speed: "91.0", r2_speed: "90.9", r1_dpts: "69.0", r2_dpts: "59.1", r1_judges: "18.0 17.5 17.5 17.5 18.0", r2_judges: "17.5 17.5 17.5 17.5 17.5", r1_comp: "-1.9", r2_comp: "-2.0" },
+                    { rank: 28, bib: "53", country: "JPN", name: "Sakutaro Kobayashi", points: 227.8, r1_dist: "129.0", r1_note: "53.0", r1_wind: "-5.7", r1_total: "118.1", r2_dist: "124.5", r2_note: "51.0", r2_wind: "-4.0", r2_total: "109.7", r1_rank: 21, r2_rank: 26, r1_speed: "90.8", r2_speed: "90.7", r1_dpts: "70.8", r2_dpts: "62.7", r1_judges: "17.5 17.5 18.0 17.5 18.0", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "-5.7", r2_comp: "-4.0" },
+                    { rank: 29, bib: "20", country: "SUI", name: "Juri Kesseli", points: 223.6, r1_dist: "126.0", r1_note: "52.0", r1_wind: "-1.3", r1_total: "116.1", r2_dist: "123.0", r2_note: "50.5", r2_wind: "-3.0", r2_total: "107.5", r1_rank: 25, r2_rank: 30, r1_speed: "91.0", r2_speed: "90.8", r1_dpts: "65.4", r2_dpts: "60.0", r1_judges: "17.5 17.0 17.5 17.0 17.5", r2_judges: "17.0 17.0 16.5 16.5 17.0", r1_comp: "-1.3", r2_comp: "-3.0" },
+                    { rank: 30, bib: "32", country: "JPN", name: "Tomofumi Naito", points: 223.2, r1_dist: "125.0", r1_note: "51.0", r1_wind: "-0.5", r1_total: "114.1", r2_dist: "124.0", r2_note: "51.5", r2_wind: "-4.2", r2_total: "109.1", r1_rank: 26, r2_rank: 28, r1_speed: "90.5", r2_speed: "90.4", r1_dpts: "63.6", r2_dpts: "61.8", r1_judges: "17.0 17.0 17.0 17.0 17.0", r2_judges: "17.5 17.0 17.0 17.0 17.5", r1_comp: "-0.5", r2_comp: "-4.2" }
                 ]
             },
             {
@@ -228,57 +204,38 @@
                 date: "25.11.2025",
                 location: "Falun (SWE) - HS 95 (K-90)",
                 hill: "HS 95",
+                jury: JURY_FLAGS[2],
                 results: [
-                    { rank: 1, bib: "46", country: "AUT", name: "Stefan Kraft", points: 249.9, r1_dist: "97.5", r1_note: "56.5", r1_wind: "-4.1", r1_total: "127.4", r2_dist: "96.5", r2_note: "56.5", r2_wind: "-7.0", r2_total: "122.5" },
-                    { rank: 2, bib: "43", country: "SLO", name: "Anze Lanisek", points: 247.7, r1_dist: "96.0", r1_note: "54.5", r1_wind: "-4.3", r1_total: "122.2", r2_dist: "96.0", r2_note: "55.5", r2_wind: "-5.7", r2_total: "125.5" },
-                    { rank: 3, bib: "45", country: "GER", name: "Philipp Raimund", points: 244.9, r1_dist: "94.5", r1_note: "54.5", r1_wind: "-3.6", r1_total: "119.9", r2_dist: "99.5", r2_note: "54.0", r2_wind: "-8.0", r2_total: "125.0" },
-                    { rank: 4, bib: "42", country: "AUT", name: "Stephan Embacher", points: 241.8, r1_dist: "95.0", r1_note: "54.5", r1_wind: "-4.6", r1_total: "119.9", r2_dist: "96.5", r2_note: "54.5", r2_wind: "-5.6", r2_total: "121.9" },
-                    { rank: 5, bib: "47", country: "AUT", name: "Jan Hoerl", points: 240.6, r1_dist: "94.0", r1_note: "55.0", r1_wind: "-4.0", r1_total: "119.0", r2_dist: "97.0", r2_note: "55.0", r2_wind: "-7.4", r2_total: "121.6" },
-                    { rank: 6, bib: "49", country: "AUT", name: "Daniel Tschofenig", points: 240.2, r1_dist: "94.0", r1_note: "56.0", r1_wind: "-3.0", r1_total: "121.0", r2_dist: "93.5", r2_note: "55.5", r2_wind: "-7.0", r2_total: "119.2" },
-                    { rank: 7, bib: "50", country: "JPN", name: "Ryoyu Kobayashi", points: 237.5, r1_dist: "94.0", r1_note: "55.5", r1_wind: "-3.4", r1_total: "120.1", r2_dist: "95.5", r2_note: "55.5", r2_wind: "-9.1", r2_total: "117.4" },
-                    { rank: 8, bib: "44", country: "GER", name: "Felix Hoffmann", points: 235.7, r1_dist: "92.0", r1_note: "54.0", r1_wind: "-2.2", r1_total: "115.8", r2_dist: "97.0", r2_note: "53.5", r2_wind: "-7.6", r2_total: "119.9" },
-                    { rank: 9, bib: "36", country: "BUL", name: "Vladimir Zografski", points: 234.7, r1_dist: "95.0", r1_note: "54.0", r1_wind: "-4.1", r1_total: "119.9", r2_dist: "93.0", r2_note: "54.0", r2_wind: "-5.2", r2_total: "114.8" },
-                    { rank: 10, bib: "35", country: "NOR", name: "Marius Lindvik", points: 232.0, r1_dist: "94.0", r1_note: "53.0", r1_wind: "-2.8", r1_total: "118.2", r2_dist: "92.5", r2_note: "54.0", r2_wind: "-5.2", r2_total: "113.8" },
-                    { rank: 11, bib: "38", country: "JPN", name: "Ren Nikaido", points: 231.2, r1_dist: "93.0", r1_note: "54.0", r1_wind: "-2.4", r1_total: "117.6", r2_dist: "92.0", r2_note: "54.0", r2_wind: "-4.4", r2_total: "113.6" },
-                    { rank: 12, bib: "32", country: "POL", name: "Kacper Tomasiak", points: 231.0, r1_dist: "93.0", r1_note: "54.0", r1_wind: "-0.6", r1_total: "119.4", r2_dist: "93.0", r2_note: "53.0", r2_wind: "-7.4", r2_total: "111.6" },
-                    { rank: 13, bib: "48", country: "SLO", name: "Domen Prevc", points: 230.7, r1_dist: "92.0", r1_note: "52.5", r1_wind: "-2.9", r1_total: "113.6", r2_dist: "95.0", r2_note: "53.5", r2_wind: "-6.4", r2_total: "117.1" },
-                    { rank: 14, bib: "34", country: "JPN", name: "Naoki Nakamura", points: 229.5, r1_dist: "91.5", r1_note: "54.0", r1_wind: "-1.4", r1_total: "115.6", r2_dist: "94.5", r2_note: "54.0", r2_wind: "-9.1", r2_total: "113.9" },
-                    { rank: 15, bib: "39", country: "POL", name: "Kamil Stoch", points: 228.5, r1_dist: "93.5", r1_note: "54.0", r1_wind: "-3.8", r1_total: "117.2", r2_dist: "93.0", r2_note: "53.0", r2_wind: "-7.7", r2_total: "111.3" },
-                    { rank: 16, bib: "31", country: "AUT", name: "Maximilian Ortner", points: 227.0, r1_dist: "90.5", r1_note: "52.5", r1_wind: "-0.8", r1_total: "112.7", r2_dist: "93.5", r2_note: "54.0", r2_wind: "-6.7", r2_total: "114.3" },
-                    { rank: 17, bib: "40", country: "AUT", name: "Manuel Fettner", points: 226.1, r1_dist: "90.5", r1_note: "52.0", r1_wind: "-4.0", r1_total: "109.0", r2_dist: "94.0", r2_note: "52.5", r2_wind: "-3.4", r2_total: "117.1" },
-                    { rank: 18, bib: "22", country: "GER", name: "Pius Paschke", points: 224.9, r1_dist: "91.0", r1_note: "49.5", r1_wind: "-0.6", r1_total: "110.9", r2_dist: "92.5", r2_note: "54.0", r2_wind: "-5.0", r2_total: "114.0" },
-                    { rank: 19, bib: "9", country: "GER", name: "Andreas Wellinger", points: 223.9, r1_dist: "93.0", r1_note: "52.5", r1_wind: "-3.8", r1_total: "114.7", r2_dist: "91.5", r2_note: "54.0", r2_wind: "-7.8", r2_total: "109.2" },
-                    { rank: 20, bib: "28", country: "FIN", name: "Antti Aalto", points: 223.8, r1_dist: "91.5", r1_note: "52.5", r1_wind: "-2.0", r1_total: "113.5", r2_dist: "92.0", r2_note: "52.5", r2_wind: "-6.2", r2_total: "110.3" },
-                    { rank: 21, bib: "7", country: "SLO", name: "Rok Oblak", points: 222.5, r1_dist: "91.5", r1_note: "53.0", r1_wind: "-4.5", r1_total: "111.5", r2_dist: "92.0", r2_note: "51.5", r2_wind: "-4.5", r2_total: "111.0" },
-                    { rank: 22, bib: "37", country: "EST", name: "Artti Aigro", points: 222.2, r1_dist: "93.0", r1_note: "53.5", r1_wind: "-3.4", r1_total: "116.1", r2_dist: "90.0", r2_note: "51.5", r2_wind: "-5.4", r2_total: "106.1" },
-                    { rank: 23, bib: "33", country: "SUI", name: "Gregor Deschwanden", points: 221.2, r1_dist: "91.5", r1_note: "52.0", r1_wind: "-1.5", r1_total: "113.5", r2_dist: "91.5", r2_note: "50.5", r2_wind: "-5.8", r2_total: "107.7" },
-                    { rank: 24, bib: "41", country: "SLO", name: "Timi Zajc", points: 220.1, r1_dist: "91.5", r1_note: "53.5", r1_wind: "-4.5", r1_total: "112.0", r2_dist: "90.0", r2_note: "51.5", r2_wind: "-3.4", r2_total: "108.1" },
-                    { rank: 25, bib: "18", country: "NOR", name: "Johann Andre Forfang", points: 218.8, r1_dist: "90.0", r1_note: "52.0", r1_wind: "-3.0", r1_total: "109.0", r2_dist: "90.0", r2_note: "52.5", r2_wind: "-2.7", r2_total: "109.8" },
-                    { rank: 26, bib: "5", country: "USA", name: "Andrew Urlaub", points: 214.8, r1_dist: "90.0", r1_note: "51.5", r1_wind: "-3.4", r1_total: "108.1", r2_dist: "88.5", r2_note: "51.5", r2_wind: "-1.8", r2_total: "106.7" },
-                    { rank: 27, bib: "21", country: "POL", name: "Pawel Wasek", points: 214.2, r1_dist: "88.5", r1_note: "51.0", r1_wind: "-0.03", r1_total: "108.4", r2_dist: "90.0", r2_note: "51.0", r2_wind: "-5.2", r2_total: "105.8" },
-                    { rank: 28, bib: "10", country: "USA", name: "Tate Frantz", points: 212.7, r1_dist: "89.5", r1_note: "52.5", r1_wind: "-3.4", r1_total: "108.1", r2_dist: "88.0", r2_note: "51.5", r2_wind: "-2.9", r2_total: "104.6" },
-                    { rank: 29, bib: "8", country: "JPN", name: "Yukiya Sato", points: 212.5, r1_dist: "90.5", r1_note: "51.5", r1_wind: "-3.5", r1_total: "109.0", r2_dist: "88.5", r2_note: "51.0", r2_wind: "-4.5", r2_total: "103.5" },
-                    { rank: 30, bib: "24", country: "NOR", name: "Halvor Egner Granerud", points: 207.4, r1_dist: "88.5", r1_note: "52.5", r1_wind: "-1.5", r1_total: "108.0", r2_dist: "85.5", r2_note: "51.5", r2_wind: "-3.1", r2_total: "99.4" },
-                    { rank: 31, bib: "17", country: "POL", name: "Aleksander Zniszczol", points: 107.8, r1_dist: "89.5", r1_note: "51.5", r1_wind: "-2.7", r1_total: "107.8" },
-                    { rank: 32, bib: "23", country: "NOR", name: "Benjamin Oestvold", points: 107.0, r1_dist: "88.0", r1_note: "51.0", r1_wind: "0.0", r1_total: "107.0" },
-                    { rank: 33, bib: "30", country: "POL", name: "Dawid Kubacki", points: 106.8, r1_dist: "88.5", r1_note: "52.5", r1_wind: "-2.7", r1_total: "106.8" },
-                    { rank: 33, bib: "1", country: "SUI", name: "Simon Ammann", points: 106.8, r1_dist: "89.0", r1_note: "51.0", r1_wind: "-2.2", r1_total: "106.8" },
-                    { rank: 35, bib: "26", country: "POL", name: "Piotr Zyla", points: 106.5, r1_dist: "88.0", r1_note: "51.0", r1_wind: "-0.5", r1_total: "106.5" },
-                    { rank: 36, bib: "27", country: "USA", name: "Jason Colby", points: 106.4, r1_dist: "88.5", r1_note: "51.5", r1_wind: "-2.1", r1_total: "106.4" },
-                    { rank: 37, bib: "15", country: "SUI", name: "Sandro Hauswirth", points: 106.3, r1_dist: "89.5", r1_note: "51.0", r1_wind: "-3.7", r1_total: "106.3" },
-                    { rank: 38, bib: "12", country: "FIN", name: "Vilho Palosaari", points: 105.7, r1_dist: "88.0", r1_note: "51.5", r1_wind: "-1.8", r1_total: "105.7" },
-                    { rank: 39, bib: "16", country: "KAZ", name: "Danil Vassilyev", points: 105.2, r1_dist: "88.5", r1_note: "52.0", r1_wind: "-3.8", r1_total: "105.2" },
-                    { rank: 40, bib: "19", country: "JPN", name: "Tomofumi Naito", points: 105.1, r1_dist: "88.0", r1_note: "50.5", r1_wind: "-1.4", r1_total: "105.1" },
-                    { rank: 41, bib: "2", country: "SUI", name: "Felix Trunz", points: 104.6, r1_dist: "88.0", r1_note: "51.5", r1_wind: "-2.9", r1_total: "104.6" },
-                    { rank: 42, bib: "6", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 104.5, r1_dist: "90.0", r1_note: "48.5", r1_wind: "-4.0", r1_total: "104.5" },
-                    { rank: 43, bib: "11", country: "FRA", name: "Jules Chervet", points: 104.0, r1_dist: "87.5", r1_note: "51.0", r1_wind: "-2.0", r1_total: "104.0" },
-                    { rank: 44, bib: "29", country: "JPN", name: "Sakutaro Kobayashi", points: 100.0, r1_dist: "86.0", r1_note: "50.0", r1_wind: "-2.0", r1_total: "100.0" },
-                    { rank: 45, bib: "13", country: "SVK", name: "Hektor Kapustik", points: 99.6, r1_dist: "86.0", r1_note: "49.5", r1_wind: "-1.9", r1_total: "99.6" },
-                    { rank: 46, bib: "20", country: "SUI", name: "Juri Kesseli", points: 99.5, r1_dist: "83.5", r1_note: "50.0", r1_wind: "2.5", r1_total: "99.5" },
-                    { rank: 47, bib: "4", country: "USA", name: "Erik Belshaw", points: 98.5, r1_dist: "86.5", r1_note: "50.0", r1_wind: "-4.5", r1_total: "98.5" },
-                    { rank: 48, bib: "25", country: "GER", name: "Karl Geiger", points: 97.6, r1_dist: "84.0", r1_note: "51.0", r1_wind: "-1.4", r1_total: "97.6" },
-                    { rank: 48, bib: "14", country: "UKR", name: "Vitaliy Kalinichenko", points: 97.6, r1_dist: "85.5", r1_note: "48.0", r1_wind: "-1.4", r1_total: "97.6" },
-                    { rank: 50, bib: "3", country: "ITA", name: "Alex Insam", points: 96.5, r1_dist: "85.5", r1_note: "50.5", r1_wind: "-5.0", r1_total: "96.5" }
+                    { rank: 1, bib: "46", country: "AUT", name: "Stefan Kraft", points: 249.9, r1_dist: "97.5", r1_note: "56.5", r1_wind: "-4.1", r1_total: "127.4", r2_dist: "96.5", r2_note: "56.5", r2_wind: "-7.0", r2_total: "122.5", r1_judges: "19.0 19.0 19.0 18.5 18.5", r2_judges: "19.0 19.0 18.5 18.5 19.0", r1_comp: "0.5", r2_comp: "0.9", r1_rank: 1, r2_rank: 3, r1_speed: "82.1", r2_speed: "81.6", r1_dpts: "75.0", r2_dpts: "73.0" },
+                    { rank: 2, bib: "43", country: "SLO", name: "Anze Lanisek", points: 247.7, r1_dist: "96.0", r1_note: "54.5", r1_wind: "-4.3", r1_total: "122.2", r2_dist: "96.0", r2_note: "55.5", r2_wind: "-5.7", r2_total: "125.5", r1_judges: "18.5 18.0 18.0 18.0 18.5", r2_judges: "19.0 18.5 18.5 18.5 18.0", r1_comp: "0.5", r2_comp: "0.7", r1_rank: 2, r2_rank: 1, r1_speed: "81.9", r2_speed: "81.2", r1_dpts: "72.0", r2_dpts: "72.0" },
+                    { rank: 3, bib: "45", country: "GER", name: "Philipp Raimund", points: 244.9, r1_dist: "94.5", r1_note: "54.5", r1_wind: "-3.6", r1_total: "119.9", r2_dist: "99.5", r2_note: "54.0", r2_wind: "-8.0", r2_total: "125.0", r1_judges: "18.0 18.0 18.5 18.0 18.5", r2_judges: "18.5 18.5 18.0 17.0 17.5", r1_comp: "0.5", r2_comp: "1.0", r1_rank: 5, r2_rank: 2, r1_speed: "82.3", r2_speed: "81.8", r1_dpts: "69.0", r2_dpts: "79.0" },
+                    { rank: 4, bib: "42", country: "AUT", name: "Stephan Embacher", points: 241.8, r1_dist: "95.0", r1_note: "54.5", r1_wind: "-4.6", r1_total: "119.9", r2_dist: "96.5", r2_note: "54.5", r2_wind: "-5.6", r2_total: "121.9", r1_judges: "18.5 18.5 18.0 18.0 18.0", r2_judges: "18.5 17.5 18.5 18.0 18.0", r1_comp: "0.6", r2_comp: "0.7", r1_rank: 5, r2_rank: 4, r1_speed: "81.8", r2_speed: "81.3", r1_dpts: "70.0", r2_dpts: "73.0" },
+                    { rank: 5, bib: "47", country: "AUT", name: "Jan Hoerl", points: 240.6, r1_dist: "94.0", r1_note: "55.0", r1_wind: "-4.0", r1_total: "119.0", r2_dist: "97.0", r2_note: "55.0", r2_wind: "-7.4", r2_total: "121.6", r1_judges: "18.5 18.0 18.5 18.5 18.0", r2_judges: "18.0 18.5 18.5 18.0 18.5", r1_comp: "0.5", r2_comp: "0.9", r1_rank: 9, r2_rank: 5, r1_speed: "81.6", r2_speed: "81.3", r1_dpts: "68.0", r2_dpts: "74.0" },
+                    { rank: 6, bib: "49", country: "AUT", name: "Daniel Tschofenig", points: 240.2, r1_dist: "94.0", r1_note: "56.0", r1_wind: "-3.0", r1_total: "121.0", r2_dist: "93.5", r2_note: "55.5", r2_wind: "-7.0", r2_total: "119.2", r1_judges: "18.5 19.0 18.5 19.0 18.5", r2_judges: "18.5 18.5 18.5 19.0 18.5", r1_comp: "0.4", r2_comp: "0.9", r1_rank: 3, r2_rank: 7, r1_speed: "81.6", r2_speed: "80.7", r1_dpts: "68.0", r2_dpts: "67.0" },
+                    { rank: 7, bib: "50", country: "JPN", name: "Ryoyu Kobayashi", points: 237.5, r1_dist: "94.0", r1_note: "55.5", r1_wind: "-3.4", r1_total: "120.1", r2_dist: "95.5", r2_note: "55.5", r2_wind: "-9.1", r2_total: "117.4", r1_judges: "18.5 18.5 18.5 18.5 19.0", r2_judges: "18.5 18.5 18.5 18.5 19.0", r1_comp: "0.4", r2_comp: "1.1", r1_rank: 4, r2_rank: 8, r1_speed: "81.9", r2_speed: "81.5", r1_dpts: "68.0", r2_dpts: "71.0" },
+                    { rank: 8, bib: "44", country: "GER", name: "Felix Hoffmann", points: 235.7, r1_dist: "92.0", r1_note: "54.0", r1_wind: "-2.2", r1_total: "115.8", r2_dist: "97.0", r2_note: "53.5", r2_wind: "-7.6", r2_total: "119.9", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.0 18.0 17.5 17.5", r1_comp: "0.3", r2_comp: "1.0", r1_rank: 14, r2_rank: 6, r1_speed: "81.5", r2_speed: "81.1", r1_dpts: "64.0", r2_dpts: "74.0" },
+                    { rank: 9, bib: "36", country: "BUL", name: "Vladimir Zografski", points: 234.7, r1_dist: "95.0", r1_note: "54.0", r1_wind: "-4.1", r1_total: "119.9", r2_dist: "93.0", r2_note: "54.0", r2_wind: "-5.2", r2_total: "114.8", r1_judges: "18.0 17.5 18.5 18.0 18.0", r2_judges: "17.5 18.0 18.5 18.0 18.0", r1_comp: "0.5", r2_comp: "0.7", r1_rank: 5, r2_rank: 11, r1_speed: "81.6", r2_speed: "80.9", r1_dpts: "70.0", r2_dpts: "66.0" },
+                    { rank: 10, bib: "35", country: "NOR", name: "Marius Lindvik", points: 232.0, r1_dist: "94.0", r1_note: "53.0", r1_wind: "-2.8", r1_total: "118.2", r2_dist: "92.5", r2_note: "54.0", r2_wind: "-5.2", r2_total: "113.8", r1_judges: "18.0 18.0 17.5 17.5 17.5", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "0.4", r2_comp: "0.7", r1_rank: 10, r2_rank: 15, r1_speed: "82.0", r2_speed: "81.0", r1_dpts: "68.0", r2_dpts: "65.0" },
+                    { rank: 11, bib: "38", country: "JPN", name: "Ren Nikaido", points: 231.2, r1_dist: "93.0", r1_note: "54.0", r1_wind: "-2.4", r1_total: "117.6", r2_dist: "92.0", r2_note: "54.0", r2_wind: "-4.4", r2_total: "113.6", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.5 18.0 18.0 18.0", r1_comp: "0.3", r2_comp: "0.6", r1_rank: 11, r2_rank: 16, r1_speed: "82.0", r2_speed: "81.6", r1_dpts: "66.0", r2_dpts: "64.0" },
+                    { rank: 12, bib: "32", country: "POL", name: "Kacper Tomasiak", points: 231.0, r1_dist: "93.0", r1_note: "54.0", r1_wind: "-0.6", r1_total: "119.4", r2_dist: "93.0", r2_note: "53.0", r2_wind: "-7.4", r2_total: "111.6", r1_judges: "18.0 18.0 19.0 18.0 18.0", r2_judges: "17.5 18.0 17.5 17.0 18.0", r1_comp: "0.1", r2_comp: "0.9", r1_rank: 8, r2_rank: 17, r1_speed: "82.1", r2_speed: "81.7", r1_dpts: "66.0", r2_dpts: "66.0" },
+                    { rank: 13, bib: "48", country: "SLO", name: "Domen Prevc", points: 230.7, r1_dist: "92.0", r1_note: "52.5", r1_wind: "-2.9", r1_total: "113.6", r2_dist: "95.0", r2_note: "53.5", r2_wind: "-6.4", r2_total: "117.1", r1_judges: "17.5 17.5 17.5 17.5 17.5", r2_judges: "17.5 18.0 17.5 18.0 18.0", r1_comp: "0.4", r2_comp: "0.8", r1_rank: 17, r2_rank: 9, r1_speed: "81.7", r2_speed: "81.6", r1_dpts: "64.0", r2_dpts: "70.0" },
+                    { rank: 14, bib: "34", country: "JPN", name: "Naoki Nakamura", points: 229.5, r1_dist: "91.5", r1_note: "54.0", r1_wind: "-1.4", r1_total: "115.6", r2_dist: "94.5", r2_note: "54.0", r2_wind: "-9.1", r2_total: "113.9", r1_judges: "18.0 18.0 18.0 18.5 18.0", r2_judges: "17.0 18.0 18.0 18.0 18.0", r1_comp: "0.2", r2_comp: "1.1", r1_rank: 15, r2_rank: 14, r1_speed: "81.8", r2_speed: "81.1", r1_dpts: "63.0", r2_dpts: "69.0" },
+                    { rank: 15, bib: "39", country: "POL", name: "Kamil Stoch", points: 228.5, r1_dist: "93.5", r1_note: "54.0", r1_wind: "-3.8", r1_total: "117.2", r2_dist: "93.0", r2_note: "53.0", r2_wind: "-7.7", r2_total: "111.3", r1_judges: "18.0 17.5 18.0 18.0 18.0", r2_judges: "18.0 17.0 17.0 18.0 18.0", r1_comp: "0.5", r2_comp: "1.0", r1_rank: 12, r2_rank: 18, r1_speed: "81.8", r2_speed: "81.3", r1_dpts: "67.0", r2_dpts: "66.0" },
+                    { rank: 16, bib: "31", country: "AUT", name: "Maximilian Ortner", points: 227.0, r1_dist: "90.5", r1_note: "52.5", r1_wind: "-0.8", r1_total: "112.7", r2_dist: "93.5", r2_note: "54.0", r2_wind: "-6.7", r2_total: "114.3", r1_judges: "17.5 17.5 18.0 17.5 17.0", r2_judges: "17.5 18.0 18.0 18.0 18.0", r1_comp: "0.1", r2_comp: "0.8", r1_rank: 20, r2_rank: 12, r1_speed: "82.0", r2_speed: "81.5", r1_dpts: "61.0", r2_dpts: "67.0" },
+                    { rank: 17, bib: "40", country: "AUT", name: "Manuel Fettner", points: 226.1, r1_dist: "90.5", r1_note: "52.0", r1_wind: "-4.0", r1_total: "109.0", r2_dist: "94.0", r2_note: "52.5", r2_wind: "-3.4", r2_total: "117.1", r1_judges: "17.5 17.5 17.5 17.0 17.0", r2_judges: "17.0 17.5 17.5 17.5 17.5", r1_comp: "0.5", r2_comp: "0.4", r1_rank: 24, r2_rank: 9, r1_speed: "81.7", r2_speed: "81.8", r1_dpts: "61.0", r2_dpts: "68.0" },
+                    { rank: 18, bib: "22", country: "GER", name: "Pius Paschke", points: 224.9, r1_dist: "91.0", r1_note: "49.5", r1_wind: "-0.6", r1_total: "110.9", r2_dist: "92.5", r2_note: "54.0", r2_wind: "-5.0", r2_total: "114.0", r1_judges: "16.5 16.5 16.5 17.0 16.5", r2_judges: "17.5 18.0 18.0 18.0 18.0", r1_comp: "0.1", r2_comp: "0.6", r1_rank: 23, r2_rank: 13, r1_speed: "82.1", r2_speed: "81.5", r1_dpts: "62.0", r2_dpts: "65.0" },
+                    { rank: 19, bib: "9", country: "GER", name: "Andreas Wellinger", points: 223.9, r1_dist: "93.0", r1_note: "52.5", r1_wind: "-3.8", r1_total: "114.7", r2_dist: "91.5", r2_note: "54.0", r2_wind: "-7.8", r2_total: "109.2", r1_judges: "17.5 18.0 17.5 17.5 17.0", r2_judges: "17.5 18.0 18.0 18.0 18.0", r1_comp: "0.5", r2_comp: "1.0", r1_rank: 16, r2_rank: 22, r1_speed: "82.8", r2_speed: "82.2", r1_dpts: "66.0", r2_dpts: "63.0" },
+                    { rank: 20, bib: "28", country: "FIN", name: "Antti Aalto", points: 223.8, r1_dist: "91.5", r1_note: "52.5", r1_wind: "-2.0", r1_total: "113.5", r2_dist: "92.0", r2_note: "52.5", r2_wind: "-6.2", r2_total: "110.3", r1_judges: "17.5 17.5 17.5 17.5 17.0", r2_judges: "17.5 17.5 17.5 17.5 17.5", r1_comp: "0.3", r2_comp: "0.8", r1_rank: 18, r2_rank: 20, r1_speed: "82.1", r2_speed: "81.5", r1_dpts: "63.0", r2_dpts: "64.0" },
+                    { rank: 21, bib: "7", country: "SLO", name: "Rok Oblak", points: 222.5, r1_dist: "91.5", r1_note: "53.0", r1_wind: "-4.5", r1_total: "111.5", r2_dist: "92.0", r2_note: "51.5", r2_wind: "-4.5", r2_total: "111.0", r1_judges: "17.0 17.5 17.5 18.0 18.0", r2_judges: "17.5 17.0 17.0 17.0 17.5", r1_comp: "0.6", r2_comp: "0.6", r1_rank: 22, r2_rank: 19, r1_speed: "82.2", r2_speed: "81.8", r1_dpts: "63.0", r2_dpts: "64.0" },
+                    { rank: 22, bib: "37", country: "EST", name: "Artti Aigro", points: 222.2, r1_dist: "93.0", r1_note: "53.5", r1_wind: "-3.4", r1_total: "116.1", r2_dist: "90.0", r2_note: "51.5", r2_wind: "-5.4", r2_total: "106.1", r1_judges: "18.0 18.0 17.5 18.5 17.5", r2_judges: "17.0 16.5 18.0 17.0 17.5", r1_comp: "0.4", r2_comp: "0.7", r1_rank: 13, r2_rank: 26, r1_speed: "81.7", r2_speed: "81.2", r1_dpts: "66.0", r2_dpts: "60.0" },
+                    { rank: 23, bib: "33", country: "SUI", name: "Gregor Deschwanden", points: 221.2, r1_dist: "91.5", r1_note: "52.0", r1_wind: "-1.5", r1_total: "113.5", r2_dist: "91.5", r2_note: "50.5", r2_wind: "-5.8", r2_total: "107.7", r1_judges: "17.5 17.0 17.5 17.0 17.5", r2_judges: "17.0 17.5 17.0 16.5 16.5", r1_comp: "0.2", r2_comp: "0.7", r1_rank: 18, r2_rank: 24, r1_speed: "82.4", r2_speed: "81.9", r1_dpts: "63.0", r2_dpts: "63.0" },
+                    { rank: 24, bib: "41", country: "SLO", name: "Timi Zajc", points: 220.1, r1_dist: "91.5", r1_note: "53.5", r1_wind: "-4.5", r1_total: "112.0", r2_dist: "90.0", r2_note: "51.5", r2_wind: "-3.4", r2_total: "108.1", r1_judges: "18.0 17.0 18.0 18.0 17.5", r2_judges: "17.5 17.5 17.0 17.0 17.0", r1_comp: "0.6", r2_comp: "0.4", r1_rank: 21, r2_rank: 23, r1_speed: "81.9", r2_speed: "81.4", r1_dpts: "63.0", r2_dpts: "60.0" },
+                    { rank: 25, bib: "18", country: "NOR", name: "Johann Andre Forfang", points: 218.8, r1_dist: "90.0", r1_note: "52.0", r1_wind: "-3.0", r1_total: "109.0", r2_dist: "90.0", r2_note: "52.5", r2_wind: "-2.7", r2_total: "109.8", r1_judges: "18.0 17.5 17.0 17.5 17.0", r2_judges: "17.5 17.5 17.5 17.5 17.5", r1_comp: "0.4", r2_comp: "0.3", r1_rank: 24, r2_rank: 21, r1_speed: "82.1", r2_speed: "81.6", r1_dpts: "60.0", r2_dpts: "60.0" },
+                    { rank: 26, bib: "5", country: "USA", name: "Andrew Urlaub", points: 214.8, r1_dist: "90.0", r1_note: "51.5", r1_wind: "-3.4", r1_total: "108.1", r2_dist: "88.5", r2_note: "51.5", r2_wind: "-1.8", r2_total: "106.7", r1_judges: "17.5 16.5 17.0 17.5 17.0", r2_judges: "17.5 17.0 17.5 17.0 17.0", r1_comp: "0.4", r2_comp: "0.2", r1_rank: 28, r2_rank: 25, r1_speed: "81.9", r2_speed: "81.6", r1_dpts: "60.0", r2_dpts: "57.0" },
+                    { rank: 27, bib: "21", country: "POL", name: "Pawel Wasek", points: 214.2, r1_dist: "88.5", r1_note: "51.0", r1_wind: "-0.03", r1_total: "108.4", r2_dist: "90.0", r2_note: "51.0", r2_wind: "-5.2", r2_total: "105.8", r1_judges: "17.0 17.0 17.0 18.0 17.0", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "0.4", r2_comp: "0.7", r1_rank: 27, r2_rank: 27, r1_speed: "82.0", r2_speed: "81.5", r1_dpts: "57.0", r2_dpts: "60.0" },
+                    { rank: 28, bib: "10", country: "USA", name: "Tate Frantz", points: 212.7, r1_dist: "89.5", r1_note: "52.5", r1_wind: "-3.4", r1_total: "108.1", r2_dist: "88.0", r2_note: "51.5", r2_wind: "-2.9", r2_total: "104.6", r1_judges: "17.5 17.0 17.0 16.5 18.0", r2_judges: "17.5 17.5 17.5 17.5 17.0", r1_comp: "0.4", r2_comp: "0.4", r1_rank: 28, r2_rank: 28, r1_speed: "81.9", r2_speed: "81.5", r1_dpts: "59.0", r2_dpts: "56.0" },
+                    { rank: 29, bib: "8", country: "JPN", name: "Yukiya Sato", points: 212.5, r1_dist: "90.5", r1_note: "51.5", r1_wind: "-3.5", r1_total: "109.0", r2_dist: "88.5", r2_note: "51.0", r2_wind: "-4.5", r2_total: "103.5", r1_judges: "17.5 17.0 17.0 17.0 17.5", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "0.4", r2_comp: "0.6", r1_rank: 24, r2_rank: 29, r1_speed: "81.5", r2_speed: "81.1", r1_dpts: "61.0", r2_dpts: "57.0" },
+                    { rank: 30, bib: "24", country: "NOR", name: "Halvor Egner Granerud", points: 207.4, r1_dist: "88.5", r1_note: "52.5", r1_wind: "-1.5", r1_total: "108.0", r2_dist: "85.5", r2_note: "51.5", r2_wind: "-3.1", r2_total: "99.4", r1_judges: "18.0 17.5 17.5 17.5 17.0", r2_judges: "17.5 16.5 17.5 17.0 17.0", r1_comp: "0.4", r2_comp: "0.4", r1_rank: 30, r2_rank: 30, r1_speed: "82.0", r2_speed: "81.2", r1_dpts: "57.0", r2_dpts: "51.0" }
                 ]
             },
             {
@@ -286,62 +243,94 @@
                 date: "26.11.2025",
                 location: "Falun (SWE) - HS 132 (K-120)",
                 hill: "HS 132",
+                jury: JURY_FLAGS[3],
                 results: [
-                    { rank: 1, bib: "46", country: "SLO", name: "Anze Lanisek", points: 262.9, r1_dist: "129.0", r1_note: "55.5", r1_wind: "-0.1", r1_total: "131.6", r2_dist: "129.0", r2_note: "56.0", r2_wind: "-2.1", r2_total: "131.3" },
-                    { rank: 2, bib: "42", country: "AUT", name: "Stephan Embacher", points: 259.9, r1_dist: "128.5", r1_note: "54.0", r1_wind: "0.01", r1_total: "127.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "0.19", r2_total: "132.7" },
-                    { rank: 3, bib: "45", country: "SLO", name: "Domen Prevc", points: 258.7, r1_dist: "129.0", r1_note: "52.0", r1_wind: "-0.06", r1_total: "129.2", r2_dist: "129.0", r2_note: "55.0", r2_wind: "0.51", r2_total: "129.5" },
-                    { rank: 4, bib: "48", country: "AUT", name: "Daniel Tschofenig", points: 256.6, r1_dist: "127.0", r1_note: "56.0", r1_wind: "-2.4", r1_total: "126.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "0.47", r2_total: "130.4" },
-                    { rank: 5, bib: "47", country: "AUT", name: "Jan Hoerl", points: 252.2, r1_dist: "125.0", r1_note: "54.0", r1_wind: "2.8", r1_total: "125.8", r2_dist: "126.5", r2_note: "54.0", r2_wind: "-3.1", r2_total: "126.4" },
-                    { rank: 6, bib: "49", country: "JPN", name: "Ryoyu Kobayashi", points: 249.9, r1_dist: "127.5", r1_note: "55.0", r1_wind: "-3.7", r1_total: "124.8", r2_dist: "127.5", r2_note: "55.0", r2_wind: "0.67", r2_total: "125.1" },
-                    { rank: 7, bib: "40", country: "AUT", name: "Manuel Fettner", points: 249.2, r1_dist: "128.0", r1_note: "53.5", r1_wind: "0.02", r1_total: "127.7", r2_dist: "123.5", r2_note: "54.0", r2_wind: "0.24", r2_total: "121.5" },
-                    { rank: 8, bib: "41", country: "JPN", name: "Ren Nikaido", points: 249.1, r1_dist: "130.0", r1_note: "55.0", r1_wind: "-3.6", r1_total: "129.4", r2_dist: "124.5", r2_note: "54.5", r2_wind: "0.62", r2_total: "119.7" },
-                    { rank: 9, bib: "50", country: "AUT", name: "Stefan Kraft", points: 243.0, r1_dist: "133.0", r1_note: "57.0", r1_wind: "-3.5", r1_total: "136.9", r2_dist: "119.0", r2_note: "54.0", r2_wind: "0.92", r2_total: "106.1" },
-                    { rank: 10, bib: "32", country: "SUI", name: "Gregor Deschwanden", points: 239.6, r1_dist: "128.0", r1_note: "52.0", r1_wind: "0.48", r1_total: "121.2", r2_dist: "125.5", r2_note: "52.5", r2_wind: "0.37", r2_total: "118.4" },
-                    { rank: 11, bib: "44", country: "GER", name: "Philipp Raimund", points: 239.0, r1_dist: "125.5", r1_note: "54.0", r1_wind: "0.07", r1_total: "123.1", r2_dist: "125.5", r2_note: "52.0", r2_wind: "0.56", r2_total: "115.9" },
-                    { rank: 12, bib: "43", country: "GER", name: "Felix Hoffmann", points: 237.7, r1_dist: "128.5", r1_note: "50.0", r1_wind: "0.14", r1_total: "123.8", r2_dist: "121.0", r2_note: "52.5", r2_wind: "0.39", r2_total: "113.9" },
-                    { rank: 13, bib: "24", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 235.1, r1_dist: "124.5", r1_note: "53.5", r1_wind: "-4.0", r1_total: "117.6", r2_dist: "124.5", r2_note: "54.0", r2_wind: "-4.6", r2_total: "117.5" },
-                    { rank: 14, bib: "27", country: "GER", name: "Pius Paschke", points: 234.5, r1_dist: "121.0", r1_note: "53.0", r1_wind: "5.0", r1_total: "119.8", r2_dist: "123.0", r2_note: "53.0", r2_wind: "0.34", r2_total: "114.7" },
-                    { rank: 15, bib: "34", country: "POL", name: "Kacper Tomasiak", points: 234.3, r1_dist: "121.0", r1_note: "52.5", r1_wind: "2.9", r1_total: "117.2", r2_dist: "124.5", r2_note: "53.5", r2_wind: "-4.5", r2_total: "117.1" },
-                    { rank: 16, bib: "38", country: "POL", name: "Kamil Stoch", points: 233.8, r1_dist: "122.5", r1_note: "53.0", r1_wind: "-1.0", r1_total: "116.5", r2_dist: "125.5", r2_note: "52.5", r2_wind: "0.47", r2_total: "117.3" },
-                    { rank: 17, bib: "36", country: "JPN", name: "Naoki Nakamura", points: 231.5, r1_dist: "124.5", r1_note: "53.0", r1_wind: "0.23", r1_total: "118.6", r2_dist: "122.5", r2_note: "54.0", r2_wind: "0.52", r2_total: "112.9" },
-                    { rank: 18, bib: "37", country: "NOR", name: "Marius Lindvik", points: 229.4, r1_dist: "125.5", r1_note: "54.0", r1_wind: "-1.6", r1_total: "122.3", r2_dist: "122.0", r2_note: "51.5", r2_wind: "0.74", r2_total: "107.1" },
-                    { rank: 19, bib: "30", country: "FRA", name: "Valentin Foubert", points: 228.2, r1_dist: "122.0", r1_note: "52.5", r1_wind: "0.39", r1_total: "111.9", r2_dist: "124.0", r2_note: "53.0", r2_wind: "-3.9", r2_total: "116.3" },
-                    { rank: 20, bib: "20", country: "NOR", name: "Johann Andre Forfang", points: 228.0, r1_dist: "121.0", r1_note: "52.5", r1_wind: "-0.18", r1_total: "117.2", r2_dist: "121.5", r2_note: "52.5", r2_wind: "0.41", r2_total: "110.8" },
-                    { rank: 21, bib: "22", country: "SLO", name: "Rok Oblak", points: 226.4, r1_dist: "123.0", r1_note: "54.0", r1_wind: "0.16", r1_total: "117.7", r2_dist: "120.0", r2_note: "52.0", r2_wind: "0.31", r2_total: "108.7" },
-                    { rank: 22, bib: "13", country: "JPN", name: "Tomofumi Naito", points: 226.1, r1_dist: "122.0", r1_note: "52.0", r1_wind: "0.00", r1_total: "115.6", r2_dist: "122.5", r2_note: "51.5", r2_wind: "-5.5", r2_total: "110.5" },
-                    { rank: 23, bib: "26", country: "USA", name: "Jason Colby", points: 223.5, r1_dist: "117.5", r1_note: "51.5", r1_wind: "5.7", r1_total: "112.7", r2_dist: "122.0", r2_note: "53.5", r2_wind: "0.58", r2_total: "110.8" },
-                    { rank: 24, bib: "39", country: "BUL", name: "Vladimir Zografski", points: 222.0, r1_dist: "120.0", r1_note: "52.5", r1_wind: "-0.03", r1_total: "113.0", r2_dist: "121.5", r2_note: "53.0", r2_wind: "-6.7", r2_total: "109.0" },
-                    { rank: 25, bib: "33", country: "AUT", name: "Maximilian Ortner", points: 221.1, r1_dist: "120.0", r1_note: "51.5", r1_wind: "-1.5", r1_total: "110.0", r2_dist: "122.0", r2_note: "52.5", r2_wind: "0.46", r2_total: "111.1" },
-                    { rank: 26, bib: "35", country: "EST", name: "Artti Aigro", points: 218.9, r1_dist: "121.5", r1_note: "52.5", r1_wind: "0.27", r1_total: "112.3", r2_dist: "120.5", r2_note: "51.5", r2_wind: "-5.8", r2_total: "106.6" },
-                    { rank: 27, bib: "15", country: "JPN", name: "Yukiya Sato", points: 218.0, r1_dist: "119.5", r1_note: "51.0", r1_wind: "0.5", r1_total: "110.6", r2_dist: "121.5", r2_note: "51.0", r2_wind: "0.58", r2_total: "107.4" },
-                    { rank: 28, bib: "29", country: "POL", name: "Dawid Kubacki", points: 217.4, r1_dist: "119.0", r1_note: "52.5", r1_wind: "0.09", r1_total: "109.7", r2_dist: "120.5", r2_note: "52.5", r2_wind: "-5.7", r2_total: "107.7" },
-                    { rank: 29, bib: "25", country: "POL", name: "Piotr Zyla", points: 216.6, r1_dist: "119.0", r1_note: "51.0", r1_wind: "-0.04", r1_total: "109.8", r2_dist: "121.5", r2_note: "51.0", r2_wind: "-6.9", r2_total: "106.8" },
-                    { rank: 30, bib: "3", country: "USA", name: "Kevin Bickner", points: 214.8, r1_dist: "122.5", r1_note: "51.5", r1_wind: "-3.5", r1_total: "112.5", r2_dist: "119.0", r2_note: "49.5", r2_wind: "-5.4", r2_total: "102.3" },
-                    { rank: 31, bib: "19", country: "POL", name: "Pawel Wasek", points: 109.3, r1_dist: "118.5", r1_note: "52.0", r1_wind: "0.00", r1_total: "109.3" },
-                    { rank: 32, bib: "2", country: "SUI", name: "Sandro Hauswirth", points: 108.5, r1_dist: "118.5", r1_note: "51.5", r1_wind: "0.03", r1_total: "108.5" },
-                    { rank: 33, bib: "28", country: "JPN", name: "Sakutaro Kobayashi", points: 107.6, r1_dist: "117.5", r1_note: "51.0", r1_wind: "-0.07", r1_total: "107.6" },
-                    { rank: 34, bib: "18", country: "NOR", name: "Halvor Egner Granerud", points: 107.5, r1_dist: "117.5", r1_note: "51.5", r1_wind: "-0.03", r1_total: "107.5" },
-                    { rank: 35, bib: "10", country: "SUI", name: "Felix Trunz", points: 107.1, r1_dist: "121.5", r1_note: "52.0", r1_wind: "0.70", r1_total: "107.1" },
-                    { rank: 36, bib: "7", country: "SUI", name: "Simon Ammann", points: 106.6, r1_dist: "118.5", r1_note: "49.5", r1_wind: "0.02", r1_total: "106.6" },
-                    { rank: 37, bib: "31", country: "FIN", name: "Antti Aalto", points: 106.2, r1_dist: "119.0", r1_note: "51.5", r1_wind: "0.32", r1_total: "106.2" },
-                    { rank: 38, bib: "17", country: "USA", name: "Andrew Urlaub", points: 104.1, r1_dist: "117.0", r1_note: "50.5", r1_wind: "0.09", r1_total: "104.1" },
-                    { rank: 39, bib: "11", country: "SLO", name: "Lovro Kos", points: 102.9, r1_dist: "119.5", r1_note: "50.0", r1_wind: "0.57", r1_total: "102.9" },
-                    { rank: 40, bib: "23", country: "GER", name: "Andreas Wellinger", points: 100.6, r1_dist: "115.5", r1_note: "51.0", r1_wind: "0.21", r1_total: "100.6" },
-                    { rank: 41, bib: "21", country: "GER", name: "Karl Geiger", points: 100.3, r1_dist: "115.0", r1_note: "50.5", r1_wind: "0.11", r1_total: "100.3" },
-                    { rank: 42, bib: "5", country: "UKR", name: "Vitaliy Kalinichenko", points: 99.8, r1_dist: "114.0", r1_note: "49.5", r1_wind: "-0.07", r1_total: "99.8" },
-                    { rank: 43, bib: "8", country: "CZE", name: "Roman Koudelka", points: 99.2, r1_dist: "117.5", r1_note: "52.0", r1_wind: "0.77", r1_total: "99.2" },
-                    { rank: 44, bib: "4", country: "FRA", name: "Louis Obersteiner", points: 97.4, r1_dist: "114.0", r1_note: "50.0", r1_wind: "0.17", r1_total: "97.4" },
-                    { rank: 45, bib: "12", country: "SVK", name: "Hektor Kapustik", points: 95.7, r1_dist: "113.5", r1_note: "50.0", r1_wind: "0.24", r1_total: "95.7" },
-                    { rank: 46, bib: "16", country: "NOR", name: "Benjamin Oestvold", points: 94.6, r1_dist: "112.5", r1_note: "49.5", r1_wind: "0.13", r1_total: "94.6" },
-                    { rank: 47, bib: "1", country: "KAZ", name: "Ilya Mizernykh", points: 93.2, r1_dist: "109.5", r1_note: "49.0", r1_wind: "-0.19", r1_total: "93.2" },
-                    { rank: 48, bib: "14", country: "SUI", name: "Juri Kesseli", points: 92.4, r1_dist: "111.0", r1_note: "48.0", r1_wind: "-0.04", r1_total: "92.4" },
-                    { rank: 49, bib: "9", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 90.6, r1_dist: "113.0", r1_note: "49.5", r1_wind: "0.58", r1_total: "90.6" },
-                    { rank: 50, bib: "1", country: "KAZ", name: "Danil Vassilyev", points: 82.7, r1_dist: "105.0", r1_note: "45.5", r1_wind: "-0.26", r1_total: "82.7" }
+                    { rank: 1, bib: "46", country: "SLO", name: "Anze Lanisek", points: 262.9, r1_dist: "129.0", r1_note: "55.5", r1_wind: "-0.1", r1_total: "131.6", r2_dist: "129.0", r2_note: "56.0", r2_wind: "-0.9", r2_total: "131.3", r1_judges: "18.5 19.0 18.0 18.5 18.5", r2_judges: "18.5 18.5 18.5 18.0 18.0", r1_comp: "0.3", r2_comp: "0.2", r1_rank: 2, r2_rank: 2, r1_speed: "89.0", r2_speed: "88.2", r1_dpts: "76.2", r2_dpts: "76.2" },
+                    { rank: 2, bib: "42", country: "AUT", name: "Stephan Embacher", points: 259.9, r1_dist: "128.5", r1_note: "54.0", r1_wind: "0.35", r1_total: "127.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "0.19", r2_total: "132.7", r1_judges: "18.5 19.0 18.0 18.5 17.5", r2_judges: "18.5 18.5 18.5 18.0 18.0", r1_comp: "0.4", r2_comp: "0.2", r1_rank: 6, r2_rank: 1, r1_speed: "88.8", r2_speed: "88.3", r1_dpts: "75.3", r2_dpts: "76.2" },
+                    { rank: 3, bib: "45", country: "SLO", name: "Domen Prevc", points: 258.7, r1_dist: "129.0", r1_note: "52.0", r1_wind: "1.0", r1_total: "129.2", r2_dist: "129.0", r2_note: "55.0", r2_wind: "-1.7", r2_total: "129.5", r1_judges: "17.0 18.5 17.5 18.5 17.5", r2_judges: "18.5 18.5 17.0 18.0 18.0", r1_comp: "1.0", r2_comp: "0.5", r1_rank: 4, r2_rank: 4, r1_speed: "89.0", r2_speed: "88.3", r1_dpts: "76.2", r2_dpts: "76.2" },
+                    { rank: 4, bib: "48", country: "AUT", name: "Daniel Tschofenig", points: 256.6, r1_dist: "127.0", r1_note: "56.0", r1_wind: "-2.4", r1_total: "126.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "-1.3", r2_total: "130.4", r1_judges: "18.5 18.0 19.0 18.5 18.5", r2_judges: "18.5 18.5 18.5 18.5 18.5", r1_comp: "0.2", r2_comp: "0.5", r1_rank: 7, r2_rank: 3, r1_speed: "89.1", r2_speed: "88.5", r1_dpts: "72.6", r2_dpts: "76.2" },
+                    { rank: 5, bib: "47", country: "AUT", name: "Jan Hoerl", points: 252.2, r1_dist: "125.0", r1_note: "54.0", r1_wind: "2.8", r1_total: "125.8", r2_dist: "126.5", r2_note: "54.0", r2_wind: "0.7", r2_total: "126.4", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 17.0 18.0 18.0 18.5", r1_comp: "-0.2", r2_comp: "0.3", r1_rank: 8, r2_rank: 5, r1_speed: "88.9", r2_speed: "88.3", r1_dpts: "69.0", r2_dpts: "71.7" },
+                    { rank: 6, bib: "49", country: "JPN", name: "Ryoyu Kobayashi", points: 249.9, r1_dist: "127.5", r1_note: "55.0", r1_wind: "-3.7", r1_total: "124.8", r2_dist: "127.5", r2_note: "55.0", r2_wind: "-3.4", r2_total: "125.1", r1_judges: "18.0 18.0 18.5 18.5 18.5", r2_judges: "18.0 18.5 18.5 18.0 18.5", r1_comp: "0.3", r2_comp: "0.7", r1_rank: 9, r2_rank: 6, r1_speed: "89.3", r2_speed: "88.9", r1_dpts: "73.5", r2_dpts: "73.5" },
+                    { rank: 7, bib: "40", country: "AUT", name: "Manuel Fettner", points: 249.2, r1_dist: "128.0", r1_note: "53.5", r1_wind: "-0.2", r1_total: "127.7", r2_dist: "123.5", r2_note: "54.0", r2_wind: "1.2", r2_total: "121.5", r1_judges: "17.5 18.0 17.5 18.0 18.0", r2_judges: "18.0 18.0 18.0 18.0 17.5", r1_comp: "-0.2", r2_comp: "0.2", r1_rank: 5, r2_rank: 7, r1_speed: "89.3", r2_speed: "88.7", r1_dpts: "74.4", r2_dpts: "66.3" },
+                    { rank: 8, bib: "41", country: "JPN", name: "Ren Nikaido", points: 249.1, r1_dist: "130.0", r1_note: "55.0", r1_wind: "-3.6", r1_total: "129.4", r2_dist: "124.5", r2_note: "54.5", r2_wind: "-2.9", r2_total: "119.7", r1_judges: "18.5 18.5 18.5 18.5 18.0", r2_judges: "18.5 18.0 18.0 18.0 18.0", r1_comp: "0.3", r2_comp: "0.6", r1_rank: 3, r2_rank: 8, r1_speed: "89.3", r2_speed: "88.5", r1_dpts: "78.0", r2_dpts: "68.1" },
+                    { rank: 9, bib: "50", country: "AUT", name: "Stefan Kraft", points: 243.0, r1_dist: "133.0", r1_note: "57.0", r1_wind: "-3.5", r1_total: "136.9", r2_dist: "119.0", r2_note: "54.0", r2_wind: "-6.1", r2_total: "106.1", r1_judges: "19.0 19.0 19.0 18.0 19.0", r2_judges: "19.0 19.0 18.0 18.0 17.5", r1_comp: "0.3", r2_comp: "0.9", r1_rank: 1, r2_rank: 29, r1_speed: "89.3", r2_speed: "88.5", r1_dpts: "83.4", r2_dpts: "58.2" },
+                    { rank: 10, bib: "32", country: "SUI", name: "Gregor Deschwanden", points: 239.6, r1_dist: "128.0", r1_note: "52.0", r1_wind: "-5.2", r1_total: "121.2", r2_dist: "125.5", r2_note: "52.5", r2_wind: "-4.0", r2_total: "118.4", r1_judges: "17.0 17.0 17.0 17.5 17.5", r2_judges: "17.5 17.5 17.5 18.0 17.5", r1_comp: "-5.2", r2_comp: "0.4", r1_rank: 13, r2_rank: 9, r1_speed: "89.4", r2_speed: "89.2", r1_dpts: "74.4", r2_dpts: "69.9" },
+                    { rank: 11, bib: "44", country: "GER", name: "Philipp Raimund", points: 239.0, r1_dist: "125.5", r1_note: "54.0", r1_wind: "-0.8", r1_total: "123.1", r2_dist: "125.5", r2_note: "52.0", r2_wind: "-6.0", r2_total: "115.9", r1_judges: "18.0 17.0 18.5 17.5 18.0", r2_judges: "18.0 18.0 17.5 17.0 17.5", r1_comp: "-0.8", r2_comp: "0.6", r1_rank: 11, r2_rank: 14, r1_speed: "89.4", r2_speed: "89.1", r1_dpts: "69.9", r2_dpts: "69.9" },
+                    { rank: 12, bib: "43", country: "GER", name: "Felix Hoffmann", points: 237.7, r1_dist: "128.5", r1_note: "50.0", r1_wind: "-1.5", r1_total: "123.8", r2_dist: "121.0", r2_note: "52.5", r2_wind: "-0.4", r2_total: "113.9", r1_judges: "17.0 17.5 16.5 17.5 17.5", r2_judges: "16.5 16.5 17.5 18.0 17.5", r1_comp: "-1.5", r2_comp: "0.4", r1_rank: 10, r2_rank: 16, r1_speed: "88.6", r2_speed: "87.7", r1_dpts: "75.3", r2_dpts: "61.8" },
+                    { rank: 13, bib: "24", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 235.1, r1_dist: "124.5", r1_note: "53.5", r1_wind: "-4.0", r1_total: "117.6", r2_dist: "124.5", r2_note: "54.0", r2_wind: "-4.6", r2_total: "117.5", r1_judges: "18.0 18.0 18.0 18.0 17.5", r2_judges: "17.5 18.0 18.0 18.0 17.5", r1_comp: "0.4", r2_comp: "0.4", r1_rank: 17, r2_rank: 10, r1_speed: "88.7", r2_speed: "88.4", r1_dpts: "68.1", r2_dpts: "68.1" },
+                    { rank: 14, bib: "27", country: "GER", name: "Pius Paschke", points: 234.5, r1_dist: "121.0", r1_note: "53.0", r1_wind: "5.0", r1_total: "119.8", r2_dist: "123.0", r2_note: "53.0", r2_wind: "-3.7", r2_total: "114.7", r1_judges: "17.5 17.5 17.5 17.5 17.5", r2_judges: "18.0 18.0 18.0 18.0 17.5", r1_comp: "-0.3", r2_comp: "0.3", r1_rank: 14, r2_rank: 15, r1_speed: "88.8", r2_speed: "88.3", r1_dpts: "61.8", r2_dpts: "65.4" },
+                    { rank: 15, bib: "34", country: "POL", name: "Kacper Tomasiak", points: 234.3, r1_dist: "121.0", r1_note: "52.5", r1_wind: "2.9", r1_total: "117.2", r2_dist: "124.5", r2_note: "53.5", r2_wind: "-4.5", r2_total: "117.1", r1_judges: "17.5 18.0 17.5 18.0 17.5", r2_judges: "17.5 17.0 17.5 18.0 18.5", r1_comp: "-0.2", r2_comp: "0.4", r1_rank: 18, r2_rank: 12, r1_speed: "89.1", r2_speed: "88.8", r1_dpts: "61.8", r2_dpts: "68.1" },
+                    { rank: 16, bib: "38", country: "POL", name: "Kamil Stoch", points: 233.8, r1_dist: "122.5", r1_note: "53.0", r1_wind: "-1.0", r1_total: "116.5", r2_dist: "125.5", r2_note: "52.5", r2_wind: "-5.1", r2_total: "117.3", r1_judges: "18.5 17.5 18.0 17.5 17.5", r2_judges: "17.5 17.5 17.0 17.5 18.0", r1_comp: "0.1", r2_comp: "0.5", r1_rank: 20, r2_rank: 11, r1_speed: "88.6", r2_speed: "88.4", r1_dpts: "64.5", r2_dpts: "69.9" },
+                    { rank: 17, bib: "36", country: "JPN", name: "Naoki Nakamura", points: 231.5, r1_dist: "124.5", r1_note: "53.0", r1_wind: "0.23", r1_total: "118.6", r2_dist: "122.5", r2_note: "54.0", r2_wind: "0.52", r2_total: "112.9", r1_judges: "18.0 18.0 17.5 18.0 18.0", r2_judges: "17.5 17.5 18.0 18.0 18.0", r1_comp: "-2.5", r2_comp: "0.5", r1_rank: 15, r2_rank: 17, r1_speed: "88.6", r2_speed: "88.2", r1_dpts: "68.1", r2_dpts: "64.5" },
+                    { rank: 18, bib: "37", country: "NOR", name: "Marius Lindvik", points: 229.4, r1_dist: "125.5", r1_note: "54.0", r1_wind: "-1.6", r1_total: "122.3", r2_dist: "122.0", r2_note: "51.5", r2_wind: "-8.0", r2_total: "107.1", r1_judges: "18.0 17.5 18.0 17.0 17.5", r2_judges: "18.0 18.5 17.0 17.0 17.5", r1_comp: "0.2", r2_comp: "0.7", r1_rank: 12, r2_rank: 26, r1_speed: "89.0", r2_speed: "88.7", r1_dpts: "69.9", r2_dpts: "63.6" },
+                    { rank: 19, bib: "30", country: "FRA", name: "Valentin Foubert", points: 228.2, r1_dist: "122.0", r1_note: "52.5", r1_wind: "-4.2", r1_total: "111.9", r2_dist: "124.0", r2_note: "53.0", r2_wind: "-3.9", r2_total: "116.3", r1_judges: "18.0 17.5 17.5 18.0 17.5", r2_judges: "17.5 17.0 17.5 18.0 18.0", r1_comp: "-4.2", r2_comp: "0.4", r1_rank: 26, r2_rank: 13, r1_speed: "88.3", r2_speed: "88.3", r1_dpts: "63.6", r2_dpts: "67.2" },
+                    { rank: 20, bib: "20", country: "NOR", name: "Johann Andre Forfang", points: 228.0, r1_dist: "121.0", r1_note: "52.5", r1_wind: "2.9", r1_total: "117.2", r2_dist: "121.5", r2_note: "52.5", r2_wind: "-4.4", r2_total: "110.8", r1_judges: "17.5 17.5 17.5 17.5 17.0", r2_judges: "17.5 17.5 17.5 18.0 17.5", r1_comp: "2.9", r2_comp: "0.4", r1_rank: 18, r2_rank: 19, r1_speed: "89.2", r2_speed: "88.7", r1_dpts: "61.8", r2_dpts: "62.7" },
+                    { rank: 21, bib: "22", country: "SLO", name: "Rok Oblak", points: 226.4, r1_dist: "123.0", r1_note: "54.0", r1_wind: "-1.7", r1_total: "117.7", r2_dist: "120.0", r2_note: "52.0", r2_wind: "-3.3", r2_total: "108.7", r1_judges: "18.0 17.5 18.0 17.5 17.5", r2_judges: "18.0 18.0 17.0 17.5 17.5", r1_comp: "-1.7", r2_comp: "0.3", r1_rank: 16, r2_rank: 23, r1_speed: "89.5", r2_speed: "89.0", r1_dpts: "65.4", r2_dpts: "60.0" },
+                    { rank: 22, bib: "13", country: "JPN", name: "Tomofumi Naito", points: 226.1, r1_dist: "122.0", r1_note: "52.0", r1_wind: "0.0", r1_total: "115.6", r2_dist: "122.5", r2_note: "51.5", r2_wind: "-5.5", r2_total: "110.5", r1_judges: "17.5 17.5 17.5 17.0 17.0", r2_judges: "17.5 17.0 17.0 17.5 17.5", r1_comp: "0.0", r2_comp: "0.5", r1_rank: 21, r2_rank: 21, r1_speed: "89.0", r2_speed: "88.5", r1_dpts: "63.6", r2_dpts: "64.5" },
+                    { rank: 23, bib: "26", country: "USA", name: "Jason Colby", points: 223.5, r1_dist: "117.5", r1_note: "51.5", r1_wind: "5.7", r1_total: "112.7", r2_dist: "122.0", r2_note: "53.5", r2_wind: "-6.3", r2_total: "110.8", r1_judges: "17.5 18.0 17.0 18.0 17.0", r2_judges: "17.0 17.5 18.0 17.5 18.5", r1_comp: "-0.4", r2_comp: "0.6", r1_rank: 23, r2_rank: 19, r1_speed: "88.9", r2_speed: "88.7", r1_dpts: "55.5", r2_dpts: "63.6" },
+                    { rank: 24, bib: "39", country: "BUL", name: "Vladimir Zografski", points: 222.0, r1_dist: "120.0", r1_note: "52.5", r1_wind: "0.5", r1_total: "113.0", r2_dist: "121.5", r2_note: "53.0", r2_wind: "-6.7", r2_total: "109.0", r1_judges: "17.5 17.5 18.0 18.0 17.5", r2_judges: "17.5 17.5 18.0 17.5 18.0", r1_comp: "0.5", r2_comp: "0.6", r1_rank: 24, r2_rank: 22, r1_speed: "88.6", r2_speed: "88.2", r1_dpts: "60.0", r2_dpts: "62.7" },
+                    { rank: 25, bib: "33", country: "AUT", name: "Maximilian Ortner", points: 221.1, r1_dist: "120.0", r1_note: "51.5", r1_wind: "-1.5", r1_total: "110.0", r2_dist: "122.0", r2_note: "52.5", r2_wind: "-5.0", r2_total: "111.1", r1_judges: "17.5 17.5 17.0 17.5 17.0", r2_judges: "17.5 17.0 17.5 17.5 17.5", r1_comp: "0.1", r2_comp: "0.5", r1_rank: 25, r2_rank: 18, r1_speed: "88.8", r2_speed: "88.8", r1_dpts: "60.0", r2_dpts: "63.6" },
+                    { rank: 26, bib: "35", country: "EST", name: "Artti Aigro", points: 218.9, r1_dist: "121.5", r1_note: "52.5", r1_wind: "-2.9", r1_total: "112.3", r2_dist: "120.5", r2_note: "51.5", r2_wind: "-5.8", r2_total: "106.6", r1_judges: "17.5 17.5 17.5 17.0 17.0", r2_judges: "17.5 17.5 17.0 17.5 16.5", r1_comp: "-2.9", r2_comp: "0.5", r1_rank: 26, r2_rank: 28, r1_speed: "88.7", r2_speed: "88.3", r1_dpts: "62.7", r2_dpts: "60.9" },
+                    { rank: 27, bib: "15", country: "JPN", name: "Yukiya Sato", points: 218.0, r1_dist: "119.5", r1_note: "51.0", r1_wind: "0.5", r1_total: "110.6", r2_dist: "121.5", r2_note: "51.0", r2_wind: "-6.3", r2_total: "107.4", r1_judges: "16.5 17.0 17.0 17.0 17.0", r2_judges: "17.0 17.0 17.0 17.5 17.0", r1_comp: "0.0", r2_comp: "0.6", r1_rank: 27, r2_rank: 25, r1_speed: "88.9", r2_speed: "88.6", r1_dpts: "59.1", r2_dpts: "62.7" },
+                    { rank: 28, bib: "29", country: "POL", name: "Dawid Kubacki", points: 217.4, r1_dist: "119.0", r1_note: "52.5", r1_wind: "-1.0", r1_total: "109.7", r2_dist: "120.5", r2_note: "52.5", r2_wind: "-5.7", r2_total: "107.7", r1_judges: "17.0 17.5 17.5 17.5 17.5", r2_judges: "17.5 17.0 18.0 17.5 17.5", r1_comp: "-1.0", r2_comp: "0.5", r1_rank: 28, r2_rank: 24, r1_speed: "88.9", r2_speed: "88.5", r1_dpts: "58.2", r2_dpts: "60.9" },
+                    { rank: 29, bib: "25", country: "POL", name: "Piotr Zyla", points: 216.6, r1_dist: "119.0", r1_note: "51.0", r1_wind: "0.6", r1_total: "109.8", r2_dist: "121.5", r2_note: "51.0", r2_wind: "-6.9", r2_total: "106.8", r1_judges: "17.5 17.0 17.0 17.0 17.0", r2_judges: "17.0 17.0 17.0 17.5 17.0", r1_comp: "0.6", r2_comp: "0.6", r1_rank: 29, r2_rank: 27, r1_speed: "88.9", r2_speed: "88.9", r1_dpts: "58.2", r2_dpts: "62.7" },
+                    { rank: 30, bib: "3", country: "USA", name: "Kevin Bickner", points: 214.8, r1_dist: "122.5", r1_note: "51.5", r1_wind: "-3.5", r1_total: "112.5", r2_dist: "119.0", r2_note: "49.5", r2_wind: "-5.4", r2_total: "102.3", r1_judges: "17.5 17.0 17.0 17.5 16.5", r2_judges: "16.5 16.5 16.5 16.5 16.5", r1_comp: "-3.5", r2_comp: "0.5", r1_rank: 23, r2_rank: 30, r1_speed: "89.1", r2_speed: "88.9", r1_dpts: "64.5", r2_dpts: "58.2" },
+                    { rank: 31, bib: "19", country: "POL", name: "Pawel Wasek", points: 109.3, r1_dist: "118.5", r1_note: "52.0", r1_wind: "0.0", r1_total: "109.3", r1_rank: 31, r1_speed: "89.2", r1_dpts: "57.3", r1_judges: "17.5 17.0 17.0 17.5 17.5", r1_comp: "0.0" },
+                    { rank: 32, bib: "2", country: "SUI", name: "Sandro Hauswirth", points: 108.5, r1_dist: "118.5", r1_note: "51.5", r1_wind: "-0.3", r1_total: "108.5", r1_rank: 32, r1_speed: "89.0", r1_dpts: "57.3", r1_judges: "17.0 17.5 17.0 17.0 17.5", r1_comp: "-0.3" },
+                    { rank: 33, bib: "28", country: "JPN", name: "Sakutaro Kobayashi", points: 107.6, r1_dist: "117.5", r1_note: "51.0", r1_wind: "1.1", r1_total: "107.6", r1_rank: 33, r1_speed: "89.2", r1_dpts: "55.5", r1_judges: "17.0 17.0 17.0 16.5 17.5", r1_comp: "1.1" },
+                    { rank: 34, bib: "18", country: "NOR", name: "Halvor Egner Granerud", points: 107.5, r1_dist: "117.5", r1_note: "51.5", r1_wind: "0.5", r1_total: "107.5", r1_rank: 34, r1_speed: "89.0", r1_dpts: "55.5", r1_judges: "17.0 17.5 17.0 17.0 17.5", r1_comp: "0.5" },
+                    { rank: 35, bib: "10", country: "SUI", name: "Felix Trunz", points: 107.1, r1_dist: "121.5", r1_note: "52.0", r1_wind: "-7.6", r1_total: "107.1", r1_rank: 35, r1_speed: "89.5", r1_dpts: "62.7", r1_judges: "17.0 18.0 17.0 17.5 17.5", r1_comp: "-7.6" },
+                    { rank: 36, bib: "7", country: "SUI", name: "Simon Ammann", points: 106.6, r1_dist: "118.5", r1_note: "49.5", r1_wind: "-0.2", r1_total: "106.6", r1_rank: 36, r1_speed: "89.1", r1_dpts: "57.3", r1_judges: "16.5 16.5 16.5 16.0 17.0", r1_comp: "-0.2" },
+                    { rank: 37, bib: "31", country: "FIN", name: "Antti Aalto", points: 106.2, r1_dist: "119.0", r1_note: "51.5", r1_wind: "-3.5", r1_total: "106.2", r1_rank: 37, r1_speed: "89.1", r1_dpts: "58.2", r1_judges: "17.5 17.0 17.0 16.5 17.5", r1_comp: "-3.5" },
+                    { rank: 38, bib: "17", country: "USA", name: "Andrew Urlaub", points: 104.1, r1_dist: "117.0", r1_note: "50.5", r1_wind: "-1.0", r1_total: "104.1", r1_rank: 38, r1_speed: "89.1", r1_dpts: "54.6", r1_judges: "17.5 17.0 16.5 16.5 17.0", r1_comp: "-1.0" },
+                    { rank: 39, bib: "11", country: "SLO", name: "Lovro Kos", points: 102.9, r1_dist: "119.5", r1_note: "50.0", r1_wind: "-6.2", r1_total: "102.9", r1_rank: 39, r1_speed: "89.0", r1_dpts: "59.1", r1_judges: "16.5 16.5 16.5 17.0 17.5", r1_comp: "-6.2" },
+                    { rank: 40, bib: "23", country: "GER", name: "Andreas Wellinger", points: 100.6, r1_dist: "115.5", r1_note: "51.0", r1_wind: "-2.3", r1_total: "100.6", r1_rank: 40, r1_speed: "89.6", r1_dpts: "51.9", r1_judges: "17.0 17.0 17.0 17.0 16.5", r1_comp: "-2.3" },
+                    { rank: 41, bib: "21", country: "GER", name: "Karl Geiger", points: 100.3, r1_dist: "115.0", r1_note: "50.5", r1_wind: "-1.2", r1_total: "100.3", r1_rank: 41, r1_speed: "89.3", r1_dpts: "51.0", r1_judges: "17.0 16.5 17.0 17.0 16.5", r1_comp: "-1.2" },
+                    { rank: 42, bib: "5", country: "UKR", name: "Vitaliy Kalinichenko", points: 99.8, r1_dist: "114.0", r1_note: "49.5", r1_wind: "1.1", r1_total: "99.8", r1_rank: 42, r1_speed: "88.7", r1_dpts: "49.2", r1_judges: "16.0 16.5 16.5 16.5 16.5", r1_comp: "1.1" },
+                    { rank: 43, bib: "8", country: "CZE", name: "Roman Koudelka", points: 99.2, r1_dist: "117.5", r1_note: "52.0", r1_wind: "-8.3", r1_total: "99.2", r1_rank: 43, r1_speed: "88.5", r1_dpts: "55.5", r1_judges: "17.5 16.5 17.0 17.5 17.5", r1_comp: "-8.3" },
+                    { rank: 44, bib: "4", country: "FRA", name: "Louis Obersteiner", points: 97.4, r1_dist: "114.0", r1_note: "50.0", r1_wind: "-1.8", r1_total: "97.4", r1_rank: 44, r1_speed: "89.0", r1_dpts: "49.2", r1_judges: "17.0 16.5 17.0 16.5 16.5", r1_comp: "-1.8" },
+                    { rank: 45, bib: "12", country: "SVK", name: "Hektor Kapustik", points: 95.7, r1_dist: "113.5", r1_note: "50.0", r1_wind: "-2.6", r1_total: "95.7", r1_rank: 45, r1_speed: "89.0", r1_dpts: "48.3", r1_judges: "17.0 16.5 16.5 17.0 16.5", r1_comp: "-2.6" },
+                    { rank: 46, bib: "16", country: "NOR", name: "Benjamin Oestvold", points: 94.6, r1_dist: "112.5", r1_note: "49.5", r1_wind: "-1.4", r1_total: "94.6", r1_rank: 46, r1_speed: "89.4", r1_dpts: "46.5", r1_judges: "16.0 16.5 16.5 16.5 16.5", r1_comp: "-1.4" },
+                    { rank: 47, bib: "1", country: "KAZ", name: "Ilya Mizernykh", points: 93.2, r1_dist: "109.5", r1_note: "49.0", r1_wind: "3.1", r1_total: "93.2", r1_rank: 47, r1_speed: "88.4", r1_dpts: "41.1", r1_judges: "16.0 16.5 16.5 16.5 16.0", r1_comp: "3.1" },
+                    { rank: 48, bib: "14", country: "SUI", name: "Juri Kesseli", points: 92.4, r1_dist: "111.0", r1_note: "48.0", r1_wind: "0.6", r1_total: "92.4", r1_rank: 48, r1_speed: "89.2", r1_dpts: "43.8", r1_judges: "14.5 16.0 16.0 16.0 16.0", r1_comp: "0.6" },
+                    { rank: 49, bib: "9", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 90.6, r1_dist: "113.0", r1_note: "49.5", r1_wind: "-6.3", r1_total: "90.6", r1_rank: 49, r1_speed: "89.0", r1_dpts: "47.4", r1_judges: "16.0 17.0 16.5 16.5 16.5", r1_comp: "-6.3" },
+                    { rank: 50, bib: "1", country: "KAZ", name: "Danil Vassilyev", points: 82.7, r1_dist: "105.0", r1_note: "45.5", r1_wind: "4.2", r1_total: "82.7", r1_rank: 50, r1_speed: "87.9", r1_dpts: "33.0", r1_judges: "16.0 15.0 15.0 14.5 15.5", r1_comp: "4.2" }
                 ]
             }
         ];
 
         // --- 4. KOMPONENTY APLIKACJI ---
+
+        // Helper to render judges scores with strikethrough logic
+        const renderJudgesNotes = (notesStr) => {
+            if (!notesStr) return null;
+            
+            const notes = notesStr.split(' ').map(n => parseFloat(n));
+            let minVal = Math.min(...notes);
+            let maxVal = Math.max(...notes);
+            
+            let minStruck = false;
+            let maxStruck = false;
+            
+            return notesStr.split(' ').map((noteStr, idx) => {
+                const val = parseFloat(noteStr);
+                let isStruck = false;
+                
+                if (val === minVal && !minStruck) {
+                    isStruck = true;
+                    minStruck = true;
+                } else if (val === maxVal && !maxStruck) {
+                    isStruck = true;
+                    maxStruck = true;
+                }
+                
+                return (
+                    <td key={idx} className={`px-1 py-2 text-center ${isStruck ? 'text-slate-400 line-through decoration-slate-400' : 'text-slate-700 font-medium'}`}>
+                        {noteStr}
+                    </td>
+                );
+            });
+        };
 
         const Dashboard = ({ contests }) => {
             const [mode, setMode] = useState('draft');
@@ -468,24 +457,24 @@
                         <table className="w-full text-left text-sm min-w-[350px]">
                             <thead className="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th className="px-2 py-3 whitespace-nowrap text-xs md:text-sm pl-4">M-ce</th>
-                                    <th className="px-2 py-3">Zawodnik</th>
-                                    <th className="px-2 py-3">Właściciel</th>
-                                    <th className="px-2 py-3 text-right pr-4">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
+                                    <th className="px-1 py-2 whitespace-nowrap text-[10px] md:text-sm pl-2">M-ce</th>
+                                    <th className="px-1 py-2 text-[10px] md:text-sm">Zawodnik</th>
+                                    <th className="px-1 py-2 text-[10px] md:text-sm">Właściciel</th>
+                                    <th className="px-1 py-2 text-right pr-2 text-[10px] md:text-sm">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {jumperScores.map((j) => (
                                     <tr key={j.name} className="hover:bg-slate-50">
-                                        <td className="px-2 py-3 text-slate-500 font-bold pl-4">{j.globalRank}.</td>
-                                        <td className="px-2 py-2 font-medium whitespace-normal leading-tight min-w-[100px]">
+                                        <td className="px-1 py-2 text-slate-500 font-bold pl-2 text-xs md:text-sm">{j.globalRank}.</td>
+                                        <td className="px-1 py-2 font-medium whitespace-normal leading-tight min-w-[80px] text-xs md:text-sm">
                                             <div className="flex items-center">
                                                 <Flag name={j.name} country={j.country} /> <span className="ml-1">{j.name}</span>
                                             </div>
                                         </td>
-                                        <td className="px-2 py-3 text-slate-500 text-xs">
+                                        <td className="px-1 py-2 text-slate-500 text-[10px] md:text-xs">
                                             {j.owner ? (
-                                                <span className={`px-2 py-0.5 rounded-full whitespace-nowrap ${
+                                                <span className={`px-1.5 py-0.5 rounded-full whitespace-nowrap ${
                                                     j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
                                                     j.owner === 'Tomasz P.' ? 'bg-green-100 text-green-800' :
                                                     j.owner === 'Tomasz J.' ? 'bg-amber-100 text-amber-800' :
@@ -495,7 +484,7 @@
                                                 </span>
                                             ) : "-"}
                                         </td>
-                                        <td className="px-2 py-3 text-right font-bold text-blue-600 pr-4">
+                                        <td className="px-1 py-2 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm">
                                             {sortMode === 'draft' ? j.draft : j.fis}
                                         </td>
                                     </tr>
@@ -507,95 +496,297 @@
             );
         };
 
-        const OfficialResults = ({ contests }) => {
+        const Results = ({ contests }) => {
             const [selectedContestId, setSelectedContestId] = useState(contests[contests.length-1].id);
-            const [pointsMode, setPointsMode] = useState('draft'); 
+            const [mobileViewMode, setMobileViewMode] = useState('ranking'); 
+            const [desktopTab, setDesktopTab] = useState('ranking'); 
             
             const activeContest = useMemo(() => {
                 return contests.find(c => c.id === parseInt(selectedContestId)) || contests[contests.length-1];
             }, [contests, selectedContestId]);
 
+            const viewOptions = [
+                { value: 'ranking', label: 'RANKING' },
+                { value: 'distance', label: 'DYSTANS' },
+                { value: 'notes', label: 'NOTY' },
+                { value: 'speed', label: 'PRĘDKOŚĆ' },
+                { value: 'comp', label: 'WIATR/BELKA' },
+            ];
+            
+            const juryFlags = activeContest?.jury || {};
+
             return (
                 <div className="space-y-6">
+                    {/* Header */}
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <Table className="text-indigo-500" />
-                            <h2 className="font-bold text-slate-800">Oficjalne Wyniki Konkursu</h2>
+                            <Flask className="text-purple-500" />
+                            <h2 className="font-bold text-slate-800">Wyniki Konkursu</h2>
                         </div>
-                        <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-                             <select value={pointsMode} onChange={(e) => setPointsMode(e.target.value)} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:w-auto">
-                                <option value="draft">Pokaż punkty: Draft</option>
-                                <option value="fis">Pokaż punkty: FIS</option>
-                            </select>
-                            <select value={selectedContestId} onChange={(e) => setSelectedContestId(Number(e.target.value))} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:min-w-[200px]">
-                                {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
-                            </select>
+                        <div className="flex flex-col gap-2 w-full md:w-auto">
+                            {/* Konkurs selector (top on mobile) */}
+                            <div className="w-full md:w-auto order-1 md:order-2">
+                                <label className="text-xs text-slate-500 font-semibold uppercase ml-1 md:hidden">Wybierz konkurs:</label>
+                                <select 
+                                    value={selectedContestId} 
+                                    onChange={(e) => setSelectedContestId(Number(e.target.value))} 
+                                    className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:min-w-[200px]"
+                                >
+                                    {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
+                                </select>
+                            </div>
+
+                            {/* View data selector (bottom on mobile) */}
+                            <div className="md:hidden w-full relative order-2 md:order-1 mt-2 md:mt-0">
+                                <label className="text-xs text-slate-500 font-semibold uppercase ml-1">Widok danych:</label>
+                                <select 
+                                    value={mobileViewMode} 
+                                    onChange={(e) => setMobileViewMode(e.target.value)} 
+                                    className="custom-select w-full appearance-none bg-white border border-blue-800 text-blue-900 font-bold text-sm rounded-none px-3 py-2 uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    {viewOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-xs md:text-sm text-left whitespace-nowrap">
-                            <thead className="bg-slate-900 text-slate-200">
-                                <tr>
-                                    <th colSpan="3" className="bg-slate-900"></th>
-                                    <th colSpan="4" className="text-center bg-slate-800 border-l border-r border-slate-600 py-2 text-slate-300 uppercase text-xs tracking-wider">I Seria</th>
-                                    <th colSpan="4" className="text-center bg-slate-800 border-l border-r border-slate-600 py-2 text-slate-300 uppercase text-xs tracking-wider">II Seria</th>
-                                    <th colSpan="2" className="bg-slate-900"></th>
-                                </tr>
-                                <tr>
-                                    <th className="px-2 py-3 sticky left-0 bg-slate-900 z-10 w-8">#</th>
-                                    <th className="px-2 py-3 sticky left-8 bg-slate-900 z-10 shadow-lg border-r border-slate-700">Nazwisko</th>
-                                    <th className="px-2 py-3">Kraj</th>
-                                    
-                                    <th className="px-2 py-3 bg-slate-800 border-l border-slate-600 text-center text-xs" title="Dystans">Dyst.</th>
-                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Nota Sędziowska">Nota</th>
-                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Kompensata (Belka/Wiatr)">Komp.</th>
-                                    <th className="px-2 py-3 bg-slate-800 border-r border-slate-600 text-center font-bold text-xs">Pkt.</th>
+                    <div className="bg-white md:rounded-xl shadow-sm border border-slate-200 overflow-hidden custom-scrollbar">
+                        {/* DESKTOP TABS */}
+                        <div className="hidden md:flex border-b border-slate-200 bg-slate-50">
+                            {[
+                                {id: 'ranking', label: 'Ranking'}, 
+                                {id: 'speed', label: 'Prędkość'}, 
+                                {id: 'judges', label: 'Noty'}, 
+                                {id: 'distance', label: 'Dystans'}, 
+                                {id: 'wind', label: 'Wiatr/Belka'}
+                            ].map(tab => (
+                                <button 
+                                    key={tab.id}
+                                    onClick={() => setDesktopTab(tab.id)}
+                                    className={`px-6 py-3 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors flex items-center gap-2 ${
+                                        desktopTab === tab.id 
+                                            ? 'border-blue-600 text-blue-800 bg-white' 
+                                            : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                                    }`}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
 
-                                    <th className="px-2 py-3 bg-slate-800 border-l border-slate-600 text-center text-xs" title="Dystans">Dyst.</th>
-                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Nota Sędziowska">Nota</th>
-                                    <th className="px-2 py-3 bg-slate-800 text-center text-xs" title="Kompensata (Belka/Wiatr)">Komp.</th>
-                                    <th className="px-2 py-3 bg-slate-800 border-r border-slate-600 text-center font-bold text-xs">Pkt.</th>
+                        {/* DESKTOP TABLE */}
+                        <div className="hidden md:block overflow-x-auto">
+                            <table className="w-full text-xs text-left whitespace-nowrap">
+                                <thead className="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <tr>
+                                        <th className="px-2 py-3 w-8 text-center font-extrabold text-slate-800">Rk</th>
+                                        <th className="px-2 py-3 text-center font-bold text-slate-500">Bib</th>
+                                        <th className="px-2 py-3 font-bold text-slate-800">Name</th>
+                                        <th className="px-2 py-3 font-bold text-slate-800">NSA</th>
+                                        
+                                        {desktopTab === 'ranking' && <>
+                                            <th className="px-2 py-3 text-center border-l border-slate-200">Rd. 1 Rk</th>
+                                            <th className="px-2 py-3 text-center border-r border-slate-200">Rd. 2 Rk</th>
+                                            
+                                            <th className="px-2 py-3 text-center">Rd. 1 Dist</th>
+                                            <th className="px-2 py-3 text-center">Rd. 1 Pts</th>
+                                            
+                                            <th className="px-2 py-3 text-center border-l border-slate-200">Rd. 2 Dist</th>
+                                            <th className="px-2 py-3 text-center">Rd. 2 Pts</th>
+                                            
+                                            <th className="px-3 py-3 text-right font-extrabold text-blue-900 border-l border-slate-200">Total Pts</th>
+                                            <th className="px-3 py-3 text-center font-bold text-slate-600 bg-slate-200">Draft</th>
+                                        </>}
+                                        
+                                        {desktopTab === 'speed' && <>
+                                            <th className="px-4 py-3 text-right font-mono">Rd. 1 km/h</th>
+                                            <th className="px-4 py-3 text-right font-mono">Rd. 2 km/h</th>
+                                        </>}
 
-                                    <th className="px-3 py-3 font-bold text-white text-right bg-slate-900">Nota Total</th>
-                                    <th className="px-2 py-3 bg-blue-900 text-center">{pointsMode === 'draft' ? 'Draft' : 'FIS'}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100">
+                                        {desktopTab === 'judges' && <>
+                                             <th className="px-2 py-3 text-center border-l">Rd.</th>
+                                             <th className="px-1 py-3 text-center">A <Flag country={juryFlags.A} className="ml-1 scale-75" /></th>
+                                             <th className="px-1 py-3 text-center">B <Flag country={juryFlags.B} className="ml-1 scale-75" /></th>
+                                             <th className="px-1 py-3 text-center">C <Flag country={juryFlags.C} className="ml-1 scale-75" /></th>
+                                             <th className="px-1 py-3 text-center">D <Flag country={juryFlags.D} className="ml-1 scale-75" /></th>
+                                             <th className="px-1 py-3 text-center border-r">E <Flag country={juryFlags.E} className="ml-1 scale-75" /></th>
+                                             <th className="px-2 py-3 text-right font-bold">J.Pts</th>
+                                        </>}
+
+                                        {desktopTab === 'distance' && <>
+                                            <th className="px-2 py-3 text-center border-l">Rd. 1 D.Pts</th>
+                                            <th className="px-2 py-3 text-center border-r font-bold">Rd. 1 m</th>
+                                            <th className="px-2 py-3 text-center">Rd. 2 D.Pts</th>
+                                            <th className="px-2 py-3 text-center font-bold">Rd. 2 m</th>
+                                        </>}
+
+                                        {desktopTab === 'wind' && <>
+                                            <th className="px-2 py-3 text-center border-l">Rd. 1 W.Pts</th>
+                                            <th className="px-2 py-3 text-center">Rd. 2 W.Pts</th>
+                                        </>}
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 bg-white">
+                                    {activeContest && activeContest.results.sort((a,b)=>a.rank-b.rank).map((r) => {
+                                        const owner = getJumperOwner(r.name);
+                                        const bgClass = owner ? TEAM_BG_STYLES[owner] : "hover:bg-slate-50"; 
+                                        
+                                        return (
+                                            <tr key={`${r.rank}-${r.name}`} className={`${bgClass} transition-colors`}>
+                                                <td className="px-2 py-2 font-bold text-slate-900 text-center">{r.rank}</td>
+                                                <td className="px-2 py-2 text-slate-400 text-center text-[10px]">{r.bib}</td>
+                                                <td className="px-2 py-2 font-bold text-slate-800">
+                                                    {r.name}
+                                                    {owner && <div className="text-[9px] uppercase font-bold text-blue-600 leading-none mt-0.5">{owner}</div>}
+                                                </td>
+                                                <td className="px-2 py-2 flex items-center gap-1"><Flag name={r.name} country={r.country} /> <span className="text-xs text-slate-500">{r.country}</span></td>
+
+                                                {desktopTab === 'ranking' && <>
+                                                    <td className="px-2 py-2 text-center text-xs text-slate-400 border-l border-slate-100">{r.r1_rank || "-"}</td>
+                                                    <td className="px-2 py-2 text-center text-xs text-slate-400 border-r border-slate-100">{r.r2_rank || "-"}</td>
+                                                    
+                                                    <td className="px-2 py-2 text-center text-slate-600">{r.r1_dist}</td>
+                                                    <td className="px-2 py-2 text-center text-slate-600">{r.r1_total}</td>
+
+                                                    <td className="px-2 py-2 text-center text-slate-600">{r.r2_dist || "-"}</td>
+                                                    <td className="px-2 py-2 text-center text-slate-600">{r.r2_total || "-"}</td>
+
+                                                    <td className="px-3 py-2 text-right font-extrabold text-blue-900 border-l border-slate-200">{r.points}</td>
+                                                    <td className="px-3 py-2 text-center font-bold text-slate-700 bg-slate-100/50">{getDraftPoints(r.rank)}</td>
+                                                </>}
+
+                                                {desktopTab === 'speed' && <>
+                                                    <td className="px-4 py-2 text-right font-mono text-slate-700">{r.r1_speed || "-"}</td>
+                                                    <td className="px-4 py-2 text-right font-mono text-slate-700">{r.r2_speed || "-"}</td>
+                                                </>}
+
+                                                {desktopTab === 'judges' && <>
+                                                    {r.r1_judges ? (
+                                                        <>
+                                                            <td className="px-2 py-2 text-center text-xs border-l">1</td>
+                                                            {renderJudgesNotes(r.r1_judges)}
+                                                            <td className="px-2 py-2 text-right font-bold text-slate-800">{r.r1_note}</td>
+                                                        </>
+                                                    ) : <td colSpan="7" className="px-4 py-2 text-center text-xs text-slate-400 italic">Brak danych szczegółowych</td>}
+                                                </>}
+
+                                                {desktopTab === 'distance' && <>
+                                                     <td className="px-2 py-2 text-center text-slate-500 border-l border-slate-100">{r.r1_dpts || "-"}</td>
+                                                     <td className="px-2 py-2 text-center font-bold text-slate-800 border-r border-slate-100">{r.r1_dist}</td>
+                                                     <td className="px-2 py-2 text-center text-slate-500">{r.r2_dpts || "-"}</td>
+                                                     <td className="px-2 py-2 text-center font-bold text-slate-800">{r.r2_dist || "-"}</td>
+                                                </>}
+
+                                                {desktopTab === 'wind' && <>
+                                                    <td className="px-2 py-2 text-center text-slate-600 border-l">{r.r1_comp}</td>
+                                                    <td className="px-2 py-2 text-center text-slate-600">{r.r2_comp || "-"}</td>
+                                                </>}
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* MOBILE COMPACT VIEW */}
+                        <div className="md:hidden">
+                            {/* Blue Header Row */}
+                            <div className="bg-[#001489] text-white flex text-[10px] font-bold uppercase py-1 px-1">
+                                <div className="w-6 text-center shrink-0">Rk</div>
+                                <div className="w-6 text-center shrink-0">Bib</div>
+                                <div className="flex-1 px-1">Name</div>
+                                <div className="w-8 text-center shrink-0">NSA</div>
+                                
+                                {mobileViewMode === 'ranking' && <>
+                                    <div className="w-10 text-right shrink-0">Total</div>
+                                    <div className="w-8 text-center shrink-0 bg-white/20">Dft</div>
+                                </>}
+                                {mobileViewMode === 'distance' && <>
+                                    <div className="w-12 text-right shrink-0">Rd. 1</div>
+                                    <div className="w-12 text-right shrink-0">Rd. 2</div>
+                                </>}
+                                {mobileViewMode === 'notes' && <>
+                                    <div className="w-12 text-right shrink-0">Rd. 1</div>
+                                    <div className="w-12 text-right shrink-0">Rd. 2</div>
+                                </>}
+                                {mobileViewMode === 'speed' && <>
+                                    <div className="w-12 text-right shrink-0">Rd. 1</div>
+                                    <div className="w-12 text-right shrink-0">Rd. 2</div>
+                                </>}
+                                {mobileViewMode === 'comp' && <>
+                                    <div className="w-12 text-right shrink-0">Rd. 1</div>
+                                    <div className="w-12 text-right shrink-0">Rd. 2</div>
+                                </>}
+                            </div>
+
+                            {/* Data Rows */}
+                            <div className="divide-y divide-slate-100 bg-slate-50">
                                 {activeContest && activeContest.results.sort((a,b)=>a.rank-b.rank).map((r) => {
                                     const owner = getJumperOwner(r.name);
-                                    const rowClass = owner ? TEAM_STYLES[owner] : "bg-white hover:bg-slate-50";
-                                    
+                                    const bgClass = owner ? TEAM_BG_STYLES[owner] : "bg-white"; 
+
+                                    const parts = r.name.split(' ');
+                                    const surname = parts.length > 1 ? parts[parts.length-1].toUpperCase() : r.name.toUpperCase();
+                                    const first = parts.length > 1 ? parts.slice(0, -1).join(' ') : '';
+                                    const displayName = <>{surname} <span className="font-normal text-slate-600 capitalize">{first}</span></>;
+
                                     return (
-                                        <tr key={`${r.rank}-${r.name}`} className={`${rowClass} transition-colors border-b border-slate-100`}>
-                                            <td className="px-2 py-2 font-mono font-bold sticky left-0 bg-inherit z-10 w-8">{r.rank}.</td>
-                                            <td className="px-2 py-2 font-medium sticky left-8 bg-inherit z-10 max-w-[110px] md:max-w-[160px] truncate shadow-lg border-r border-slate-200/50" title={r.name}>
-                                                {r.name} 
-                                                {owner && <span className="text-[10px] uppercase opacity-70 block font-bold tracking-wide">{owner}</span>}
-                                            </td>
-                                            <td className="px-2 py-2"><Flag name={r.name} country={r.country} /></td>
+                                        <div key={`${r.rank}-${r.name}`} className={`flex items-center py-2 px-1 text-xs border-b border-slate-100 h-12 ${bgClass}`}>
+                                            <div className="w-6 text-center font-bold text-slate-800 text-sm shrink-0">{r.rank}</div>
+                                            <div className="w-6 text-center text-slate-400 text-[10px] shrink-0">{r.bib}</div>
                                             
-                                            {/* Seria 1 */}
-                                            <td className="px-2 py-2 border-l border-slate-200 text-center">{r.r1_dist || "-"} m</td>
-                                            <td className="px-2 py-2 text-center opacity-70">{r.r1_note || "-"}</td>
-                                            <td className="px-2 py-2 text-center text-xs opacity-60">{r.r1_wind || "-"}</td>
-                                            <td className="px-2 py-2 border-r border-slate-200 text-center font-semibold">{r.r1_total || "-"}</td>
+                                            <div className="flex-1 px-1 flex flex-col justify-center min-w-0">
+                                                <div className="font-bold text-slate-900 truncate leading-tight">
+                                                    {displayName}
+                                                </div>
+                                                {owner && <div className="text-[9px] uppercase font-bold text-blue-600 leading-none mt-0.5">{owner}</div>}
+                                            </div>
 
-                                            {/* Seria 2 */}
-                                            <td className="px-2 py-2 border-l border-slate-200 text-center">{r.r2_dist || "-"} m</td>
-                                            <td className="px-2 py-2 text-center opacity-70">{r.r2_note || "-"}</td>
-                                            <td className="px-2 py-2 text-center text-xs opacity-60">{r.r2_wind || "-"}</td>
-                                            <td className="px-2 py-2 border-r border-slate-200 text-center font-semibold">{r.r2_total || "-"}</td>
+                                            <div className="w-8 flex justify-center shrink-0">
+                                                <div className="w-5 h-5 rounded-full overflow-hidden border border-slate-200 relative">
+                                                    <img src={getFlagUrl(r.name, r.country)} alt={r.country} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-auto max-w-none" />
+                                                </div>
+                                            </div>
 
-                                            <td className="px-3 py-2 font-bold text-right">{r.points}</td>
-                                            <td className="px-2 py-2 text-center font-bold bg-white/50 rounded-l shadow-sm">
-                                                {pointsMode === 'draft' ? getDraftPoints(r.rank) : getFisPoints(r.rank)}
-                                            </td>
-                                        </tr>
+                                            {mobileViewMode === 'ranking' && (
+                                                <>
+                                                    <div className="w-10 text-right font-bold text-sm text-slate-900 shrink-0">{r.points}</div>
+                                                    <div className="w-8 text-center font-bold text-xs text-blue-700 shrink-0 bg-white/50 rounded ml-1">{getDraftPoints(r.rank)}</div>
+                                                </>
+                                            )}
+
+                                            {mobileViewMode === 'distance' && (
+                                                <>
+                                                    <div className="w-12 text-right font-bold text-slate-900 shrink-0">{r.r1_dist}</div>
+                                                    <div className="w-12 text-right font-bold text-slate-500 shrink-0">{r.r2_dist || "-"}</div>
+                                                </>
+                                            )}
+
+                                            {mobileViewMode === 'notes' && (
+                                                <>
+                                                    <div className="w-12 text-right font-bold text-slate-900 shrink-0">{r.r1_note}</div>
+                                                    <div className="w-12 text-right font-bold text-slate-500 shrink-0">{r.r2_note || "-"}</div>
+                                                </>
+                                            )}
+
+                                            {mobileViewMode === 'speed' && (
+                                                <>
+                                                    <div className="w-12 text-right font-bold text-slate-900 shrink-0">{r.r1_speed}</div>
+                                                    <div className="w-12 text-right font-bold text-slate-500 shrink-0">{r.r2_speed || "-"}</div>
+                                                </>
+                                            )}
+
+                                            {mobileViewMode === 'comp' && (
+                                                <>
+                                                    <div className="w-12 text-right text-[10px] font-bold text-slate-900 shrink-0">{r.r1_comp}</div>
+                                                    <div className="w-12 text-right text-[10px] font-bold text-slate-500 shrink-0">{r.r2_comp || "-"}</div>
+                                                </>
+                                            )}
+                                        </div>
                                     );
                                 })}
-                            </tbody>
-                        </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -778,7 +969,7 @@
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">26.11 godzina 23:25</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">27.11 godzina 23:00</span>
                                     </span>
                                 </div>
                             </div>
@@ -790,7 +981,7 @@
                             <div className="grid grid-cols-3 gap-1 mb-1">
                                 <button onClick={() => setActiveTab('standings')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'standings' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Trophy size={16} /> <span className="hidden sm:inline">Klasyfikacja</span></button>
                                 <button onClick={() => setActiveTab('teams')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'teams' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Users size={16} /> <span className="hidden sm:inline">Zespoły</span></button>
-                                <button onClick={() => setActiveTab('official')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'official' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden sm:inline">Wyniki</span></button>
+                                <button onClick={() => setActiveTab('results')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'results' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden sm:inline">Wyniki</span></button>
                             </div>
                             <div className="grid grid-cols-3 gap-1">
                                 <button onClick={() => setActiveTab('detailed')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'detailed' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><ExternalLink size={16} /> <span className="hidden sm:inline">Szczegóły</span></button>
@@ -807,7 +998,7 @@
                                 </>
                             )}
                             {activeTab === 'teams' && <TeamDetails contests={contests} /> }
-                            {activeTab === 'official' && <OfficialResults contests={contests} /> }
+                            {activeTab === 'results' && <Results contests={contests} /> }
                             {activeTab === 'detailed' && <DetailedResults /> }
                             {activeTab === 'rules' && <Rules /> }
                             {activeTab === 'updates' && <Updates /> }
