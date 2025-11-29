@@ -73,11 +73,19 @@
             return name.trim().toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).sort().join(' ');
         };
 
-        const getFlagUrl = (name, countryCode) => {
+const getFlagUrl = (name, countryCode) => {
             if (countryCode && countryCode.length === 2) {
                 return `https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`;
             }
-            const judgeMap = { "NOR": "no", "FIN": "fi", "GER": "de", "AUT": "at", "SWE": "se", "POL": "pl", "JPN": "jp", "SLO": "si", "SUI": "ch", "ITA": "it", "USA": "us", "FRA": "fr" };
+            // Rozszerzona mapa kodów 3-literowych na 2-literowe
+            const judgeMap = { 
+                "NOR": "no", "FIN": "fi", "GER": "de", "AUT": "at", "SWE": "se", 
+                "POL": "pl", "JPN": "jp", "SLO": "si", "SUI": "ch", "ITA": "it", 
+                "USA": "us", "FRA": "fr", 
+                // Nowe flagi dodane w v1.1:
+                "EST": "ee", "BUL": "bg", "UKR": "ua", "CZE": "cz", 
+                "SVK": "sk", "KAZ": "kz", "CAN": "ca", "TUR": "tr"
+            };
             if (countryCode && judgeMap[countryCode]) {
                 return `https://flagcdn.com/24x18/${judgeMap[countryCode]}.png`;
             }
@@ -142,12 +150,12 @@
             return (!rank || rank === "-") ? 0 : pts[rank] || 0;
         };
 
-        // --- LISTA AKTUALIZACJI ---
+// --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
             {
-                date: "27.11.2025 23:00",
-                version: "v1.5",
-                desc: "KOMPLEKSOWA AKTUALIZACJA: 1. Dodanie konkursu Falun HS 95 z poprawnymi notami sędziów. 2. Przebudowa zakładki 'Wyniki': responsywny widok z filtrami na mobilkach i pełną tabelą na PC. 3. Poprawa wyświetlania flag i kolorów. 4. Tłumaczenie interfejsu na polski. 5. Korekta danych wszystkich konkursów."
+                date: "28.11.2025 23:30",
+                version: "v1.1",
+                desc: "KOMPLEKSOWA AKTUALIZACJA: 1. Naprawa brakujących flag przy nazwiskach (EST, BUL, UKR, CZE, SVK, KAZ, CAN). 2. Przebudowa zakładki 'Wyniki': responsywny widok z filtrami. 3. Tłumaczenie interfejsu na polski."
             }
         ];
 
