@@ -162,7 +162,7 @@ const getFlagUrl = (name, countryCode) => {
         // --- DANE KONKURSÓW ---
         // Jury data for flags (From protocols)
         const JURY_FLAGS = {
-            1: {A: "NOR", B: "FIN", C: "GER", D: "AUT", E: "SWE"}, // Generic/Assumed based on Nordic Tour location
+            1: {A: "FRA", B: "GER", C: "CAN", D: "SWE", E: "NOR"}, // Lillehammer Official Protocol
             2: {A: "SWE", B: "AUT", C: "FIN", D: "POL", E: "JPN"}, // Falun HS 95 Protocol
             3: {A: "FIN", B: "POL", C: "JPN", D: "AUT", E: "SWE"}  // Falun HS 132 Protocol
         };
@@ -309,35 +309,39 @@ const getFlagUrl = (name, countryCode) => {
 
         // --- 4. KOMPONENTY APLIKACJI ---
 
-        // Helper to render judges scores with strikethrough logic
-        const renderJudgesNotes = (notesStr) => {
-            if (!notesStr) return null;
-            
-            const notes = notesStr.split(' ').map(n => parseFloat(n));
-            let minVal = Math.min(...notes);
-            let maxVal = Math.max(...notes);
-            
-            let minStruck = false;
-            let maxStruck = false;
-            
-            return notesStr.split(' ').map((noteStr, idx) => {
-                const val = parseFloat(noteStr);
-                let isStruck = false;
-                
-                if (val === minVal && !minStruck) {
-                    isStruck = true;
-                    minStruck = true;
-                } else if (val === maxVal && !maxStruck) {
-                    isStruck = true;
-                    maxStruck = true;
-                }
-                
-                return (
-                    <td key={idx} className={`px-1 py-2 text-center ${isStruck ? 'text-slate-400 line-through decoration-slate-400' : 'text-slate-700 font-medium'}`}>
-                        {noteStr}
-                    </td>
-                );
-            });
+// Helper to render judges scores with strikethrough logic (Dual Series Support)
+        const renderJudgesNotes = (r1Str, r2Str) => {
+            const processNotes = (str) => {
+                if (!str) return Array(5).fill({ val: "-", isStruck: false });
+                const notes = str.split(' ').map(n => parseFloat(n));
+                const min = Math.min(...notes);
+                const max = Math.max(...notes);
+                let minDone = false;
+                let maxDone = false;
+                return str.split(' ').map(nStr => {
+                    const val = parseFloat(nStr);
+                    let isStruck = false;
+                    if (val === min && !minDone) { isStruck = true; minDone = true; }
+                    else if (val === max && !maxDone) { isStruck = true; maxDone = true; }
+                    return { val: nStr, isStruck };
+                });
+            };
+
+            const r1Data = processNotes(r1Str || "");
+            const r2Data = processNotes(r2Str || "");
+
+            return r1Data.map((note, idx) => (
+                <td key={idx} className="px-1 py-2 text-center border-l border-slate-50 last:border-r">
+                    <div className={`text-xs ${note.isStruck ? 'text-slate-400 line-through decoration-slate-400' : 'text-slate-800 font-bold'}`}>
+                        {note.val}
+                    </div>
+                    {r2Str && (
+                        <div className={`text-xs mt-1 ${r2Data[idx].isStruck ? 'text-slate-400 line-through decoration-slate-400' : 'text-slate-600'}`}>
+                            {r2Data[idx].val}
+                        </div>
+                    )}
+                </td>
+            ));
         };
 
         const Dashboard = ({ contests }) => {
@@ -671,9 +675,15 @@ const getFlagUrl = (name, countryCode) => {
                                                 {desktopTab === 'judges' && <>
                                                     {r.r1_judges ? (
                                                         <>
-                                                            <td className="px-2 py-2 text-center text-xs border-l">1</td>
-                                                            {renderJudgesNotes(r.r1_judges)}
-                                                            <td className="px-2 py-2 text-right font-bold text-slate-800">{r.r1_note}</td>
+                                                            <td className="px-2 py-2 text-center text-xs border-l align-top">
+                                                                <div className="font-bold text-slate-700">1</div>
+                                                                {r.r2_judges && <div className="mt-1 text-slate-400 font-normal">2</div>}
+                                                            </td>
+                                                            {renderJudgesNotes(r.r1_judges, r.r2_judges)}
+                                                            <td className="px-2 py-2 text-right text-xs align-top">
+                                                                <div className="font-bold text-slate-800">{r.r1_note}</div>
+                                                                {r.r2_note && <div className="mt-1 text-slate-500 font-medium">{r.r2_note}</div>}
+                                                            </td>
                                                         </>
                                                     ) : <td colSpan="7" className="px-4 py-2 text-center text-xs text-slate-400 italic">Brak danych szczegółowych</td>}
                                                 </>}
