@@ -99,11 +99,49 @@ const getFlagUrl = (name, countryCode) => {
             return <img src={url} alt={country || name} className={`inline-block w-5 h-3.5 object-contain align-middle mr-1 shadow-sm rounded-sm ${className}`} />;
         };
 
+        // --- ZMIANA W DEFINICJI ZESPOŁÓW ---
         const TEAMS = {
-            "Tomasz P.": ["Stefan Kraft", "Philipp Raimund", "Felix Hoffmann", "Sakutaro Kobayashi", "Artti Aigro", "Antti Aalto"],
+            // Dodajemy Sundala i Ortnera do listy, aby system przypisał im "kolor" właściciela
+            "Tomasz P.": ["Stefan Kraft", "Philipp Raimund", "Felix Hoffmann", "Sakutaro Kobayashi", "Artti Aigro", "Antti Aalto", "Kristoffer Eriksen Sundal", "Maximilian Ortner"],
             "Tomasz J.": ["Ryoyu Kobayashi", "Kamil Stoch", "Anze Lanisek", "Pius Paschke", "Naoki Nakamura", "Manuel Fettner"],
             "Madzia": ["Jan Hoerl", "Johann Andre Forfang", "Marius Lindvik", "Dawid Kubacki", "Timi Zajc", "Ren Nikaido"],
             "Dawid": ["Daniel Tschofenig", "Domen Prevc", "Stephan Embacher", "Kacper Tomasiak", "Andreas Wellinger", "Gregor Deschwanden"]
+        };
+		
+		// --- NOWA FUNKCJA POMOCNICZA DO ZMIAN W SKŁADACH ---
+        const getTeamMembersForContest = (teamName, contestId) => {
+            // Domyślny skład (bazowy)
+            let members = TEAMS[teamName];
+
+            // Specjalna logika dla zespołu Tomasz P.
+            if (teamName === "Tomasz P.") {
+                // Dla konkursów od ID 4 wzwyż (Ruka i kolejne)
+                if (contestId >= 4) {
+                    return [
+                        "Kristoffer Eriksen Sundal", // Zmiana za Krafta
+                        "Philipp Raimund",
+                        "Felix Hoffmann",
+                        "Sakutaro Kobayashi",
+                        "Maximilian Ortner",         // Zmiana za Aigro
+                        "Antti Aalto"
+                    ];
+                } 
+                // Dla konkursów 1-3 (Lillehammer, Falun) - stary skład
+                else {
+                    return [
+                        "Stefan Kraft",
+                        "Philipp Raimund",
+                        "Felix Hoffmann",
+                        "Sakutaro Kobayashi",
+                        "Artti Aigro",
+                        "Antti Aalto"
+                    ];
+                }
+            }
+            
+            // Dla innych zespołów zwracamy po prostu ich stały skład (chyba że też będą mieli zmiany)
+            // Uwaga: filtrujemy listę TEAMS do pierwszych 6, na wypadek gdybyś dodał tam rezerwowych
+            return members.slice(0, 6); 
         };
         
         // KOLORY ZESPOŁÓW (Mocniejsze dla tekstu w tabelach)
@@ -310,6 +348,13 @@ const getFlagUrl = (name, countryCode) => {
                     { rank: 50, bib: "1", country: "KAZ", name: "Danil Vassilyev", points: 82.7, r1_dist: "105.0", r1_note: "45.5", r1_wind: "4.2", r1_total: "82.7", r1_rank: 50, r1_speed: "87.9", r1_dpts: "33.0", r1_judges: "16.0 15.0 15.0 14.5 15.5", r1_comp: "4.2" }
                 ]
             }
+			{id: 4,
+                date: "30.11.2025",
+                location: "Ruka (FIN) - HS 142",
+                hill: "HS 142",
+                jury: {},
+                results: [] // Tu wkleisz wyniki jak będą dostępne
+            }
         ];
 
         // --- 4. KOMPONENTY APLIKACJI ---
@@ -367,18 +412,24 @@ const getFlagUrl = (name, countryCode) => {
         const Dashboard = ({ contests }) => {
             const [mode, setMode] = useState('draft');
 
+// Wewnątrz Dashboard -> useMemo
             const standings = useMemo(() => {
                 const scores = {};
                 Object.keys(TEAMS).forEach(team => scores[team] = 0);
+                
                 contests.forEach(contest => {
                     Object.keys(TEAMS).forEach(teamName => {
-                        const teamMembers = TEAMS[teamName];
+                        // --- ZMIANA: Zamiast TEAMS[teamName] używamy funkcji ---
+                        const teamMembers = getTeamMembersForContest(teamName, contest.id);
+                        // -------------------------------------------------------
+
                         const memberScores = teamMembers.map(jumperName => {
                             const result = contest.results.find(r => normalizeName(r.name) === normalizeName(jumperName));
                             if (!result) return 0;
                             return mode === 'draft' ? getDraftPoints(result.rank) : getFisPoints(result.rank);
                         });
                         memberScores.sort((a, b) => b - a);
+                        // Sumujemy top 5
                         scores[teamName] += memberScores.slice(0, 5).reduce((a, b) => a + b, 0);
                     });
                 });
@@ -855,10 +906,16 @@ const getFlagUrl = (name, countryCode) => {
                             </select>
                         </div>
                     </div>
+                    {/* Wewnątrz TeamDetails -> return -> grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {Object.entries(TEAMS).map(([teamName, members]) => {
+                        {Object.keys(TEAMS).map((teamName) => {
+                            // --- ZMIANA: Pobieramy skład dynamicznie dla wybranego konkursu ---
+                            const members = getTeamMembersForContest(teamName, activeContest.id);
+                            // ------------------------------------------------------------------
+
                             const scores = members.map(m => {
                                 const res = activeContest.results.find(r => normalizeName(r.name) === normalizeName(m));
+                                // Reszta kodu bez zmian...
                                 const rank = res ? res.rank : 999;
                                 const pts = scoreType === 'draft' ? getDraftPoints(rank) : getFisPoints(rank);
                                 return { name: m, rank: res ? res.rank : "-", points: pts, country: res ? res.country : null };
