@@ -652,50 +652,57 @@ const getFlagUrl = (name, countryCode) => {
                         </div>
                     </div>
                     
-                    {/* Przywrócono min-w-[350px] dla bezpieczeństwa i overflow-x-auto */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-left text-sm min-w-[350px]">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table className="w-full text-left text-xs md:text-sm table-fixed">
                             <thead className="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    {/* Desktop: standard | Mobile: mniejszy padding i text */}
-                                    <th className="px-1 py-2 md:px-2 md:py-3 whitespace-nowrap text-[10px] md:text-sm pl-2 sticky-col bg-slate-50">M-ce</th>
-                                    <th className="px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Zawodnik</th>
-                                    <th className="px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Właściciel</th>
-                                    <th className="px-1 py-2 md:px-2 md:py-3 text-right pr-2 text-[10px] md:text-sm whitespace-nowrap">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
+                                    {/* Kolumna 1: M-ce */}
+                                    <th className="w-8 px-1 py-2 md:px-2 md:py-3 whitespace-nowrap text-[10px] md:text-sm pl-2 sticky-col bg-slate-50">#</th>
+                                    
+                                    {/* Kolumna 2: Zawodnik */}
+                                    <th className="w-auto px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Zawodnik</th>
+                                    
+                                    {/* Kolumna 3: Właściciel */}
+                                    <th className="w-12 md:w-24 px-0.5 py-2 md:px-2 md:py-3 text-center text-[10px] md:text-sm whitespace-nowrap">Wł.</th>
+                                    
+                                    {/* Kolumna 4: Pkt - ZMIANA NAZWY NA "Draft Pkt." i poszerzenie w-16 */}
+                                    <th className="w-16 md:w-24 px-0.5 py-2 md:px-2 md:py-3 text-right pr-2 text-[10px] md:text-sm whitespace-nowrap">
+                                        {sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {jumperScores.map((j) => (
                                     <tr key={j.name} className="hover:bg-slate-50 group">
-                                        {/* Sticky Column z naprawionym tłem */}
+                                        {/* Sticky Rank */}
                                         <td className="px-1 py-2 md:px-2 md:py-3 text-slate-500 font-bold pl-2 text-xs md:text-sm sticky-col bg-white group-hover:bg-slate-50 border-r border-transparent">
                                             {j.globalRank}.
                                         </td>
                                         
-                                        {/* Nazwisko: Mobile (wrap), Desktop (nowrap - po staremu) */}
-                                        <td className="px-1 py-2 md:px-2 md:py-3 font-medium whitespace-normal md:whitespace-nowrap leading-tight min-w-[80px] text-xs md:text-sm">
-                                            <div className="flex flex-col sm:flex-row sm:items-center">
-                                                <div className="flex items-center">
-                                                    <Flag name={j.name} country={j.country} /> 
-                                                    <span className="ml-1">{j.name}</span>
+                                        {/* Nazwisko */}
+                                        <td className="px-1 py-2 md:px-2 md:py-3 font-medium leading-tight whitespace-normal break-words">
+                                            <div className="flex flex-col justify-center h-full">
+                                                <div className="flex items-start">
+                                                    <Flag name={j.name} country={j.country} className="mr-1 mt-0.5 shrink-0" /> 
+                                                    <span>{j.name}</span>
                                                 </div>
                                                 
-                                                {/* Rezerwowy */}
+                                                {/* Rezerwowy - Pełny zapis */}
                                                 {RESERVES.includes(j.name) && (
-                                                    <span className="mt-1 sm:mt-0 sm:ml-2 text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit flex flex-col md:flex-row md:gap-1 text-center md:text-left">
-                                                        <span>Rezerwowy</span>
-                                                        <span className="normal-case font-semibold">
+                                                    <div className="mt-1.5 ml-0 text-[9px] uppercase font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded w-fit border border-amber-100 leading-snug">
+                                                        <div>REZERWOWY</div>
+                                                        <div className="normal-case font-semibold text-amber-800 opacity-90">
                                                             (Dla zespołu: {sortMode === 'draft' ? j.teamDraft : j.teamFis} pkt)
-                                                        </span>
-                                                    </span>
+                                                        </div>
+                                                    </div>
                                                 )}
                                             </div>
                                         </td>
                                         
                                         {/* Właściciel */}
-                                        <td className="px-1 py-2 md:px-2 md:py-3 text-slate-500 text-[10px] md:text-xs">
+                                        <td className="px-0.5 py-2 md:px-2 md:py-3 text-center text-[9px] md:text-xs align-middle">
                                             {j.owner ? (
-                                                <span className={`px-1.5 py-0.5 rounded-full whitespace-nowrap ${
+                                                <span className={`px-1 py-0.5 rounded whitespace-nowrap inline-block ${
                                                     j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
                                                     j.owner === 'Tomasz P.' ? 'bg-green-100 text-green-800' :
                                                     j.owner === 'Tomasz J.' ? 'bg-amber-100 text-amber-800' :
@@ -703,11 +710,11 @@ const getFlagUrl = (name, countryCode) => {
                                                 }`}>
                                                     {j.owner}
                                                 </span>
-                                            ) : "-"}
+                                            ) : <span className="text-slate-300">-</span>}
                                         </td>
                                         
                                         {/* Punkty */}
-                                        <td className="px-1 py-2 md:px-2 md:py-3 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm">
+                                        <td className="px-0.5 py-2 md:px-2 md:py-3 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm align-middle">
                                             {sortMode === 'draft' ? j.draft : j.fis}
                                         </td>
                                     </tr>
