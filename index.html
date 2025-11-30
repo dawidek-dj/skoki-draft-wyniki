@@ -193,7 +193,7 @@ const getFlagUrl = (name, countryCode) => {
             {
                 date: "29.11.2025 23:30",
                 version: "v1.2 (Update)",
-                desc: "RUKA: Wprowadzenie oficjalnych wyników (jedna seria). Transfery 'medyczne' w zespole Tomasz P.: Stefan Kraft (narodziny dziecka) -> K.E. Sundal, Artti Aigro (przeziębienie) -> M. Ortner. Korekta punktów za wiatr zgodnie z protokołem FIS."
+                desc: "RUKA: 1. Oficjalne wyniki (jedna seria) z korektą punktów za wiatr. 2. Transfery 'medyczne' w zespole Tomasz P. (Kraft -> Sundal, Aigro -> Ortner). 3. NOWOŚĆ: Dodano linki do protokołów FIS (PDF/Live) pod wynikami konkursu. 4. NOWOŚĆ: W klasyfikacji indywidualnej przy zawodnikach rezerwowych wyświetla się teraz liczba punktów zdobytych dla drużyny."
             },
             {
                 date: "28.11.2025 23:30",
@@ -357,6 +357,12 @@ const getFlagUrl = (name, countryCode) => {
                 location: "Ruka (FIN) - HS 142 (One Round Only)",
                 hill: "HS 142",
                 jury: JURY_FLAGS[4],
+				// --- NOWE POLE LINKS ---
+                links: {
+                    fis: "https://live.fis-ski.com/jp-3079/results-pda.htm",
+                    pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3079/2026JP3079RL1.pdf"
+                },
+                // -----------------------
                 results: [
                     { rank: 1, bib: "68", country: "SLO", name: "Anze Lanisek", points: 141.0, r1_dist: "142.0", r1_note: "57.0", r1_wind: "1.33", r1_total: "141.0", r1_rank: 1, r1_speed: "86.0", r1_dpts: "99.6", r1_judges: "19.0 19.0 19.0 19.0 18.5", r1_comp: "15.6" },
                     { rank: 2, bib: "59", country: "JPN", name: "Ren Nikaido", points: 136.4, r1_dist: "141.0", r1_note: "55.0", r1_wind: "1.40", r1_total: "136.4", r1_rank: 2, r1_speed: "86.5", r1_dpts: "97.8", r1_judges: "18.0 18.0 19.0 18.5 18.5", r1_comp: "-16.4" },
@@ -544,12 +550,30 @@ const getFlagUrl = (name, countryCode) => {
                     contest.results.forEach(r => {
                         const name = r.name;
                         if (!scores[name]) {
-                             scores[name] = { draft: 0, fis: 0 };
+                             // Dodajemy pola teamDraft i teamFis
+                             scores[name] = { draft: 0, fis: 0, teamDraft: 0, teamFis: 0 };
                              owners[name] = getJumperOwner(name);
                              countries[name] = r.country;
                         }
-                        scores[name].draft += getDraftPoints(r.rank);
-                        scores[name].fis += getFisPoints(r.rank);
+                        
+                        const dPoints = getDraftPoints(r.rank);
+                        const fPoints = getFisPoints(r.rank);
+
+                        // Punkty ogólne
+                        scores[name].draft += dPoints;
+                        scores[name].fis += fPoints;
+
+                        // --- NOWA LOGIKA: Czy punkty liczą się dla drużyny? ---
+                        const owner = owners[name];
+                        if (owner) {
+                            // Sprawdzamy, czy w TYM konkursie (contest.id) zawodnik był w składzie punktującym
+                            const activeSquad = getTeamMembersForContest(owner, contest.id);
+                            // Jeśli zawodnik jest na liście aktywnej (uwzględnia to zamianę rezerwowych w Ruce)
+                            if (activeSquad.includes(name)) {
+                                scores[name].teamDraft += dPoints;
+                                scores[name].teamFis += fPoints;
+                            }
+                        }
                     });
                 });
                 
@@ -557,13 +581,15 @@ const getFlagUrl = (name, countryCode) => {
                     .map(([name, pts]) => ({ 
                         name, 
                         draft: pts.draft, 
-                        fis: pts.fis, 
+                        fis: pts.fis,
+                        // Przekazujemy punkty drużynowe dalej
+                        teamDraft: pts.teamDraft,
+                        teamFis: pts.teamFis,
                         owner: owners[name],
                         country: countries[name]
                     }))
                     .sort((a, b) => b[sortMode] - a[sortMode]);
 
-                // Assign global rank first
                 list = list.map((item, index) => ({ ...item, globalRank: index + 1 }));
 
                 if (filterMode !== 'all') {
@@ -572,7 +598,7 @@ const getFlagUrl = (name, countryCode) => {
                 
                 return list;
 
-            }, [contests, sortMode, filterMode]);
+            }, [contests, sortMode, filterMode]);;
 
             return (
                 <div className="space-y-6 mt-8">
@@ -610,10 +636,14 @@ const getFlagUrl = (name, countryCode) => {
                                                 <div className="flex items-center">
                                                     <Flag name={j.name} country={j.country} /> <span className="ml-1">{j.name}</span>
                                                 </div>
-                                                {/* --- ZMIANA: Oznaczenie rezerwowego --- */}
+                                                {/* --- ZMIANA: Wyświetlanie punktów dla drużyny przy rezerwowym --- */}
                                                 {RESERVES.includes(j.name) && (
-                                                    <span className="mt-1 sm:mt-0 sm:ml-2 text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit">
-                                                        Rezerwowy
+                                                    <span className="mt-1 sm:mt-0 sm:ml-2 text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit flex flex-col md:flex-row md:gap-1 text-center md:text-left">
+                                                        <span>Rezerwowy</span>
+                                                        {/* Pokazujemy punkty zależnie od wybranego trybu sortowania (Draft/FIS) */}
+                                                        <span className="normal-case font-semibold">
+                                                            (Dla zespołu: {sortMode === 'draft' ? j.teamDraft : j.teamFis} pkt)
+                                                        </span>
                                                     </span>
                                                 )}
                                             </div>
@@ -681,6 +711,25 @@ const getFlagUrl = (name, countryCode) => {
                                     {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
                                 </select>
                             </div>
+						
+						{/* --- NOWA SEKCJA LINKÓW (Dodaj ten fragment) --- */}
+                        {activeContest.links && (
+                            <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100 mt-2">
+                                <span className="text-xs font-bold text-slate-500 uppercase self-center mr-2">Raporty FIS:</span>
+                                {activeContest.links.fis && (
+                                    <a href={activeContest.links.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-xs rounded hover:bg-slate-700 transition-colors">
+                                        <ExternalLink size={12} /> Live Ticker
+                                    </a>
+                                )}
+                                {activeContest.links.pdf && (
+                                    <a href={activeContest.links.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-xs rounded hover:bg-red-500 transition-colors">
+                                        <ExternalLink size={12} /> Protokół PDF
+                                    </a>
+                                )}
+                            </div>
+                        )}
+                        {/* ----------------------------------------------- */}
+                    </div>
 
                             {/* View data selector (bottom on mobile) */}
                             <div className="md:hidden w-full relative order-2 md:order-1 mt-2 md:mt-0">
