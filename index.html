@@ -190,6 +190,11 @@ const getFlagUrl = (name, countryCode) => {
 
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
+			{
+                date: "30.11.2025 17:00",
+                version: "v1.3",
+                desc: "RUKA (Niedziela): 1. Wdrożenie obsługi odwołanego konkursu (specjalne komunikaty w zakładkach Wyniki i Zespoły). 2. Dodanie listy nieobecnych (Kraft, Aigro) dla całego weekendu w Ruce. 3. Naprawa znikających flag w zakładce Zespoły. 4. Optymalizacja interfejsu (ukrycie pustych tabel, podzakładek i linków dla odwołanych zawodów)."
+            },
             {
                 date: "29.11.2025 23:30",
                 version: "v1.2 (Update)",
@@ -354,7 +359,7 @@ const getFlagUrl = (name, countryCode) => {
             },
 			{id: 4,
                 date: "29.11.2025",
-                location: "Ruka (FIN) - HS 142 (One Round Only)",
+                location: "Ruka (FIN) - HS 142 (Tylko jedna seria)",
                 hill: "HS 142",
                 jury: JURY_FLAGS[4],
 				// --- NOWE POLE LINKS ---
@@ -415,6 +420,15 @@ const getFlagUrl = (name, countryCode) => {
                     { rank: 49, bib: "26", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 13.9, r1_dist: "81.0", r1_note: "40.0", r1_wind: "-1.36", r1_total: "13.9", r1_rank: 49, r1_speed: "86.0", r1_dpts: "-10.2", r1_judges: "13.5 13.5 13.5 13.0 13.0", r1_comp: "-15.9" },
                     { rank: 50, bib: "3", country: "FIN", name: "Jarkko Maatta", points: 12.3, r1_dist: "78.0", r1_note: "39.0", r1_wind: "-0.95", r1_total: "12.3", r1_rank: 50, r1_speed: "86.6", r1_dpts: "-15.6", r1_judges: "13.0 13.0 12.5 13.5 13.0", r1_comp: "-11.1" }
                 ]
+            },
+			{
+                id: 5,
+                date: "30.11.2025",
+                location: "Ruka (FIN) - HS 142 (Odwołany)", // Specjalna nazwa w liście
+                hill: "HS 142",
+                jury: {}, // Brak, zawody nie odbyły się
+                // Sekcja links została usunięta, więc przyciski się nie wyświetlą
+                results: [] // Pusta tablica wyników = brak punktów
             }
         ];
 
@@ -718,7 +732,7 @@ const getFlagUrl = (name, countryCode) => {
                                 <span className="text-xs font-bold text-slate-500 uppercase self-center mr-2">Raporty FIS:</span>
                                 {activeContest.links.fis && (
                                     <a href={activeContest.links.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-xs rounded hover:bg-slate-700 transition-colors">
-                                        <ExternalLink size={12} /> Live Ticker
+                                        <ExternalLink size={12} /> WWW FIS
                                     </a>
                                 )}
                                 {activeContest.links.pdf && (
@@ -745,29 +759,46 @@ const getFlagUrl = (name, countryCode) => {
                         </div>
                     </div>
 
-                    <div className="bg-white md:rounded-xl shadow-sm border border-slate-200 overflow-hidden custom-scrollbar">
                         {/* DESKTOP TABS */}
-                        <div className="hidden md:flex border-b border-slate-200 bg-slate-50">
-                            {[
-                                {id: 'ranking', label: 'Ranking'}, 
-                                {id: 'speed', label: 'Prędkość'}, 
-                                {id: 'judges', label: 'Noty'}, 
-                                {id: 'distance', label: 'Dystans'}, 
-                                {id: 'wind', label: 'Wiatr/Belka'}
-                            ].map(tab => (
-                                <button 
-                                    key={tab.id}
-                                    onClick={() => setDesktopTab(tab.id)}
-                                    className={`px-6 py-3 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors flex items-center gap-2 ${
-                                        desktopTab === tab.id 
-                                            ? 'border-blue-600 text-blue-800 bg-white' 
-                                            : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100'
-                                    }`}
-                                >
-                                    {tab.label}
-                                </button>
-                            ))}
-                        </div>
+						<div className="bg-white md:rounded-xl shadow-sm border border-slate-200 overflow-hidden custom-scrollbar">
+                        {/* DESKTOP TABS - Pokazuj tylko jeśli są wyniki */}
+                        {activeContest.results.length > 0 && (
+                            <div className="hidden md:flex border-b border-slate-200 bg-slate-50">
+                                {[
+                                    {id: 'ranking', label: 'Ranking'}, 
+                                    {id: 'speed', label: 'Prędkość'}, 
+                                    {id: 'judges', label: 'Noty'}, 
+                                    {id: 'distance', label: 'Dystans'}, 
+                                    {id: 'wind', label: 'Wiatr/Belka'}
+                                ].map(tab => (
+                                    <button 
+                                        key={tab.id}
+                                        onClick={() => setDesktopTab(tab.id)}
+                                        className={`px-6 py-3 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors flex items-center gap-2 ${
+                                            desktopTab === tab.id 
+                                                ? 'border-blue-600 text-blue-800 bg-white' 
+                                                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                                        }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+						{/* --- OBSŁUGA PUSTEGO KONKURSU (ODWOŁANY/OCZEKIWANIE) --- */}
+                        {activeContest.results.length === 0 ? (
+                            <div className="p-10 text-center bg-white">
+                                <div className="inline-block p-4 rounded-full bg-amber-50 mb-4">
+                                    <Info className="w-10 h-10 text-amber-500" />
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-800 mb-2">Konkurs odwołany</h3>
+                                <p className="text-slate-500 mb-6">
+                                    Dzisiejszy Puchar Świata w skokach narciarskich w Ruka (FIN) został odwołany przez jury. Wiatr wiejący z prędkością do 11 m/s uniemożliwiał rywalizację. FIS rozważa ewentualną zmianę terminu zawodów, być może w Lahti (FIN), w ramach zaplanowanego tam weekendu Pucharu Świata w dniach 7 i 8 marca 2026 r..
+                                </p>
+                            </div>
+                        ) : (
+                            <>
 
                         {/* DESKTOP TABLE */}
                         <div className="hidden md:block overflow-x-auto">
@@ -988,6 +1019,8 @@ const getFlagUrl = (name, countryCode) => {
                                 })}
                             </div>
                         </div>
+						</>
+                    )}
                     </div>
                 </div>
             );
@@ -997,6 +1030,20 @@ const getFlagUrl = (name, countryCode) => {
             const [selectedContestId, setSelectedContestId] = useState(contests[contests.length-1].id);
             const [scoreType, setScoreType] = useState('draft'); 
             
+			// --- NOWE: Mapa krajów, aby flagi działały nawet jak nie ma wyników (np. odwołany konkurs) ---
+            const jumperCountries = useMemo(() => {
+                const map = {};
+                contests.forEach(c => {
+                    c.results.forEach(r => {
+                        if (r.name && r.country) {
+                            map[r.name] = r.country;
+                        }
+                    });
+                });
+                return map;
+            }, [contests]);
+            // -------------------------------------------------------------------------------------------
+			
             const activeContest = useMemo(() => {
                 const found = contests.find(c => c.id === parseInt(selectedContestId));
                 return found || contests[contests.length - 1];
@@ -1019,74 +1066,117 @@ const getFlagUrl = (name, countryCode) => {
                         </div>
                     </div>
                     {/* Wewnątrz TeamDetails -> return -> grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {Object.keys(TEAMS).map((teamName) => {
-                            // --- ZMIANA: Pobieramy skład dynamicznie dla wybranego konkursu ---
-                            const members = getTeamMembersForContest(teamName, activeContest.id);
-                            // ------------------------------------------------------------------
+                    {/* WARUNEK DLA ODWOŁANEGO KONKURSU (ID 5) */}
+                    {activeContest.id === 5 ? (
+                        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 text-center animate-fade-in">
+                            <div className="inline-block p-4 rounded-full bg-amber-50 mb-4">
+                                <Info className="w-12 h-12 text-amber-500" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-slate-800 mb-2">Konkurs Odwołany / Przełożony</h3>
+                            <p className="text-slate-500 mb-8 text-lg">
+                                Brak wyników punktowych dla zespołów w tym konkursie. <br />
+								Dzisiejszy Puchar Świata w skokach narciarskich w Ruka (FIN) został odwołany przez jury. Wiatr wiejący z prędkością do 11 m/s uniemożliwiał rywalizację. FIS rozważa ewentualną zmianę terminu zawodów, być może w Lahti (FIN), w ramach zaplanowanego tam weekendu Pucharu Świata w dniach 7 i 8 marca 2026 r..
+                            </p>
 
-                            const scores = members.map(m => {
-                                const res = activeContest.results.find(r => normalizeName(r.name) === normalizeName(m));
-                                // Reszta kodu bez zmian...
-                                const rank = res ? res.rank : 999;
-                                const pts = scoreType === 'draft' ? getDraftPoints(rank) : getFisPoints(rank);
-                                return { name: m, rank: res ? res.rank : "-", points: pts, country: res ? res.country : null };
-                            }).sort((a, b) => b.points - a.points);
-                            
-                            const top5 = scores.slice(0, 5);
-                            const top5Sum = top5.reduce((acc, curr) => acc + curr.points, 0);
-
-                            return (
-                                <div key={teamName} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                                    <div className={`px-4 py-3 border-b border-slate-200 flex justify-between items-center ${TEAM_STYLES[teamName].replace('border-l-4', 'border-b-2')}`}>
-                                        <h3 className="font-bold">{teamName}</h3>
-                                        <span className="text-xs md:text-sm bg-white/80 px-2 py-1 rounded font-semibold border border-slate-200 text-slate-800">Suma (Top 5): {top5Sum}</span>
-                                    </div>
-                                    <div className="p-0">
-                                        <table className="w-full text-sm">
-                                            <thead><tr className="text-slate-500 border-b border-slate-100 bg-slate-50/50"><th className="px-3 py-2 text-left">Zawodnik</th><th className="px-2 py-2 text-center">M-ce</th><th className="px-2 py-2 text-center text-blue-600">Pkt</th></tr></thead>
-                                            <tbody>
-                                                {scores.map((jumper, i) => (
-                                                    <tr key={jumper.name} className={`border-b border-slate-50 last:border-0 ${i < 5 && jumper.rank !== '-' ? 'bg-slate-50/50' : ''}`}>
-                                                        <td className="px-3 py-2 font-medium truncate flex flex-col sm:flex-row sm:items-center gap-1">
-                                                            <div className="flex items-center">
-                                                                <Flag name={jumper.name} country={jumper.country} /> {jumper.name}
-                                                            </div>
-                                                            {/* --- ZMIANA: Rezerwowy tylko w Ruce i dalej --- */}
-                                                            {RESERVES.includes(jumper.name) && activeContest.id >= 4 && (
-                                                                <span className="text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit">
-                                                                    Rezerwowy
-                                                                </span>
-                                                            )}
-                                                        </td>
-                                                        <td className="px-2 py-2 text-center font-mono text-slate-500">{jumper.rank}</td>
-                                                        <td className="px-2 py-2 text-center font-bold text-blue-600">{jumper.points > 0 ? jumper.points : "-"}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-										{/* --- NOWA SEKCJA: NIE OBECNI (Tylko dla Tomasz P. w Ruce) --- */}
-                                        {teamName === "Tomasz P." && activeContest.id === 4 && (
-                                            <div className="bg-red-50 border-t border-red-100 p-3 text-xs text-red-700">
-                                                <div className="font-bold mb-1 flex items-center gap-1">
-                                                    <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
-                                                    Nieobecni (Absencja):
-                                                </div>
-                                                <ul className="space-y-1 ml-3 list-disc">
-                                                    <li>
-                                                        <span className="font-semibold">Stefan Kraft</span> - absencja (narodziny dziecka)
-                                                    </li>
-                                                    <li>
-                                                        <span className="font-semibold">Artti Aigro</span> - absencja (przeziębienie)
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        )}
-										</div>
+                            {/* Sekcja Nieobecni - Specjalnie dla tego widoku */}
+                            <div className="max-w-md mx-auto bg-red-50 border border-red-100 rounded-xl p-6 text-left shadow-sm">
+                                <div className="flex items-center gap-2 mb-4 border-b border-red-200 pb-2">
+                                    <span className="relative flex h-3 w-3">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                    </span>
+                                    <h4 className="font-bold text-red-800 uppercase text-sm tracking-wide">
+                                        Nieobecni 28-30.11.2025 (Absencja):
+                                    </h4>
                                 </div>
-                            );
-                        })}
-                    </div>
+                                <ul className="space-y-3 text-red-700 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="font-bold text-slate-700">Stefan Kraft</span> 
+                                        <span>- absencja (narodziny dziecka)</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="font-bold text-slate-700">Artti Aigro</span> 
+                                        <span>- absencja (przeziębienie)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    ) : (
+                        /* STANDARDOWY WIDOK TABEL (Dla pozostałych konkursów) */
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {Object.keys(TEAMS).map((teamName) => {
+                                // --- ZMIANA: Pobieramy skład dynamicznie dla wybranego konkursu ---
+                                const members = getTeamMembersForContest(teamName, activeContest.id);
+                                // ------------------------------------------------------------------
+
+                                const scores = members.map(m => {
+                                    const res = activeContest.results.find(r => normalizeName(r.name) === normalizeName(m));
+                                    const rank = res ? res.rank : 999;
+                                    const pts = scoreType === 'draft' ? getDraftPoints(rank) : getFisPoints(rank);
+                                    
+                                    // --- ZMIANA: Pobieranie kraju z mapy pomocniczej jeśli brak wyniku ---
+                                    const country = res ? res.country : jumperCountries[m];
+                                    // ---------------------------------------------------------------------
+                                    
+                                    return { name: m, rank: res ? res.rank : "-", points: pts, country: country };
+                                }).sort((a, b) => b.points - a.points);
+                                
+                                const top5 = scores.slice(0, 5);
+                                const top5Sum = top5.reduce((acc, curr) => acc + curr.points, 0);
+
+                                return (
+                                    <div key={teamName} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                                        <div className={`px-4 py-3 border-b border-slate-200 flex justify-between items-center ${TEAM_STYLES[teamName].replace('border-l-4', 'border-b-2')}`}>
+                                            <h3 className="font-bold">{teamName}</h3>
+                                            <span className="text-xs md:text-sm bg-white/80 px-2 py-1 rounded font-semibold border border-slate-200 text-slate-800">Suma (Top 5): {top5Sum}</span>
+                                        </div>
+                                        <div className="p-0">
+                                            <table className="w-full text-sm">
+                                                <thead><tr className="text-slate-500 border-b border-slate-100 bg-slate-50/50"><th className="px-3 py-2 text-left">Zawodnik</th><th className="px-2 py-2 text-center">M-ce</th><th className="px-2 py-2 text-center text-blue-600">Pkt</th></tr></thead>
+                                                <tbody>
+                                                    {scores.map((jumper, i) => (
+                                                        <tr key={jumper.name} className={`border-b border-slate-50 last:border-0 ${i < 5 && jumper.rank !== '-' ? 'bg-slate-50/50' : ''}`}>
+                                                            <td className="px-3 py-2 font-medium truncate flex flex-col sm:flex-row sm:items-center gap-1">
+                                                                <div className="flex items-center">
+                                                                    <Flag name={jumper.name} country={jumper.country} /> {jumper.name}
+                                                                </div>
+                                                                {/* --- ZMIANA: Rezerwowy tylko w Ruce i dalej --- */}
+                                                                {RESERVES.includes(jumper.name) && activeContest.id >= 4 && (
+                                                                    <span className="text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit">
+                                                                        Rezerwowy
+                                                                    </span>
+                                                                )}
+                                                            </td>
+                                                            <td className="px-2 py-2 text-center font-mono text-slate-500">{jumper.rank}</td>
+                                                            <td className="px-2 py-2 text-center font-bold text-blue-600">{jumper.points > 0 ? jumper.points : "-"}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                            
+                                            {/* --- SEKJA NIEOBECNI DLA KONKURSU Z WYNIKAMI (ID 4 - Sobota) --- */}
+                                            {teamName === "Tomasz P." && activeContest.id === 4 && (
+                                                <div className="bg-red-50 border-t border-red-100 p-3 text-xs text-red-700">
+                                                    <div className="font-bold mb-1 flex items-center gap-1">
+                                                        <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
+                                                        Nieobecni (Absencja):
+                                                    </div>
+                                                    <ul className="space-y-1 ml-3 list-disc">
+                                                        <li>
+                                                            <span className="font-semibold">Stefan Kraft</span> - absencja (narodziny dziecka)
+                                                        </li>
+                                                        <li>
+                                                            <span className="font-semibold">Artti Aigro</span> - absencja (przeziębienie)
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             );
         };
@@ -1202,7 +1292,7 @@ const getFlagUrl = (name, countryCode) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">29.11 godzina 23:30</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">30.11 godzina 17:00</span>
                                     </span>
                                 </div>
                             </div>
