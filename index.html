@@ -191,6 +191,11 @@ const getFlagUrl = (name, countryCode) => {
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
             {
+                date: "30.11.2025 10:00",
+                version: "v1.3",
+                desc: "Transfery medyczne/okolicznościowe: Stefan Kraft (nieobecny - narodziny dziecka) zastąpiony przez Kristoffera Eriksena Sundala. Artti Aigro (nieobecny - przeziębienie) zastąpiony przez Maximiliana Ortnera. Oznaczenie zawodników rezerwowych w tabelach."
+            },
+            {
                 date: "29.11.2025 23:25",
                 version: "v1.2",
                 desc: "Korekta wyników Lillehammer: Aktualizacja kolejności zawodników i sum punktów zgodnie z oficjalnym feedem TV. Wprowadzenie szczegółowych not sędziowskich (A-E) dla obu serii z automatycznym skreślaniem skrajnych wartości."
@@ -201,6 +206,9 @@ const getFlagUrl = (name, countryCode) => {
                 desc: "KOMPLEKSOWA AKTUALIZACJA: 1. Naprawa brakujących flag przy nazwiskach. 2. Przebudowa zakładki 'Wyniki'. 3. Tłumaczenie interfejsu."
             }
         ];
+
+        // Definicja zawodników rezerwowych
+        const RESERVES = ["Kristoffer Eriksen Sundal", "Maximilian Ortner"];
 
         // --- DANE KONKURSÓW ---
         // Jury data for flags (From protocols)
@@ -602,8 +610,16 @@ const getFlagUrl = (name, countryCode) => {
                                     <tr key={j.name} className="hover:bg-slate-50">
                                         <td className="px-1 py-2 text-slate-500 font-bold pl-2 text-xs md:text-sm">{j.globalRank}.</td>
                                         <td className="px-1 py-2 font-medium whitespace-normal leading-tight min-w-[80px] text-xs md:text-sm">
-                                            <div className="flex items-center">
-                                                <Flag name={j.name} country={j.country} /> <span className="ml-1">{j.name}</span>
+                                            <div className="flex flex-col sm:flex-row sm:items-center">
+                                                <div className="flex items-center">
+                                                    <Flag name={j.name} country={j.country} /> <span className="ml-1">{j.name}</span>
+                                                </div>
+                                                {/* --- ZMIANA: Oznaczenie rezerwowego --- */}
+                                                {RESERVES.includes(j.name) && (
+                                                    <span className="mt-1 sm:mt-0 sm:ml-2 text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit">
+                                                        Rezerwowy
+                                                    </span>
+                                                )}
                                             </div>
                                         </td>
                                         <td className="px-1 py-2 text-slate-500 text-[10px] md:text-xs">
@@ -987,8 +1003,16 @@ const getFlagUrl = (name, countryCode) => {
                                             <tbody>
                                                 {scores.map((jumper, i) => (
                                                     <tr key={jumper.name} className={`border-b border-slate-50 last:border-0 ${i < 5 && jumper.rank !== '-' ? 'bg-slate-50/50' : ''}`}>
-                                                        <td className="px-3 py-2 font-medium truncate flex items-center">
-                                                            <Flag name={jumper.name} country={jumper.country} /> {jumper.name}
+                                                        <td className="px-3 py-2 font-medium truncate flex flex-col sm:flex-row sm:items-center gap-1">
+                                                            <div className="flex items-center">
+                                                                <Flag name={jumper.name} country={jumper.country} /> {jumper.name}
+                                                            </div>
+                                                            {/* --- ZMIANA: Rezerwowy tylko w Ruce i dalej --- */}
+                                                            {RESERVES.includes(jumper.name) && activeContest.id >= 4 && (
+                                                                <span className="text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit">
+                                                                    Rezerwowy
+                                                                </span>
+                                                            )}
                                                         </td>
                                                         <td className="px-2 py-2 text-center font-mono text-slate-500">{jumper.rank}</td>
                                                         <td className="px-2 py-2 text-center font-bold text-blue-600">{jumper.points > 0 ? jumper.points : "-"}</td>
@@ -1080,6 +1104,7 @@ const getFlagUrl = (name, countryCode) => {
                         </div>
                         
                         <div className="relative border-l-2 border-slate-200 ml-3 space-y-8">
+                            {/* --- ZMIANA: slice().reverse() zapewnia kolejność od najstarszych (v1.1) do najnowszych (v1.3) --- */}
                             {APP_UPDATES.slice().reverse().map((update, idx) => (
                                 <div key={idx} className="ml-6 relative">
                                     <span className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-4 border-blue-500"></span>
@@ -1115,7 +1140,7 @@ const getFlagUrl = (name, countryCode) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">28.11 godzina 23:30</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">29.11 godzina 23:30</span>
                                     </span>
                                 </div>
                             </div>
