@@ -43,7 +43,7 @@
             background-position: right 0.7rem top 50%;
             background-size: 0.65rem auto;
         }
-		table thead th {
+        table thead th {
         position: sticky;
         top: 0;
         background: white;
@@ -57,6 +57,20 @@
         background: white;
         z-index: 3;
         }
+        /* MOBILE */
+        @media (max-width: 600px) {
+        table {
+          font-size: 12px;     /* zmniejsza całą czcionkę w tabeli */
+        }
+
+        table th, table td {
+          padding: 4px 6px;    /* mniejsze odstępy wewnątrz komórek */
+        }
+
+        h1, h2, h3 {
+          font-size: 18px;     /* nagłówki też warto zmniejszyć */
+        }
+        } 
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -501,24 +515,19 @@ const getFlagUrl = (name, countryCode) => {
         const Dashboard = ({ contests }) => {
             const [mode, setMode] = useState('draft');
 
-// Wewnątrz Dashboard -> useMemo
             const standings = useMemo(() => {
                 const scores = {};
                 Object.keys(TEAMS).forEach(team => scores[team] = 0);
                 
                 contests.forEach(contest => {
                     Object.keys(TEAMS).forEach(teamName => {
-                        // --- ZMIANA: Zamiast TEAMS[teamName] używamy funkcji ---
                         const teamMembers = getTeamMembersForContest(teamName, contest.id);
-                        // -------------------------------------------------------
-
                         const memberScores = teamMembers.map(jumperName => {
                             const result = contest.results.find(r => normalizeName(r.name) === normalizeName(jumperName));
                             if (!result) return 0;
                             return mode === 'draft' ? getDraftPoints(result.rank) : getFisPoints(result.rank);
                         });
                         memberScores.sort((a, b) => b - a);
-                        // Sumujemy top 5
                         scores[teamName] += memberScores.slice(0, 5).reduce((a, b) => a + b, 0);
                     });
                 });
@@ -529,33 +538,36 @@ const getFlagUrl = (name, countryCode) => {
                 <div className="space-y-6">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 gap-4">
                         <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800"><Trophy className="text-yellow-500" /> Klasyfikacja Generalna</h2>
-                        <div className="flex bg-slate-100 p-1 rounded-lg">
-                            <button onClick={() => setMode('draft')} className={`px-4 py-2 rounded-md text-sm font-medium ${mode === 'draft' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Fantasy</button>
-                            <button onClick={() => setMode('fis')} className={`px-4 py-2 rounded-md text-sm font-medium ${mode === 'fis' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Oficjalne FIS</button>
+                        <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-auto">
+                            <button onClick={() => setMode('draft')} className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-medium ${mode === 'draft' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Fantasy</button>
+                            <button onClick={() => setMode('fis')} className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-medium ${mode === 'fis' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Oficjalne FIS</button>
                         </div>
                     </div>
+                    
+                    {/* Przywrócono overflow-x-auto dla desktopu, żeby się nie ściskało */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-left min-w-[350px]">
+                        <table className="w-full text-left min-w-[300px] md:min-w-[500px]">
                             <thead className="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th className="px-6 py-4 font-semibold text-slate-600 whitespace-nowrap">M-ce</th>
-                                    <th className="px-6 py-4 font-semibold text-slate-600">Drużyna</th>
-                                    <th className="px-6 py-4 font-semibold text-slate-600 text-right">Punkty</th>
+                                    {/* Desktop: px-6 py-4 | Mobile: px-2 py-2 */}
+                                    <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600 whitespace-nowrap text-center md:text-left">M-ce</th>
+                                    <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600">Drużyna</th>
+                                    <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600 text-right">Punkty</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {standings.map(([team, points], index) => (
                                     <tr key={team} className="hover:bg-slate-50">
-                                        <td className="px-6 py-4 font-bold text-slate-500">{index + 1}.</td>
-                                        <td className="px-6 py-4 font-medium flex items-center gap-3 whitespace-nowrap">
-                                            <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${
+                                        <td className="px-2 py-2 md:px-6 md:py-4 font-bold text-slate-500 text-center md:text-left">{index + 1}.</td>
+                                        <td className="px-2 py-2 md:px-6 md:py-4 font-medium flex items-center gap-2 md:gap-3 whitespace-nowrap">
+                                            <div className={`shrink-0 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${
                                                 team === 'Tomasz P.' ? 'bg-green-600' : 
                                                 team === 'Tomasz J.' ? 'bg-amber-600' : 
                                                 team === 'Madzia' ? 'bg-pink-600' : 'bg-blue-600'
                                             }`}>{team.charAt(0)}</div>
-                                            {team}
+                                            <span className="text-sm md:text-base">{team}</span>
                                         </td>
-                                        <td className="px-6 py-4 font-bold text-right text-lg">{points}</td>
+                                        <td className="px-2 py-2 md:px-6 md:py-4 font-bold text-right text-base md:text-lg">{points}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -578,7 +590,6 @@ const getFlagUrl = (name, countryCode) => {
                     contest.results.forEach(r => {
                         const name = r.name;
                         if (!scores[name]) {
-                             // Dodajemy pola teamDraft i teamFis
                              scores[name] = { draft: 0, fis: 0, teamDraft: 0, teamFis: 0 };
                              owners[name] = getJumperOwner(name);
                              countries[name] = r.country;
@@ -587,16 +598,12 @@ const getFlagUrl = (name, countryCode) => {
                         const dPoints = getDraftPoints(r.rank);
                         const fPoints = getFisPoints(r.rank);
 
-                        // Punkty ogólne
                         scores[name].draft += dPoints;
                         scores[name].fis += fPoints;
 
-                        // --- NOWA LOGIKA: Czy punkty liczą się dla drużyny? ---
                         const owner = owners[name];
                         if (owner) {
-                            // Sprawdzamy, czy w TYM konkursie (contest.id) zawodnik był w składzie punktującym
                             const activeSquad = getTeamMembersForContest(owner, contest.id);
-                            // Jeśli zawodnik jest na liście aktywnej (uwzględnia to zamianę rezerwowych w Ruce)
                             if (activeSquad.includes(name)) {
                                 scores[name].teamDraft += dPoints;
                                 scores[name].teamFis += fPoints;
@@ -610,7 +617,6 @@ const getFlagUrl = (name, countryCode) => {
                         name, 
                         draft: pts.draft, 
                         fis: pts.fis,
-                        // Przekazujemy punkty drużynowe dalej
                         teamDraft: pts.teamDraft,
                         teamFis: pts.teamFis,
                         owner: owners[name],
@@ -632,12 +638,12 @@ const getFlagUrl = (name, countryCode) => {
                 <div className="space-y-6 mt-8">
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
                         <h2 className="text-xl font-bold flex items-center gap-2"><Medal className="text-orange-500" /> Indywidualnie</h2>
-                        <div className="flex gap-2 text-sm flex-wrap">
-                            <select value={sortMode} onChange={(e) => setSortMode(e.target.value)} className="p-2 border rounded bg-white">
+                        <div className="flex gap-2 text-sm flex-wrap w-full md:w-auto">
+                            <select value={sortMode} onChange={(e) => setSortMode(e.target.value)} className="flex-1 md:flex-none p-2 border rounded bg-white">
                                 <option value="draft">Sortuj: Draft Pkt</option>
                                 <option value="fis">Sortuj: FIS Pkt</option>
                             </select>
-                            <select value={filterMode} onChange={(e) => setFilterMode(e.target.value)} className="p-2 border rounded bg-white">
+                            <select value={filterMode} onChange={(e) => setFilterMode(e.target.value)} className="flex-1 md:flex-none p-2 border rounded bg-white">
                                 <option value="all">Wszyscy Skoczkowie</option>
                                 {Object.keys(TEAMS).map(team => (
                                     <option key={team} value={team}>Tylko: {team}</option>
@@ -645,30 +651,39 @@ const getFlagUrl = (name, countryCode) => {
                             </select>
                         </div>
                     </div>
+                    
+                    {/* Przywrócono min-w-[350px] dla bezpieczeństwa i overflow-x-auto */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
                         <table className="w-full text-left text-sm min-w-[350px]">
                             <thead className="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th className="px-1 py-2 whitespace-nowrap text-[10px] md:text-sm pl-2">M-ce</th>
-                                    <th className="px-1 py-2 text-[10px] md:text-sm">Zawodnik</th>
-                                    <th className="px-1 py-2 text-[10px] md:text-sm">Właściciel</th>
-                                    <th className="px-1 py-2 text-right pr-2 text-[10px] md:text-sm">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
+                                    {/* Desktop: standard | Mobile: mniejszy padding i text */}
+                                    <th className="px-1 py-2 md:px-2 md:py-3 whitespace-nowrap text-[10px] md:text-sm pl-2 sticky-col bg-slate-50">M-ce</th>
+                                    <th className="px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Zawodnik</th>
+                                    <th className="px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Właściciel</th>
+                                    <th className="px-1 py-2 md:px-2 md:py-3 text-right pr-2 text-[10px] md:text-sm whitespace-nowrap">{sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {jumperScores.map((j) => (
-                                    <tr key={j.name} className="hover:bg-slate-50">
-                                        <td className="px-1 py-2 text-slate-500 font-bold pl-2 text-xs md:text-sm">{j.globalRank}.</td>
-                                        <td className="px-1 py-2 font-medium whitespace-normal leading-tight min-w-[80px] text-xs md:text-sm">
+                                    <tr key={j.name} className="hover:bg-slate-50 group">
+                                        {/* Sticky Column z naprawionym tłem */}
+                                        <td className="px-1 py-2 md:px-2 md:py-3 text-slate-500 font-bold pl-2 text-xs md:text-sm sticky-col bg-white group-hover:bg-slate-50 border-r border-transparent">
+                                            {j.globalRank}.
+                                        </td>
+                                        
+                                        {/* Nazwisko: Mobile (wrap), Desktop (nowrap - po staremu) */}
+                                        <td className="px-1 py-2 md:px-2 md:py-3 font-medium whitespace-normal md:whitespace-nowrap leading-tight min-w-[80px] text-xs md:text-sm">
                                             <div className="flex flex-col sm:flex-row sm:items-center">
                                                 <div className="flex items-center">
-                                                    <Flag name={j.name} country={j.country} /> <span className="ml-1">{j.name}</span>
+                                                    <Flag name={j.name} country={j.country} /> 
+                                                    <span className="ml-1">{j.name}</span>
                                                 </div>
-                                                {/* --- ZMIANA: Wyświetlanie punktów dla drużyny przy rezerwowym --- */}
+                                                
+                                                {/* Rezerwowy */}
                                                 {RESERVES.includes(j.name) && (
                                                     <span className="mt-1 sm:mt-0 sm:ml-2 text-[9px] uppercase font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200 w-fit flex flex-col md:flex-row md:gap-1 text-center md:text-left">
                                                         <span>Rezerwowy</span>
-                                                        {/* Pokazujemy punkty zależnie od wybranego trybu sortowania (Draft/FIS) */}
                                                         <span className="normal-case font-semibold">
                                                             (Dla zespołu: {sortMode === 'draft' ? j.teamDraft : j.teamFis} pkt)
                                                         </span>
@@ -676,7 +691,9 @@ const getFlagUrl = (name, countryCode) => {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-1 py-2 text-slate-500 text-[10px] md:text-xs">
+                                        
+                                        {/* Właściciel */}
+                                        <td className="px-1 py-2 md:px-2 md:py-3 text-slate-500 text-[10px] md:text-xs">
                                             {j.owner ? (
                                                 <span className={`px-1.5 py-0.5 rounded-full whitespace-nowrap ${
                                                     j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
@@ -688,7 +705,9 @@ const getFlagUrl = (name, countryCode) => {
                                                 </span>
                                             ) : "-"}
                                         </td>
-                                        <td className="px-1 py-2 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm">
+                                        
+                                        {/* Punkty */}
+                                        <td className="px-1 py-2 md:px-2 md:py-3 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm">
                                             {sortMode === 'draft' ? j.draft : j.fis}
                                         </td>
                                     </tr>
