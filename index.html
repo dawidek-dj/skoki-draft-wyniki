@@ -711,7 +711,7 @@ const getFlagUrl = (name, countryCode) => {
                                     {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
                                 </select>
                             </div>
-						
+						<div>
 						{/* --- NOWA SEKCJA LINKÓW (Dodaj ten fragment) --- */}
                         {activeContest.links && (
                             <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100 mt-2">
