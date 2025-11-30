@@ -191,14 +191,9 @@ const getFlagUrl = (name, countryCode) => {
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
             {
-                date: "30.11.2025 10:00",
-                version: "v1.3",
-                desc: "Transfery medyczne/okolicznościowe: Stefan Kraft (nieobecny - narodziny dziecka) zastąpiony przez Kristoffera Eriksena Sundala. Artti Aigro (nieobecny - przeziębienie) zastąpiony przez Maximiliana Ortnera. Oznaczenie zawodników rezerwowych w tabelach."
-            },
-            {
-                date: "29.11.2025 23:25",
-                version: "v1.2",
-                desc: "Korekta wyników Lillehammer: Aktualizacja kolejności zawodników i sum punktów zgodnie z oficjalnym feedem TV. Wprowadzenie szczegółowych not sędziowskich (A-E) dla obu serii z automatycznym skreślaniem skrajnych wartości."
+                date: "29.11.2025 23:30",
+                version: "v1.2 (Update)",
+                desc: "RUKA: Wprowadzenie oficjalnych wyników (jedna seria). Transfery "medyczne" w zespole Tomasz P.: Stefan Kraft (narodziny dziecka) -> K.E. Sundal, Artti Aigro (przeziębienie) -> M. Ortner. Korekta punktów za wiatr zgodnie z protokołem FIS."
             },
             {
                 date: "28.11.2025 23:30",
@@ -358,12 +353,13 @@ const getFlagUrl = (name, countryCode) => {
                 ]
             },
 			{id: 4,
-                date: "30.11.2025",
-                location: "Ruka (FIN) - HS 142",
+                date: "29.11.2025",
+                location: "Ruka (FIN) - HS 142 (One Round Only)",
                 hill: "HS 142",
-                jury: {},
-                results: [{ rank: 1, bib: "68", country: "SLO", name: "Anze Lanisek", points: 141.0, r1_dist: "142.0", r1_note: "57.0", r1_wind: "1.33", r1_total: "141.0", r1_rank: 1, r1_speed: "86.0", r1_dpts: "99.6", r1_judges: "19.0 19.0 19.0 19.0 18.5", r1_comp: "15.6" },
-                    { rank: 2, bib: "59", country: "JPN", name: "Ren Nikaido", points: 136.4, r1_dist: "141.0", r1_note: "55.0", r1_wind: "1.40", r1_total: "136.4", r1_rank: 2, r1_speed: "86.5", r1_dpts: "97.8", r1_judges: "18.0 18.0 19.0 18.5 18.5", r1_comp: "16.4" },
+                jury: JURY_FLAGS[4],
+                results: [
+                    { rank: 1, bib: "68", country: "SLO", name: "Anze Lanisek", points: 141.0, r1_dist: "142.0", r1_note: "57.0", r1_wind: "1.33", r1_total: "141.0", r1_rank: 1, r1_speed: "86.0", r1_dpts: "99.6", r1_judges: "19.0 19.0 19.0 19.0 18.5", r1_comp: "15.6" },
+                    { rank: 2, bib: "59", country: "JPN", name: "Ren Nikaido", points: 136.4, r1_dist: "141.0", r1_note: "55.0", r1_wind: "1.40", r1_total: "136.4", r1_rank: 2, r1_speed: "86.5", r1_dpts: "97.8", r1_judges: "18.0 18.0 19.0 18.5 18.5", r1_comp: "-16.4" },
                     { rank: 3, bib: "65", country: "SLO", name: "Domen Prevc", points: 128.0, r1_dist: "132.5", r1_note: "54.0", r1_wind: "0.73", r1_total: "128.0", r1_rank: 3, r1_speed: "85.7", r1_dpts: "82.5", r1_judges: "17.5 18.0 18.0 18.0 18.0", r1_comp: "8.5" },
                     { rank: 4, bib: "56", country: "BUL", name: "Vladimir Zografski", points: 125.4, r1_dist: "131.0", r1_note: "54.0", r1_wind: "0.72", r1_total: "125.4", r1_rank: 4, r1_speed: "86.4", r1_dpts: "79.8", r1_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "8.4" },
                     { rank: 5, bib: "66", country: "JPN", name: "Ryoyu Kobayashi", points: 122.7, r1_dist: "130.5", r1_note: "55.0", r1_wind: "-0.96", r1_total: "122.7", r1_rank: 5, r1_speed: "86.3", r1_dpts: "78.9", r1_judges: "18.0 18.5 18.5 18.0 18.5", r1_comp: "-11.2" },
@@ -413,7 +409,7 @@ const getFlagUrl = (name, countryCode) => {
                     { rank: 49, bib: "26", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 13.9, r1_dist: "81.0", r1_note: "40.0", r1_wind: "-1.36", r1_total: "13.9", r1_rank: 49, r1_speed: "86.0", r1_dpts: "-10.2", r1_judges: "13.5 13.5 13.5 13.0 13.0", r1_comp: "-15.9" },
                     { rank: 50, bib: "3", country: "FIN", name: "Jarkko Maatta", points: 12.3, r1_dist: "78.0", r1_note: "39.0", r1_wind: "-0.95", r1_total: "12.3", r1_rank: 50, r1_speed: "86.6", r1_dpts: "-15.6", r1_judges: "13.0 13.0 12.5 13.5 13.0", r1_comp: "-11.1" }
                 ]
-            },
+            }
         ];
 
         // --- 4. KOMPONENTY APLIKACJI ---
@@ -1020,6 +1016,24 @@ const getFlagUrl = (name, countryCode) => {
                                                 ))}
                                             </tbody>
                                         </table>
+										{/* --- NOWA SEKCJA: NIE OBECNI (Tylko dla Tomasz P. w Ruce) --- */}
+                                        {teamName === "Tomasz P." && activeContest.id === 4 && (
+                                            <div className="bg-red-50 border-t border-red-100 p-3 text-xs text-red-700">
+                                                <div className="font-bold mb-1 flex items-center gap-1">
+                                                    <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
+                                                    Nieobecni (Absencja):
+                                                </div>
+                                                <ul className="space-y-1 ml-3 list-disc">
+                                                    <li>
+                                                        <span className="font-semibold">Stefan Kraft</span> - absencja (narodziny dziecka)
+                                                    </li>
+                                                    <li>
+                                                        <span className="font-semibold">Artti Aigro</span> - absencja (przeziębienie)
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+										</div>
                                     </div>
                                 </div>
                             );
@@ -1105,7 +1119,7 @@ const getFlagUrl = (name, countryCode) => {
                         
                         <div className="relative border-l-2 border-slate-200 ml-3 space-y-8">
                             {/* --- ZMIANA: slice().reverse() zapewnia kolejność od najstarszych (v1.1) do najnowszych (v1.3) --- */}
-                            {APP_UPDATES.slice().reverse().map((update, idx) => (
+                            {APP_UPDATES.map((update, idx) => (
                                 <div key={idx} className="ml-6 relative">
                                     <span className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-4 border-blue-500"></span>
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mb-2">
