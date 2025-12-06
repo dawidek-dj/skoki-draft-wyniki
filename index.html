@@ -137,24 +137,35 @@ const getFlagUrl = (name, countryCode) => {
         };
 		
 		// --- NOWA FUNKCJA POMOCNICZA DO ZMIAN W SKŁADACH ---
-        const getTeamMembersForContest = (teamName, contestId) => {
+    const getTeamMembersForContest = (teamName, contestId) => {
             // Domyślny skład (bazowy)
             let members = TEAMS[teamName];
 
             // Specjalna logika dla zespołu Tomasz P.
             if (teamName === "Tomasz P.") {
-                // Dla konkursów od ID 4 wzwyż (Ruka i kolejne)
-                if (contestId >= 4) {
+                // 1. WISŁA (ID 6) i kolejne: Kraft nadal out, ale Aigro WRACA (za Ortnera)
+                if (contestId >= 6) {
                     return [
-                        "Kristoffer Eriksen Sundal", // Zmiana za Krafta
+                        "Kristoffer Eriksen Sundal", // Zastępuje Krafta
                         "Philipp Raimund",
                         "Felix Hoffmann",
                         "Sakutaro Kobayashi",
-                        "Maximilian Ortner",         // Zmiana za Aigro
+                        "Artti Aigro",               // Powrót do składu
+                        "Antti Aalto"
+                    ];
+                }
+                // 2. RUKA (ID 4-5): Kraft i Aigro nieobecni (zastępują ich Sundal i Ortner)
+                else if (contestId >= 4) {
+                    return [
+                        "Kristoffer Eriksen Sundal", 
+                        "Philipp Raimund",
+                        "Felix Hoffmann",
+                        "Sakutaro Kobayashi",
+                        "Maximilian Ortner",         
                         "Antti Aalto"
                     ];
                 } 
-                // Dla konkursów 1-3 (Lillehammer, Falun) - stary skład
+                // 3. LILLEHAMMER / FALUN (ID 1-3): Podstawowy skład
                 else {
                     return [
                         "Stefan Kraft",
@@ -165,13 +176,13 @@ const getFlagUrl = (name, countryCode) => {
                         "Antti Aalto"
                     ];
                 }
-            }
+        };
             
             // Dla innych zespołów zwracamy po prostu ich stały skład (chyba że też będą mieli zmiany)
             // Uwaga: filtrujemy listę TEAMS do pierwszych 6, na wypadek gdybyś dodał tam rezerwowych
             return members.slice(0, 6); 
-        };
-        
+          };
+
         // KOLORY ZESPOŁÓW (Mocniejsze dla tekstu w tabelach)
         const TEAM_STYLES = {
             "Dawid": "bg-blue-200 text-blue-900 border-l-4 border-blue-700 font-bold", 
@@ -218,6 +229,11 @@ const getFlagUrl = (name, countryCode) => {
 
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
+        {
+                date: "06.12.2025 23:45",
+                version: "v1.4",
+                desc: "WISŁA: Dodano oficjalne wyniki konkursu indywidualnego (HS 134) z dnia 06.12.2025. Pełne 2 serie. Uzupełniono punktację dla wszystkich zespołów. 2. Zmiana w składzie Tomasz P.: Powrót Arttiego Aigro (zastępuje M. Ortnera). Stefan Kraft nadal nieobecny (zastępowany przez K.E. Sundala)."
+            },
 			{
                 date: "30.11.2025 17:00",
                 version: "v1.3",
@@ -244,7 +260,8 @@ const getFlagUrl = (name, countryCode) => {
             1: {A: "FRA", B: "GER", C: "CAN", D: "SWE", E: "NOR"}, // Lillehammer Official Protocol
             2: {A: "SWE", B: "AUT", C: "FIN", D: "POL", E: "JPN"}, // Falun HS 95 Protocol
             3: {A: "FIN", B: "POL", C: "JPN", D: "AUT", E: "SWE"},  // Falun HS 132 Protocol
-			4: {A: "CAN", B: "SUI", C: "ITA", D: "FIN", E: "GER"} // Ruka 29.11.2025
+			      4: {A: "CAN", B: "SUI", C: "ITA", D: "FIN", E: "GER"}, // Ruka 29.11.2025
+            6: {A: "SLO", B: "POR", C: "GER", D: "USA", E: "FRA"} //
         };
 
         const INITIAL_CONTESTS = [
@@ -457,6 +474,69 @@ const getFlagUrl = (name, countryCode) => {
                 jury: {}, // Brak, zawody nie odbyły się
                 // Sekcja links została usunięta, więc przyciski się nie wyświetlą
                 results: [] // Pusta tablica wyników = brak punktów
+            },
+            {
+                id: 6,
+                date: "06.12.2025",
+                location: "Wisła (POL) - HS 134",
+                hill: "HS 134",
+                jury: JURY_FLAGS[6],
+                links: {
+                    fis: "https://live.fis-ski.com/jp-3087/results-pda.htm",
+                    pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3087/2026JP3087RL.pdf"
+                },
+                results: [
+                    { rank: 1, bib: "49", country: "SLO", name: "Domen Prevc", points: 286.2, r1_dist: "136.0", r1_note: "53.0", r1_wind: "-1.2", r1_total: "140.6", r2_dist: "130.0", r2_note: "53.5", r2_wind: "14.1", r2_total: "145.6", r1_rank: 1, r2_rank: 1, r1_speed: "90.5", r2_speed: "90.8", r1_dpts: "78.0", r2_dpts: "78.0", r1_judges: "17.5 17.0 19.0 18.0 17.5", r2_judges: "18.0 18.0 17.5 17.5 18.0", r1_comp: "-1.2", r2_comp: "14.1" },
+                    { rank: 2, bib: "44", country: "GER", name: "Philipp Raimund", points: 279.4, r1_dist: "129.0", r1_note: "52.5", r1_wind: "-0.47", r1_total: "136.3", r2_dist: "130.5", r2_note: "52.5", r2_wind: "11.7", r2_total: "143.1", r1_rank: 2, r2_rank: 2, r1_speed: "91.0", r2_speed: "91.1", r1_dpts: "76.2", r2_dpts: "78.9", r1_judges: "18.0 17.5 18.0 17.0 17.0", r2_judges: "18.0 17.5 17.0 17.5 17.5", r1_comp: "-0.47", r2_comp: "11.7" },
+                    { rank: 3, bib: "48", country: "JPN", name: "Ryoyu Kobayashi", points: 267.2, r1_dist: "130.5", r1_note: "54.0", r1_wind: "1.3", r1_total: "134.2", r2_dist: "123.0", r2_note: "53.0", r2_wind: "14.6", r2_total: "133.0", r1_rank: 4, r2_rank: 7, r1_speed: "90.5", r2_speed: "91.0", r1_dpts: "78.9", r2_dpts: "65.4", r1_judges: "18.0 18.0 19.0 17.5 18.0", r2_judges: "17.5 18.0 18.0 18.0 17.5", r1_comp: "1.3", r2_comp: "14.6" },
+                    { rank: 4, bib: "50", country: "SLO", name: "Anze Lanisek", points: 265.8, r1_dist: "129.5", r1_note: "54.5", r1_wind: "2.3", r1_total: "133.9", r2_dist: "123.0", r2_note: "53.5", r2_wind: "13.0", r2_total: "131.9", r1_rank: 5, r2_rank: 10, r1_speed: "90.4", r2_speed: "90.7", r1_dpts: "77.1", r2_dpts: "65.4", r1_judges: "18.5 18.0 18.0 17.5 18.0", r2_judges: "18.0 18.5 18.0 18.0 17.5", r1_comp: "2.3", r2_comp: "13.0" },
+                    { rank: 5, bib: "42", country: "GER", name: "Felix Hoffmann", points: 265.7, r1_dist: "125.5", r1_note: "51.0", r1_wind: "7.9", r1_total: "128.8", r2_dist: "126.5", r2_note: "54.0", r2_wind: "11.2", r2_total: "136.9", r1_rank: 9, r2_rank: 3, r1_speed: "90.2", r2_speed: "90.3", r1_dpts: "69.9", r2_dpts: "71.7", r1_judges: "16.5 18.0 17.5 17.5 17.0", r2_judges: "18.0 17.0 17.0 18.0 18.0", r1_comp: "7.9", r2_comp: "11.2" },
+                    { rank: 6, bib: "47", country: "AUT", name: "Daniel Tschofenig", points: 265.3, r1_dist: "129.5", r1_note: "56.0", r1_wind: "2.1", r1_total: "135.2", r2_dist: "121.5", r2_note: "53.0", r2_wind: "14.4", r2_total: "130.1", r1_rank: 3, r2_rank: 13, r1_speed: "90.2", r2_speed: "90.5", r1_dpts: "77.1", r2_dpts: "62.7", r1_judges: "18.5 18.5 19.0 17.5 19.0", r2_judges: "17.5 18.5 18.5 17.5 18.0", r1_comp: "2.1", r2_comp: "14.4" },
+                    { rank: 7, bib: "32", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 264.5, r1_dist: "124.5", r1_note: "53.5", r1_wind: "8.7", r1_total: "130.3", r2_dist: "127.0", r2_note: "54.5", r2_wind: "7.1", r2_total: "134.2", r1_rank: 7, r2_rank: 6, r1_speed: "90.2", r2_speed: "90.5", r1_dpts: "68.1", r2_dpts: "72.6", r1_judges: "17.0 18.0 18.0 18.0 18.0", r2_judges: "18.5 17.5 18.0 18.0 18.5", r1_comp: "8.7", r2_comp: "7.1" },
+                    { rank: 8, bib: "45", country: "AUT", name: "Stephan Embacher", points: 261.2, r1_dist: "124.5", r1_note: "52.5", r1_wind: "5.2", r1_total: "125.8", r2_dist: "126.0", r2_note: "52.0", r2_wind: "12.6", r2_total: "135.4", r1_rank: 12, r2_rank: 4, r1_speed: "90.1", r2_speed: "90.6", r1_dpts: "68.1", r2_dpts: "70.8", r1_judges: "17.5 17.0 17.5 17.5 17.5", r2_judges: "17.5 17.0 17.5 17.0 17.5", r1_comp: "5.2", r2_comp: "12.6" },
+                    { rank: 9, bib: "33", country: "JPN", name: "Naoki Nakamura", points: 256.9, r1_dist: "125.0", r1_note: "52.5", r1_wind: "3.4", r1_total: "124.9", r2_dist: "127.5", r2_note: "51.0", r2_wind: "7.5", r2_total: "132.0", r1_rank: 15, r2_rank: 9, r1_speed: "90.1", r2_speed: "90.7", r1_dpts: "69.0", r2_dpts: "73.5", r1_judges: "17.5 17.0 18.5 17.5 17.5", r2_judges: "16.0 17.5 17.5 16.5 17.5", r1_comp: "3.4", r2_comp: "7.5" },
+                    { rank: 10, bib: "38", country: "FRA", name: "Valentin Foubert", points: 256.8, r1_dist: "124.0", r1_note: "51.0", r1_wind: "6.8", r1_total: "125.0", r2_dist: "126.5", r2_note: "52.5", r2_wind: "7.6", r2_total: "131.8", r1_rank: 14, r2_rank: 11, r1_speed: "90.2", r2_speed: "90.6", r1_dpts: "67.2", r2_dpts: "71.7", r1_judges: "17.0 18.0 17.0 17.5 17.0", r2_judges: "17.5 17.0 17.5 17.5 17.5", r1_comp: "6.8", r2_comp: "7.6" },
+                    { rank: 11, bib: "41", country: "BUL", name: "Vladimir Zografski", points: 256.1, r1_dist: "127.0", r1_note: "52.5", r1_wind: "6.0", r1_total: "131.1", r2_dist: "122.0", r2_note: "51.0", r2_wind: "10.4", r2_total: "125.0", r1_rank: 6, r2_rank: 21, r1_speed: "90.7", r2_speed: "90.7", r1_dpts: "72.6", r2_dpts: "63.6", r1_judges: "17.0 17.0 17.5 16.5 17.5", r2_judges: "17.0 17.5 17.5 17.0 17.0", r1_comp: "6.0", r2_comp: "10.4" },
+                    { rank: 12, bib: "35", country: "SLO", name: "Timi Zajc", points: 255.9, r1_dist: "127.0", r1_note: "53.5", r1_wind: "1.1", r1_total: "127.2", r2_dist: "124.5", r2_note: "51.5", r2_wind: "9.1", r2_total: "128.7", r1_rank: 10, r2_rank: 15, r1_speed: "90.4", r2_speed: "90.7", r1_dpts: "72.6", r2_dpts: "68.1", r1_judges: "17.5 17.5 18.0 16.5 17.5", r2_judges: "17.0 18.0 18.0 17.5 17.0", r1_comp: "1.1", r2_comp: "9.1" },
+                    { rank: 13, bib: "43", country: "JPN", name: "Ren Nikaido", points: 255.7, r1_dist: "122.5", r1_note: "49.0", r1_wind: "7.9", r1_total: "121.4", r2_dist: "129.5", r2_note: "52.5", r2_wind: "4.7", r2_total: "134.3", r1_rank: 23, r2_rank: 5, r1_speed: "90.5", r2_speed: "90.9", r1_dpts: "64.5", r2_dpts: "77.1", r1_judges: "17.0 18.0 16.5 17.5 15.5", r2_judges: "17.5 16.5 16.0 17.5 17.5", r1_comp: "7.9", r2_comp: "4.7" },
+                    { rank: 14, bib: "18", country: "POL", name: "Piotr Zyla", points: 254.9, r1_dist: "123.5", r1_note: "50.5", r1_wind: "5.8", r1_total: "122.6", r2_dist: "126.5", r2_note: "52.5", r2_wind: "8.1", r2_total: "132.3", r1_rank: 17, r2_rank: 8, r1_speed: "90.7", r2_speed: "91.0", r1_dpts: "66.3", r2_dpts: "71.7", r1_judges: "16.5 17.5 17.0 18.0 16.5", r2_judges: "17.5 17.0 17.0 17.5 17.5", r1_comp: "5.8", r2_comp: "8.1" },
+                    { rank: 15, bib: "28", country: "FIN", name: "Niko Kytosaho", points: 254.3, r1_dist: "123.0", r1_note: "51.0", r1_wind: "9.2", r1_total: "125.6", r2_dist: "125.5", r2_note: "52.0", r2_wind: "6.8", r2_total: "128.7", r1_rank: 13, r2_rank: 15, r1_speed: "90.4", r2_speed: "90.8", r1_dpts: "65.4", r2_dpts: "69.9", r1_judges: "17.0 17.5 17.0 17.0 17.0", r2_judges: "17.5 17.0 17.0 17.0 17.5", r1_comp: "9.2", r2_comp: "6.8" },
+                    { rank: 16, bib: "46", country: "AUT", name: "Jan Hoerl", points: 251.5, r1_dist: "124.0", r1_note: "52.5", r1_wind: "2.6", r1_total: "122.3", r2_dist: "129.5", r2_note: "50.0", r2_wind: "2.1", r2_total: "129.2", r1_rank: 19, r2_rank: 14, r1_speed: "89.9", r2_speed: "90.6", r1_dpts: "67.2", r2_dpts: "77.1", r1_judges: "18.0 17.0 17.5 16.0 17.5", r2_judges: "15.5 17.5 17.5 17.0 17.0", r1_comp: "2.6", r2_comp: "2.1" },
+                    { rank: 17, bib: "34", country: "GER", name: "Pius Paschke", points: 251.0, r1_dist: "124.5", r1_note: "51.0", r1_wind: "1.1", r1_total: "120.2", r2_dist: "126.5", r2_note: "52.5", r2_wind: "6.6", r2_total: "130.8", r1_rank: 24, r2_rank: 12, r1_speed: "90.4", r2_speed: "90.6", r1_dpts: "68.1", r2_dpts: "71.7", r1_judges: "16.5 17.5 17.0 17.5 17.0", r2_judges: "17.5 17.0 17.0 17.5 17.5", r1_comp: "1.1", r2_comp: "6.6" },
+                    { rank: 18, bib: "37", country: "NOR", name: "Marius Lindvik", points: 250.1, r1_dist: "125.5", r1_note: "51.0", r1_wind: "8.4", r1_total: "129.3", r2_dist: "119.5", r2_note: "50.5", r2_wind: "11.2", r2_total: "120.8", r1_rank: 8, r2_rank: 25, r1_speed: "90.2", r2_speed: "90.5", r1_dpts: "69.9", r2_dpts: "59.1", r1_judges: "17.0 17.0 17.0 18.0 17.0", r2_judges: "16.5 17.0 17.0 16.0 16.5", r1_comp: "8.4", r2_comp: "11.2" },
+                    { rank: 19, bib: "23", country: "USA", name: "Jason Colby", points: 248.5, r1_dist: "125.0", r1_note: "51.0", r1_wind: "3.7", r1_total: "123.7", r2_dist: "123.0", r2_note: "51.0", r2_wind: "8.4", r2_total: "124.8", r1_rank: 16, r2_rank: 22, r1_speed: "90.4", r2_speed: "90.7", r1_dpts: "69.0", r2_dpts: "65.4", r1_judges: "16.5 17.0 17.0 17.0 17.0", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "3.7", r2_comp: "8.4" },
+                    { rank: 20, bib: "27", country: "FIN", name: "Antti Aalto", points: 248.3, r1_dist: "122.0", r1_note: "50.0", r1_wind: "7.9", r1_total: "121.5", r2_dist: "122.0", r2_note: "51.0", r2_wind: "12.2", r2_total: "126.8", r1_rank: 22, r2_rank: 18, r1_speed: "90.8", r2_speed: "91.3", r1_dpts: "63.6", r2_dpts: "63.6", r1_judges: "16.5 17.0 17.0 17.5 16.5", r2_judges: "17.0 18.0 16.5 16.5 17.0", r1_comp: "7.9", r2_comp: "12.2" },
+                    { rank: 21, bib: "21", country: "NOR", name: "Halvor Egner Granerud", points: 248.0, r1_dist: "123.5", r1_note: "52.5", r1_wind: "7.5", r1_total: "126.3", r2_dist: "120.0", r2_note: "50.5", r2_wind: "11.2", r2_total: "121.7", r1_rank: 11, r2_rank: 24, r1_speed: "90.7", r2_speed: "91.1", r1_dpts: "66.3", r2_dpts: "60.0", r1_judges: "17.5 16.5 17.0 17.0 17.0", r2_judges: "17.5 17.0 17.0 16.5 17.0", r1_comp: "7.5", r2_comp: "11.2" },
+                    { rank: 22, bib: "16", country: "AUT", name: "Jonas Schuster", points: 247.5, r1_dist: "125.0", r1_note: "45.5", r1_wind: "4.4", r1_total: "118.9", r2_dist: "123.5", r2_note: "51.0", r2_wind: "11.3", r2_total: "128.6", r1_rank: 26, r2_rank: 17, r1_speed: "90.7", r2_speed: "91.1", r1_dpts: "69.0", r2_dpts: "66.3", r1_judges: "15.0 17.0 15.5 17.0 14.5", r2_judges: "17.0 15.0 15.5 17.0 16.5", r1_comp: "4.4", r2_comp: "11.3" },
+                    { rank: 23, bib: "20", country: "NOR", name: "Johann Andre Forfang", points: 246.1, r1_dist: "122.0", r1_note: "48.5", r1_wind: "7.8", r1_total: "119.9", r2_dist: "121.0", r2_note: "50.5", r2_wind: "13.9", r2_total: "126.2", r1_rank: 25, r2_rank: 20, r1_speed: "90.5", r2_speed: "90.8", r1_dpts: "63.6", r2_dpts: "61.8", r1_judges: "16.5 17.0 16.0 17.0 16.0", r2_judges: "16.5 16.0 16.5 16.5 17.0", r1_comp: "7.8", r2_comp: "13.9" },
+                    { rank: 24, bib: "40", country: "AUT", name: "Manuel Fettner", points: 245.8, r1_dist: "124.5", r1_note: "51.5", r1_wind: "2.8", r1_total: "122.4", r2_dist: "123.0", r2_note: "51.0", r2_wind: "7.0", r2_total: "123.4", r1_rank: 18, r2_rank: 23, r1_speed: "90.7", r2_speed: "90.7", r1_dpts: "68.1", r2_dpts: "65.4", r1_judges: "16.0 17.0 17.5 17.0 17.5", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "2.8", r2_comp: "7.0" },
+                    { rank: 25, bib: "36", country: "POL", name: "Kacper Tomasiak", points: 244.8, r1_dist: "122.0", r1_note: "51.0", r1_wind: "3.4", r1_total: "118.0", r2_dist: "123.0", r2_note: "51.0", r2_wind: "10.4", r2_total: "126.8", r1_rank: 27, r2_rank: 18, r1_speed: "90.5", r2_speed: "91.1", r1_dpts: "63.6", r2_dpts: "65.4", r1_judges: "16.5 17.0 17.0 17.5 17.0", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "3.4", r2_comp: "10.4" },
+                    { rank: 26, bib: "24", country: "POL", name: "Dawid Kubacki", points: 239.7, r1_dist: "123.0", r1_note: "52.5", r1_wind: "4.0", r1_total: "121.9", r2_dist: "119.0", r2_note: "50.5", r2_wind: "9.1", r2_total: "117.8", r1_rank: 20, r2_rank: 27, r1_speed: "90.4", r2_speed: "90.8", r1_dpts: "65.4", r2_dpts: "58.2", r1_judges: "17.0 17.5 17.5 17.5 17.5", r2_judges: "16.5 17.5 17.5 16.5 16.5", r1_comp: "4.0", r2_comp: "9.1" },
+                    { rank: 27, bib: "4", country: "KAZ", name: "Ilya Mizernykh", points: 237.6, r1_dist: "125.0", r1_note: "50.5", r1_wind: "0.2", r1_total: "117.3", r2_dist: "122.5", r2_note: "50.5", r2_wind: "5.3", r2_total: "120.3", r1_rank: 30, r2_rank: 26, r1_speed: "90.6", r2_speed: "90.9", r1_dpts: "69.0", r2_dpts: "64.5", r1_judges: "16.5 17.0 17.0 17.0 17.0", r2_judges: "16.5 17.0 16.5 16.5 17.0", r1_comp: "0.2", r2_comp: "5.3" },
+                    { rank: 28, bib: "31", country: "EST", name: "Artti Aigro", points: 234.4, r1_dist: "120.0", r1_note: "50.0", r1_wind: "7.5", r1_total: "117.5", r2_dist: "122.5", r2_note: "49.5", r2_wind: "2.9", r2_total: "116.9", r1_rank: 29, r2_rank: 28, r1_speed: "89.9", r2_speed: "90.4", r1_dpts: "60.0", r2_dpts: "64.5", r1_judges: "16.5 17.0 17.0 16.5 16.0", r2_judges: "17.0 16.5 16.5 16.5 16.5", r1_comp: "7.5", r2_comp: "2.9" },
+                    { rank: 29, bib: "8", country: "CZE", name: "Roman Koudelka", points: 234.1, r1_dist: "121.5", r1_note: "50.0", r1_wind: "5.2", r1_total: "117.9", r2_dist: "119.5", r2_note: "50.0", r2_wind: "7.1", r2_total: "116.2", r1_rank: 28, r2_rank: 29, r1_speed: "90.8", r2_speed: "91.0", r1_dpts: "62.7", r2_dpts: "59.1", r1_judges: "16.0 17.0 17.0 17.0 16.5", r2_judges: "16.5 17.0 16.0 16.5 16.5", r1_comp: "5.2", r2_comp: "7.1" },
+                    { rank: 30, bib: "15", country: "USA", name: "Kevin Bickner", points: 233.1, r1_dist: "124.5", r1_note: "50.0", r1_wind: "3.7", r1_total: "121.8", r2_dist: "118.5", r2_note: "48.0", r2_wind: "6.0", r2_total: "111.3", r1_rank: 21, r2_rank: 30, r1_speed: "90.8", r2_speed: "91.0", r1_dpts: "68.1", r2_dpts: "57.3", r1_judges: "16.5 16.0 17.0 15.5 17.0", r2_judges: "16.5 16.5 16.0 16.0 16.0", r1_comp: "3.7", r2_comp: "6.0" },
+                    { rank: 31, bib: "29", country: "AUT", name: "Maximilian Ortner", points: 117.0, r1_dist: "120.0", r1_note: "50.0", r1_wind: "7.0", r1_total: "117.0", r1_rank: 31, r1_speed: "90.6", r1_dpts: "60.0", r1_judges: "16.0 16.5 17.0 16.5 17.0", r1_comp: "7.0" },
+                    { rank: 31, bib: "1", country: "POL", name: "Maciej Kot", points: 117.0, r1_dist: "120.5", r1_note: "49.5", r1_wind: "6.6", r1_total: "117.0", r1_rank: 31, r1_speed: "90.2", r1_dpts: "60.9", r1_judges: "16.0 17.0 16.5 16.5 16.5", r1_comp: "6.6" },
+                    { rank: 33, bib: "16", country: "JPN", name: "Tomofumi Naito", points: 116.9, r1_dist: "123.0", r1_note: "50.5", r1_wind: "1.0", r1_total: "116.9", r1_rank: 33, r1_speed: "90.1", r1_dpts: "65.4", r1_judges: "16.5 17.0 17.0 16.5 17.0", r1_comp: "1.0" },
+                    { rank: 34, bib: "14", country: "POL", name: "Pawel Wasek", points: 116.3, r1_dist: "122.0", r1_note: "48.0", r1_wind: "4.7", r1_total: "116.3", r1_rank: 34, r1_speed: "90.5", r1_dpts: "63.6", r1_judges: "16.0 16.0 16.5 16.0 15.5", r1_comp: "4.7" },
+                    { rank: 35, bib: "5", country: "FIN", name: "Vilho Palosaari", points: 114.6, r1_dist: "123.5", r1_note: "50.5", r1_wind: "-2.2", r1_total: "114.6", r1_rank: 35, r1_speed: "90.8", r1_dpts: "66.3", r1_judges: "16.0 17.0 17.0 17.0 16.5", r1_comp: "-2.2" },
+                    { rank: 36, bib: "26", country: "JPN", name: "Sakutaro Kobayashi", points: 114.3, r1_dist: "118.0", r1_note: "49.0", r1_wind: "8.9", r1_total: "114.3", r1_rank: 36, r1_speed: "90.7", r1_dpts: "56.4", r1_judges: "16.0 16.5 16.0 16.5 16.5", r1_comp: "8.9" },
+                    { rank: 37, bib: "12", country: "USA", name: "Tate Frantz", points: 114.2, r1_dist: "121.0", r1_note: "49.5", r1_wind: "2.9", r1_total: "114.2", r1_rank: 37, r1_speed: "90.8", r1_dpts: "61.8", r1_judges: "15.5 17.0 16.5 16.5 16.5", r1_comp: "2.9" },
+                    { rank: 38, bib: "17", country: "ITA", name: "Alex Insam", points: 113.8, r1_dist: "119.5", r1_note: "49.0", r1_wind: "5.7", r1_total: "113.8", r1_rank: 38, r1_speed: "90.7", r1_dpts: "59.1", r1_judges: "16.0 16.5 16.0 16.5 16.5", r1_comp: "5.7" },
+                    { rank: 39, bib: "30", country: "GER", name: "Andreas Wellinger", points: 113.7, r1_dist: "118.0", r1_note: "49.5", r1_wind: "7.8", r1_total: "113.7", r1_rank: 39, r1_speed: "91.3", r1_dpts: "56.4", r1_judges: "16.5 17.5 16.5 16.5 16.5", r1_comp: "7.8" },
+                    { rank: 40, bib: "25", country: "SLO", name: "Rok Oblak", points: 112.7, r1_dist: "119.0", r1_note: "48.0", r1_wind: "6.5", r1_total: "112.7", r1_rank: 40, r1_speed: "90.9", r1_dpts: "58.2", r1_judges: "16.0 16.0 16.0 16.0 16.0", r1_comp: "6.5" },
+                    { rank: 41, bib: "2", country: "SLO", name: "Ziga Jancar", points: 111.4, r1_dist: "121.0", r1_note: "48.0", r1_wind: "1.6", r1_total: "111.4", r1_rank: 41, r1_speed: "90.9", r1_dpts: "61.8", r1_judges: "16.0 16.0 16.0 16.0 16.5", r1_comp: "1.6" },
+                    { rank: 42, bib: "19", country: "ITA", name: "Giovanni Bresadola", points: 110.8, r1_dist: "117.5", r1_note: "48.0", r1_wind: "7.3", r1_total: "110.8", r1_rank: 42, r1_speed: "90.3", r1_dpts: "55.5", r1_judges: "16.0 16.0 16.0 16.0 15.5", r1_comp: "7.3" },
+                    { rank: 43, bib: "9", country: "SUI", name: "Felix Trunz", points: 110.6, r1_dist: "118.0", r1_note: "49.0", r1_wind: "5.2", r1_total: "110.6", r1_rank: 43, r1_speed: "91.1", r1_dpts: "56.4", r1_judges: "16.5 16.0 16.5 16.0 16.5", r1_comp: "5.2" },
+                    { rank: 44, bib: "3", country: "USA", name: "Erik Belshaw", points: 107.9, r1_dist: "119.0", r1_note: "49.5", r1_wind: "0.2", r1_total: "107.9", r1_rank: 44, r1_speed: "90.3", r1_dpts: "58.2", r1_judges: "16.5 17.0 16.0 16.5 16.5", r1_comp: "0.2" },
+                    { rank: 45, bib: "39", country: "SUI", name: "Gregor Deschwanden", points: 107.5, r1_dist: "118.0", r1_note: "48.0", r1_wind: "3.1", r1_total: "107.5", r1_rank: 45, r1_speed: "91.0", r1_dpts: "56.4", r1_judges: "16.0 16.0 16.0 16.0 16.0", r1_comp: "3.1" },
+                    { rank: 46, bib: "10", country: "KAZ", name: "Danil Vassilyev", points: 107.0, r1_dist: "118.0", r1_note: "47.0", r1_wind: "3.6", r1_total: "107.0", r1_rank: 46, r1_speed: "89.7", r1_dpts: "56.4", r1_judges: "15.5 16.0 15.5 16.0 15.5", r1_comp: "3.6" },
+                    { rank: 47, bib: "13", country: "SUI", name: "Simon Ammann", points: 105.8, r1_dist: "116.0", r1_note: "48.5", r1_wind: "4.5", r1_total: "105.8", r1_rank: 47, r1_speed: "90.8", r1_dpts: "52.8", r1_judges: "15.5 16.5 16.0 16.5 16.0", r1_comp: "4.5" },
+                    { rank: 48, bib: "6", country: "SUI", name: "Sandro Hauswirth", points: 104.7, r1_dist: "118.0", r1_note: "48.0", r1_wind: "0.3", r1_total: "104.7", r1_rank: 48, r1_speed: "90.5", r1_dpts: "56.4", r1_judges: "15.5 16.0 16.0 16.0 16.0", r1_comp: "0.3" },
+                    { rank: 49, bib: "22", country: "JPN", name: "Yukiya Sato", points: 102.1, r1_dist: "116.0", r1_note: "47.0", r1_wind: "2.3", r1_total: "102.1", r1_rank: 49, r1_speed: "89.8", r1_dpts: "52.8", r1_judges: "15.0 16.0 15.5 16.0 15.5", r1_comp: "2.3" },
+                    { rank: 50, bib: "11", country: "UKR", name: "Vitaliy Kalinichenko", points: 97.8, r1_dist: "113.5", r1_note: "45.5", r1_wind: "4.0", r1_total: "97.8", r1_rank: 50, r1_speed: "90.3", r1_dpts: "48.3", r1_judges: "15.0 15.0 15.5 15.0 15.5", r1_comp: "4.0" }
+                ]
             }
         ];
 
@@ -1194,19 +1274,27 @@ const getFlagUrl = (name, countryCode) => {
                                                 </tbody>
                                             </table>
                                             
-                                            {/* --- SEKJA NIEOBECNI DLA KONKURSU Z WYNIKAMI (ID 4 - Sobota) --- */}
+                                            {/* --- SEKCJA NIEOBECNI - RUKA (ID 4) --- */}
                                             {teamName === "Tomasz P." && activeContest.id === 4 && (
                                                 <div className="bg-red-50 border-t border-red-100 p-3 text-xs text-red-700">
-                                                    <div className="font-bold mb-1 flex items-center gap-1">
-                                                        <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
-                                                        Nieobecni (Absencja):
+                                                    {/* ... stary kod dla Ruki ... */}
+                                                </div>
+                                            )}
+
+                                            {/* --- NOWA SEKCJA: WISŁA (ID 6) - POWRÓT AIGRO --- */}
+                                            {teamName === "Tomasz P." && activeContest.id === 6 && (
+                                                <div className="bg-blue-50 border-t border-blue-100 p-3 text-xs text-slate-700">
+                                                    <div className="font-bold mb-1 flex items-center gap-1 text-blue-800">
+                                                        <Info size={14} /> Status kadry:
                                                     </div>
-                                                    <ul className="space-y-1 ml-3 list-disc">
-                                                        <li>
-                                                            <span className="font-semibold">Stefan Kraft</span> - absencja (narodziny dziecka)
+                                                    <ul className="space-y-1 ml-1">
+                                                        <li className="flex items-start gap-2">
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                                                            <span><span className="font-semibold">Stefan Kraft</span>: absencja (narodziny dziecka)</span>
                                                         </li>
-                                                        <li>
-                                                            <span className="font-semibold">Artti Aigro</span> - absencja (przeziębienie)
+                                                        <li className="flex items-start gap-2">
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0"></span>
+                                                            <span><span className="font-semibold">Artti Aigro</span>: powrót do składu punktującego (za M. Ortnera)</span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1332,7 +1420,7 @@ const getFlagUrl = (name, countryCode) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">30.11 godz. 17:00</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">06.12 godzina 23:45</span>
                                     </span>
                                 </div>
                             </div>
@@ -1379,5 +1467,4 @@ const getFlagUrl = (name, countryCode) => {
         root.render(<App />);
     </script>
 </body>
-
 </html>
