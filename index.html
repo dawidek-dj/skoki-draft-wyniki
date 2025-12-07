@@ -150,7 +150,12 @@ const handleDownloadJpg = async (elementId, fileName) => {
             const element = document.getElementById(elementId);
             if (!element) return;
             try {
-                const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2 }); // Scale 2 dla lepszej jakości
+                const canvas = await html2canvas(element, { 
+                    backgroundColor: '#ffffff', 
+                    scale: 2,
+                    useCORS: true, // Musi być true
+                    logging: false
+                });
                 const data = canvas.toDataURL('image/jpeg', 0.9);
                 const link = document.createElement('a');
                 link.href = data;
@@ -159,8 +164,8 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 link.click();
                 document.body.removeChild(link);
             } catch (err) {
-                console.error("Błąd pobierania JPG:", err);
-                alert("Wystąpił błąd podczas generowania obrazu.");
+                console.error("Błąd JPG:", err);
+                alert("Błąd generowania obrazu. Jeśli uruchamiasz plik lokalnie (file://), przeglądarka może blokować tę funkcję ze względów bezpieczeństwa.");
             }
         };
 
@@ -168,28 +173,36 @@ const handleDownloadJpg = async (elementId, fileName) => {
             const element = document.getElementById(elementId);
             if (!element) return;
             try {
-                const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2 });
+                const canvas = await html2canvas(element, { 
+                    backgroundColor: '#ffffff', 
+                    scale: 2,
+                    useCORS: true, // Musi być true
+                    logging: false
+                });
+                
                 const imgData = canvas.toDataURL('image/png');
                 
+                if (!window.jspdf) {
+                    alert("Biblioteka jsPDF nie załadowana.");
+                    return;
+                }
+
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = pdf.internal.pageSize.getHeight();
                 const imgWidth = canvas.width;
                 const imgHeight = canvas.height;
-                const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-                const imgX = (pdfWidth - imgWidth * ratio) / 2;
-                const imgY = 20; // Margines od góry
-
-                // Obliczamy szerokość obrazka w PDF
-                const finalImgWidth = 190; // Marginesy po 10mm
+                // Skalowanie do szerokości strony z marginesem
+                const margin = 10; 
+                const finalImgWidth = pdfWidth - (margin * 2);
                 const finalImgHeight = (canvas.height * finalImgWidth) / canvas.width;
 
-                pdf.addImage(imgData, 'PNG', 10, 10, finalImgWidth, finalImgHeight);
+                pdf.addImage(imgData, 'PNG', margin, margin, finalImgWidth, finalImgHeight);
                 pdf.save(`${fileName}.pdf`);
             } catch (err) {
-                console.error("Błąd pobierania PDF:", err);
-                alert("Wystąpił błąd podczas generowania PDF.");
+                console.error("Błąd PDF:", err);
+                alert("Błąd generowania PDF. Jeśli uruchamiasz plik lokalnie (file://), przeglądarka może blokować tę funkcję.");
             }
         };
 
@@ -198,7 +211,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
             return name.trim().toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).sort().join(' ');
         };
 
-const getFlagUrl = (name, countryCode) => {
+        const getFlagUrl = (name, countryCode) => {
             if (countryCode && countryCode.length === 2) {
                 return `https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`;
             }
@@ -207,9 +220,9 @@ const getFlagUrl = (name, countryCode) => {
                 "NOR": "no", "FIN": "fi", "GER": "de", "AUT": "at", "SWE": "se", 
                 "POL": "pl", "JPN": "jp", "SLO": "si", "SUI": "ch", "ITA": "it", 
                 "USA": "us", "FRA": "fr", 
-                // Nowe flagi dodane w v1.1:
                 "EST": "ee", "BUL": "bg", "UKR": "ua", "CZE": "cz", 
-                "SVK": "sk", "KAZ": "kz", "CAN": "ca", "TUR": "tr"
+                "SVK": "sk", "KAZ": "kz", "CAN": "ca", "TUR": "tr",
+                "CHN": "cn" // <--- DODANO CHINY (Dla Song Qiwu)
             };
             if (countryCode && judgeMap[countryCode]) {
                 return `https://flagcdn.com/24x18/${judgeMap[countryCode]}.png`;
@@ -220,8 +233,17 @@ const getFlagUrl = (name, countryCode) => {
         const Flag = ({ name, country, className }) => {
             const url = getFlagUrl(name, country);
             if (!url) return <span className={`w-5 inline-block text-center text-xs text-gray-300 mr-1 ${className}`}>🏳️</span>;
-            // Ensure proper display block/inline-block and sizing
-            return <img src={url} alt={country || name} className={`inline-block w-5 h-3.5 object-contain align-middle mr-1 shadow-sm rounded-sm ${className}`} />;
+            
+            return (
+                <img 
+                    // Dodajemy losowy parametr ?v=... aby ominąć cache przeglądarki
+                    // To kluczowe dla działania html2canvas z zewnętrznymi obrazkami!
+                    src={`${url}?v=1`} 
+                    alt={country || name} 
+                    crossOrigin="anonymous" 
+                    className={`inline-block w-5 h-3.5 object-contain align-middle mr-1 shadow-sm rounded-sm ${className}`} 
+                />
+            );
         };
 
         // --- ZMIANA W DEFINICJI ZESPOŁÓW ---
