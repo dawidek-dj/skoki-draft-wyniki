@@ -78,29 +78,6 @@
         }
 
         /* Animacja paska transmisji */
-        .broadcast-ticker-wrap {
-            overflow: hidden;
-            white-space: nowrap;
-            background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
-            color: #fff;
-            padding: 8px 0;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        .broadcast-ticker {
-            display: inline-block;
-            padding-left: 100%;
-            animation: ticker 35s linear infinite;
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .broadcast-item {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 40px;
-        }
         .broadcast-time {
             color: #fbbf24; /* Amber-400 */
             margin-right: 6px;
@@ -139,9 +116,12 @@
             // IKONY POBIERANIA:
             Download: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>,
             Image: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>,
-            FileText: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            FileText: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>,
+            // --- TUTAJ DODANO NOWĄ IKONĘ ZEGARA ---
+            Clock: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         };
-        const { Trophy, Users, Table, Medal, Calendar, Snowflake, ExternalLink, Info, RefreshCw, Flask, Download, Image, FileText } = Icons;
+        // Zaktualizowana linia z Clock na końcu:
+        const { Trophy, Users, Table, Medal, Calendar, Snowflake, ExternalLink, Info, RefreshCw, Flask, Download, Image, FileText, Clock } = Icons;
 
         // --- 2. DEFINICJE DANYCH I FUNKCJI POMOCNICZYCH ---
         
@@ -349,32 +329,65 @@ const handleDownloadJpg = async (elementId, fileName) => {
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
         {
+                date: "07.12.2025 22:00",
+                version: "v1.6",
+                desc: `*** TERMINARZ: Dodano nową zakładkę "Terminarz" ze szczegółowym, graficznym planem transmisji TV dla nadchodzących zawodów (Klingenthal).
+
+                *** INTERFACE: Zastąpiono animowany pasek przewijania stałym, kompaktowym paskiem "Następne zawody", który jest czytelniejszy na urządzeniach mobilnych.
+
+                *** LOGIKA: Usprawniono wykrywanie najbliższego konkursu – system automatycznie pomija odwołane zawody (np. Ruka) i wskazuje te, które faktycznie mają się odbyć.
+
+                *** NAWIGACJA: Dodano przycisk "Sprawdź plan transmisji!" na pasku głównym dla szybkiego dostępu.`
+            },
+            {
                 date: "07.12.2025 18:30",
                 version: "v1.5",
-                desc: `*** WISŁA (Niedziela): Dodano Oficjalne wyniki konkursu indywidualnego (HS 134) z dnia 07.12.2025 - Zwycięstwo Domena Prevca. Świetny występ Polaków: 5. Kacper Tomasiak, 7. Piotr Żyła!
-                *** KLINGENTHAL: Dodano zapowiedzi dwóch konkursów (13.12 i 14.12) wraz z linkami do wyników LIVE i planem transmisji TV.
-                *** ZESPOŁY: Zablokowano wyświetlanie tabeli wyników dla nadchodzących konkursów.
-                *** INTERFACE: Zaktualizowano pasek transmisji na nadchodzący weekend.`
+                desc: `*** WISŁA (Niedziela): Dodano Oficjalne wyniki konkursu indywidualnego.
+
+                *** KLINGENTHAL: Dodano zapowiedzi konkursów.
+
+                *** ZESPOŁY: Zablokowano wyświetlanie tabeli wyników dla nadchodzących konkursów.`
             },
         {
                 date: "06.12.2025 23:45",
                 version: "v1.4",
-                desc: "WISŁA: Dodano oficjalne wyniki konkursu indywidualnego (HS 134) z dnia 06.12.2025. Pełne 2 serie. Uzupełniono punktację dla wszystkich zespołów. 2. Zmiana w składzie Tomasz P.: Powrót Arttiego Aigro (zastępuje M. Ortnera). Stefan Kraft nadal nieobecny (zastępowany przez K.E. Sundala). 3. Dodano zakładkę dla konkursu 07.12 z nowym widokiem 'Nadchodzące' (linki do relacji LIVE FIS i Berkutschi dla kwalifikacji i konkursu). 4. Wprowadzono animowany pasek z harmonogramem transmisji TV."
+                desc: `*** WISŁA: Dodano oficjalne wyniki konkursu indywidualnego (HS 134) z dnia 06.12.2025. Pełne 2 serie. Uzupełniono punktację dla wszystkich zespołów. 
+
+                *** Zmiana w składzie Tomasz P.: Powrót Arttiego Aigro (zastępuje M. Ortnera). Stefan Kraft nadal nieobecny (zastępowany przez K.E. Sundala). 
+
+                *** Dodano zakładkę dla konkursu 07.12 z nowym widokiem 'Nadchodzące' (linki do relacji LIVE FIS i Berkutschi dla kwalifikacji i konkursu).
+
+                *** Wprowadzono animowany pasek z harmonogramem transmisji TV.`
             },
 			{
                 date: "30.11.2025 17:00",
                 version: "v1.3",
-                desc: "RUKA (Niedziela): 1. Wdrożenie obsługi odwołanego konkursu (specjalne komunikaty w zakładkach Wyniki i Zespoły). 2. Dodanie listy nieobecnych (Kraft, Aigro) dla całego weekendu w Ruce. 3. Naprawa znikających flag w zakładce Zespoły. 4. Optymalizacja interfejsu (ukrycie pustych tabel, podzakładek i linków dla odwołanych zawodów)."
+                desc: `*** RUKA (Niedziela): Wdrożenie obsługi odwołanego konkursu (specjalne komunikaty w zakładkach Wyniki i Zespoły).
+                
+                *** Dodanie listy nieobecnych (Kraft, Aigro) dla całego weekendu w Ruce.
+                
+                *** Naprawa znikających flag w zakładce Zespoły.
+                
+                *** Optymalizacja interfejsu (ukrycie pustych tabel, podzakładek i linków dla odwołanych zawodów).`
             },
             {
                 date: "29.11.2025 23:30",
-                version: "v1.2 (Update)",
-                desc: "RUKA: 1. Oficjalne wyniki (jedna seria) z korektą punktów za wiatr. 2. Transfery 'medyczne' w zespole Tomasz P. (Kraft -> Sundal, Aigro -> Ortner). 3. NOWOŚĆ: Dodano linki do protokołów FIS (PDF/Live) pod wynikami konkursu. 4. NOWOŚĆ: W klasyfikacji indywidualnej przy zawodnikach rezerwowych wyświetla się teraz liczba punktów zdobytych dla drużyny."
+                version: "v1.2",
+                desc: `*** RUKA: Oficjalne wyniki (jedna seria) z korektą punktów za wiatr. 
+                *** Transfery 'medyczne' w zespole Tomasz P. (Kraft -> Sundal, Aigro -> Ortner).
+                
+                *** NOWOŚĆ: Dodano linki do protokołów FIS (PDF/Live) pod wynikami konkursu.
+                
+                *** NOWOŚĆ: W klasyfikacji indywidualnej przy zawodnikach rezerwowych wyświetla się teraz liczba punktów zdobytych dla drużyny.`
             },
             {
                 date: "28.11.2025 23:30",
                 version: "v1.1",
-                desc: "KOMPLEKSOWA AKTUALIZACJA: 1. Naprawa brakujących flag przy nazwiskach. 2. Przebudowa zakładki 'Wyniki'. 3. Tłumaczenie interfejsu."
+                desc: `*** Naprawa brakujących flag przy nazwiskach. 
+                
+                *** Przebudowa zakładki 'Wyniki'.
+                
+                *** Tłumaczenie interfejsu.`
             }
         ];
 
@@ -1650,6 +1663,73 @@ const handleDownloadJpg = async (elementId, fileName) => {
             );
         };
 
+        // --- NOWY KOMPONENT: TERMINARZ ---
+        const Schedule = () => {
+            return (
+                <div className="animate-fade-in space-y-6">
+                    <div className="bg-slate-900 text-white p-6 md:p-8 rounded-xl shadow-lg border border-slate-700 max-w-3xl mx-auto">
+                        {/* Nagłówek */}
+                        <h2 className="text-lg md:text-xl font-bold text-yellow-400 mb-8 flex items-center gap-3 border-b border-slate-700 pb-4 tracking-wide uppercase">
+                            <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]"></span>
+                            Plan Transmisji TV (Klingenthal):
+                        </h2>
+
+                        <div className="space-y-8">
+                            {/* PIĄTEK - Niebieska Linia */}
+                            <div className="relative pl-5">
+                                <div className="absolute left-0 top-1 bottom-1 w-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Piątek 12.12</h3>
+                                <div className="space-y-1">
+                                    <div className="text-base md:text-lg">
+                                        <span className="text-blue-400 font-bold font-mono mr-2">19:30</span> 
+                                        <span className="font-bold tracking-tight">KWALIFIKACJE</span>
+                                    </div>
+                                    <div className="text-slate-400 text-sm md:text-base pl-0">(Eurosport 1, Player/HBO Max od 19:00)</div>
+                                </div>
+                            </div>
+
+                            {/* SOBOTA - Zielona Linia */}
+                            <div className="relative pl-5">
+                                <div className="absolute left-0 top-1 bottom-1 w-1 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Sobota 13.12</h3>
+                                <div className="space-y-1">
+                                    <div className="text-base md:text-lg">
+                                        <span className="text-blue-400 font-bold font-mono mr-2">15:45</span> 
+                                        <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
+                                    </div>
+                                    <div className="text-slate-400 text-sm md:text-base pl-0">(TVN od 15:25; Eurosport 1, Player/HBO Max od 15:15)</div>
+                                </div>
+                            </div>
+
+                            {/* NIEDZIELA - Fioletowa Linia */}
+                            <div className="relative pl-5">
+                                <div className="absolute left-0 top-1 bottom-1 w-1 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+                                <h3 className="font-bold text-lg mb-3 uppercase tracking-wider text-white">Niedziela 14.12</h3>
+                                <div className="space-y-6">
+                                    {/* Wydarzenie 1 */}
+                                    <div>
+                                        <div className="text-base md:text-lg">
+                                            <span className="text-blue-400 font-bold font-mono mr-2">14:30</span> 
+                                            <span className="font-bold tracking-tight">KWALIFIKACJE</span>
+                                        </div>
+                                        <div className="text-slate-400 text-sm md:text-base pl-0">(Eurosport 1, Player/HBO Max od 14:00)</div>
+                                    </div>
+                                    {/* Wydarzenie 2 */}
+                                    <div>
+                                        <div className="text-base md:text-lg">
+                                            <span className="text-blue-400 font-bold font-mono mr-2">16:00</span> 
+                                            <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
+                                        </div>
+                                        <div className="text-slate-400 text-sm md:text-base pl-0">(TVN od 15:35; Eurosport 1, Player/HBO Max od 15:15)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const Rules = () => {
             return (
                 <div className="space-y-6 animate-fade-in">
@@ -1738,7 +1818,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">07.12 godzina 18:30</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">07.12 godzina 22:00</span>
                                     </span>
                                 </div>
                             </div>
@@ -1748,81 +1828,72 @@ const handleDownloadJpg = async (elementId, fileName) => {
                     <main className="max-w-6xl mx-auto px-2 md:px-4 -mt-12 relative z-20">
     
     {/* PASEK TRANSMISJI (NIEDZIELA 07.12) */}
-    <div className="broadcast-ticker-wrap">
-      <div className="broadcast-ticker">
-        {/* PIĄTEK */}
-        <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider">Piątek 12.12:</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">19:30</span> KWALIFIKACJE 
-            <span className="broadcast-channels">(Eurosport 1, Player/HBO Max od 19:00)</span>
-        </span>
+    {/* --- PASEK STATYCZNY: NASTĘPNE ZAWODY (Kompaktowy) --- */}
+    {(() => {
+                        // Szukamy zawodów, które mają zdefiniowane dane "upcomingData" (to eliminuje odwołaną Rukę i zakończone zawody)
+                        // Jeśli takich nie ma, szukamy pierwszego bez wyników, ale pomijamy ID 5 (Ruka)
+                        const nextContest = contests.find(c => c.upcomingData) || contests.find(c => (!c.results || c.results.length === 0) && c.id !== 5);
+                        
+                        const nextLocation = nextContest ? nextContest.location.split(' - ')[0] : "Koniec sezonu";
 
-        {/* SOBOTA */}
-        <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider">Sobota 13.12:</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">15:45</span> KONKURS INDYWIDUALNY
-            <span className="broadcast-channels">(TVN od 15:25; Eurosport 1, Player/HBO Max od 15:15)</span>
-        </span>
-
-        {/* NIEDZIELA */}
-        <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider">Niedziela 14.12:</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">14:30</span> KWALIFIKACJE
-            <span className="broadcast-channels">(Eurosport 1, Player/HBO Max od 14:00)</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">16:00</span> KONKURS INDYWIDUALNY
-            <span className="broadcast-channels">(TVN od 15:35; Eurosport 1, Player/HBO Max od 15:15)</span>
-        </span>
-
-        {/* --- POWTÓRZENIE DLA PŁYNNEGO PRZEWIJANIA --- */}
-        <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider"> || </span>
-        </span>
-        <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider">Piątek 12.12:</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">19:30</span> KWALIFIKACJE 
-        </span>
-         <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider">Sobota 13.12:</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">15:45</span> KONKURS 
-        </span>
-         <span className="broadcast-item">
-            <span className="text-blue-400 mr-2 uppercase tracking-wider">Niedziela 14.12:</span>
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">14:30</span> KWALIFIKACJE
-        </span>
-        <span className="broadcast-item">
-            <span className="broadcast-time">16:00</span> KONKURS
-        </span>
-    </div>
-    </div>
+                        return (
+                            <div className="bg-slate-900 rounded-lg shadow-md border-b-2 border-blue-600 p-2 mb-4 mx-0 flex flex-row items-center justify-between gap-2 animate-fade-in">
+                                {/* Lewa strona: Tekst */}
+                                <div className="flex items-center gap-2 overflow-hidden">
+                                    <span className="uppercase font-bold tracking-wide text-[10px] md:text-xs text-slate-400 whitespace-nowrap hidden sm:inline">
+                                        Następne zawody:
+                                    </span>
+                                    <span className="uppercase font-bold tracking-wide text-[10px] md:text-xs text-slate-400 whitespace-nowrap sm:hidden">
+                                        Następne:
+                                    </span>
+                                    <span className="font-bold text-white text-xs md:text-sm flex items-center gap-1.5 truncate">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shrink-0"></span>
+                                        {nextLocation}
+                                    </span>
+                                </div>
+                                
+                                {/* Prawa strona: Przycisk */}
+                                <button 
+                                    onClick={() => setActiveTab('schedule')}
+                                    className="group flex items-center gap-1 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white px-3 py-1 rounded-full transition-all duration-300 text-[10px] md:text-xs font-bold border border-blue-600/30 hover:border-blue-500 cursor-pointer whitespace-nowrap shrink-0"
+                                >
+                                    <span>Sprawdź plan transmisji!</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </button>
+                            </div>
+                        );
+                    })()}
 
     <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-1 mb-6">
-                            <div className="grid grid-cols-3 gap-1 mb-1">
-                                <button onClick={() => setActiveTab('standings')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'standings' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Trophy size={16} /> <span className="hidden sm:inline">Klasyfikacja</span></button>
-                                <button onClick={() => setActiveTab('teams')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'teams' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Users size={16} /> <span className="hidden sm:inline">Zespoły</span></button>
-                                <button onClick={() => setActiveTab('results')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'results' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden sm:inline">Wyniki</span></button>
-                            </div>
-                            <div className="grid grid-cols-3 gap-1">
-                                <button onClick={() => setActiveTab('detailed')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'detailed' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><ExternalLink size={16} /> <span className="hidden sm:inline">Szczegóły</span></button>
-                                <button onClick={() => setActiveTab('rules')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'rules' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Info size={16} /> <span className="hidden sm:inline">Zasady</span></button>
-                                <button onClick={() => setActiveTab('updates')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'updates' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><RefreshCw size={16} /> <span className="hidden sm:inline">Aktualizacje</span></button>
-                            </div>
+                        
+                        {/* 1. RZĄD (Bez zmian - 3 przyciski) */}
+                        <div className="grid grid-cols-3 gap-1 mb-1">
+                            <button onClick={() => setActiveTab('standings')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'standings' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Trophy size={16} /> <span className="hidden sm:inline">Klasyfikacja</span></button>
+                            <button onClick={() => setActiveTab('teams')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'teams' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Users size={16} /> <span className="hidden sm:inline">Zespoły</span></button>
+                            <button onClick={() => setActiveTab('results')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'results' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Table size={16} /> <span className="hidden sm:inline">Wyniki</span></button>
                         </div>
 
-                        <div className="animate-fade-in">
+                        {/* 2. RZĄD (Bez zmian - 3 przyciski) */}
+                        <div className="grid grid-cols-3 gap-1 mb-1">
+                            <button onClick={() => setActiveTab('detailed')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'detailed' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><ExternalLink size={16} /> <span className="hidden sm:inline">Szczegóły</span></button>
+                            <button onClick={() => setActiveTab('rules')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'rules' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><Info size={16} /> <span className="hidden sm:inline">Zasady</span></button>
+                            <button onClick={() => setActiveTab('updates')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'updates' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}><RefreshCw size={16} /> <span className="hidden sm:inline">Aktualizacje</span></button>
+                        </div>
+
+                        {/* 3. RZĄD - NOWY (1 długi przycisk TERMINARZ) */}
+                        {/* W przyszłości zmień grid-cols-1 na grid-cols-2, aby dodać kolejny przycisk obok */}
+                        <div className="grid grid-cols-1 gap-1">
+                            <button onClick={() => setActiveTab('schedule')} className={`py-3 px-2 rounded-lg text-xs md:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${activeTab === 'schedule' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}>
+                                <Clock size={16} /> 
+                                <span>Terminarz</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="animate-fade-in">
+                            {/* --- DODAJ TĘ LINIJKĘ --- */}
+                            {activeTab === 'schedule' && <Schedule />}
+                            
                             {activeTab === 'standings' && (
                                 <>
                                     <Dashboard contests={contests} />
