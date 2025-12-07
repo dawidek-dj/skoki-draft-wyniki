@@ -349,11 +349,6 @@ const handleDownloadJpg = async (elementId, fileName) => {
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
         {
-                date: "07.12.2025 00:30",
-                version: "v1.5",
-                desc: "NOWOŚĆ: Dodano możliwość pobierania tabel wyników! Klasyfikacja Generalna dostępna jako obraz (JPG). Klasyfikacje Indywidualne oraz Zespołowe dostępne zarówno jako obraz (JPG), jak i dokument (PDF)."
-            },
-        {
                 date: "06.12.2025 23:45",
                 version: "v1.4",
                 desc: "WISŁA: Dodano oficjalne wyniki konkursu indywidualnego (HS 134) z dnia 06.12.2025. Pełne 2 serie. Uzupełniono punktację dla wszystkich zespołów. 2. Zmiana w składzie Tomasz P.: Powrót Arttiego Aigro (zastępuje M. Ortnera). Stefan Kraft nadal nieobecny (zastępowany przez K.E. Sundala). 3. Dodano zakładkę dla konkursu 07.12 z nowym widokiem 'Nadchodzące' (linki do relacji LIVE FIS i Berkutschi dla kwalifikacji i konkursu). 4. Wprowadzono animowany pasek z harmonogramem transmisji TV."
@@ -758,64 +753,42 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 return Object.entries(scores).sort(([, a], [, b]) => b - a);
             }, [contests, mode]);
 
-            const lastContest = contests[contests.length - 1]; 
-            const contestInfo = lastContest ? lastContest.location.split('(')[0].trim() : "Sezon"; 
-            const today = new Date().toLocaleDateString('pl-PL').replace(/\./g, '-');
-            const fileName = `Klasyfikacja_Generalna_${contestInfo}_${today}`;
-
             return (
-                <div className="space-y-4">
-                    {/* --- SEKJA POBIERANIA (NAD CAŁOŚCIĄ) --- */}
-                    <div className="flex justify-center items-center gap-3 py-2">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">Pobierz tabelę:</span>
-                        <button 
-                            onClick={() => handleDownloadJpg('dashboard-content', fileName)}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-slate-800 text-white rounded-full text-xs font-bold hover:bg-slate-700 transition shadow-sm transform hover:scale-105"
-                            title="Pobierz widok jako obraz JPG"
-                        >
-                            <Image size={14} /> JPG
-                        </button>
+                <div className="space-y-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 gap-4">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800"><Trophy className="text-yellow-500" /> Klasyfikacja Generalna</h2>
+                        <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-auto">
+                            <button onClick={() => setMode('draft')} className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-medium ${mode === 'draft' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Fantasy</button>
+                            <button onClick={() => setMode('fis')} className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-medium ${mode === 'fis' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Oficjalne FIS</button>
+                        </div>
                     </div>
-
-                    {/* --- KONTENER DO POBRANIA (ZAWIERA TYTUŁ I TABELĘ) --- */}
-                    <div id="dashboard-content" className="bg-slate-100 p-1"> {/* Mały padding tła, żeby ładnie wyglądało na screnie */}
-                        
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 gap-4 mb-4">
-                            <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800"><Trophy className="text-yellow-500" /> Klasyfikacja Generalna</h2>
-                            
-                            <div className="flex bg-slate-100 p-1 rounded-lg">
-                                <button onClick={() => setMode('draft')} className={`px-4 py-2 rounded-md text-sm font-medium ${mode === 'draft' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Fantasy</button>
-                                <button onClick={() => setMode('fis')} className={`px-4 py-2 rounded-md text-sm font-medium ${mode === 'fis' ? 'bg-white shadow text-blue-600' : 'text-slate-500'}`}>Oficjalne FIS</button>
-                            </div>
-                        </div>
-                        
-                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
-                            <table className="w-full text-left min-w-[300px] md:min-w-[500px]">
-                                <thead className="bg-slate-50 border-b border-slate-200">
-                                    <tr>
-                                        <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600 whitespace-nowrap text-center md:text-left">M-ce</th>
-                                        <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600">Drużyna</th>
-                                        <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600 text-right">Punkty</th>
+                    
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto custom-scrollbar">
+                        <table className="w-full text-left min-w-[300px] md:min-w-[500px]">
+                            <thead className="bg-slate-50 border-b border-slate-200">
+                                <tr>
+                                    <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600 whitespace-nowrap text-center md:text-left">M-ce</th>
+                                    <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600">Drużyna</th>
+                                    <th className="px-2 py-2 md:px-6 md:py-4 font-semibold text-slate-600 text-right">Punkty</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {standings.map(([team, points], index) => (
+                                    <tr key={team} className="hover:bg-slate-50">
+                                        <td className="px-2 py-2 md:px-6 md:py-4 font-bold text-slate-500 text-center md:text-left">{index + 1}.</td>
+                                        <td className="px-2 py-2 md:px-6 md:py-4 font-medium flex items-center gap-2 md:gap-3 whitespace-nowrap">
+                                            <div className={`shrink-0 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${
+                                                team === 'Tomasz P.' ? 'bg-green-600' : 
+                                                team === 'Tomasz J.' ? 'bg-amber-600' : 
+                                                team === 'Madzia' ? 'bg-pink-600' : 'bg-blue-600'
+                                            }`}>{team.charAt(0)}</div>
+                                            <span className="text-sm md:text-base">{team}</span>
+                                        </td>
+                                        <td className="px-2 py-2 md:px-6 md:py-4 font-bold text-right text-base md:text-lg">{points}</td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100">
-                                    {standings.map(([team, points], index) => (
-                                        <tr key={team} className="hover:bg-slate-50">
-                                            <td className="px-2 py-2 md:px-6 md:py-4 font-bold text-slate-500 text-center md:text-left">{index + 1}.</td>
-                                            <td className="px-2 py-2 md:px-6 md:py-4 font-medium flex items-center gap-2 md:gap-3 whitespace-nowrap">
-                                                <div className={`shrink-0 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${
-                                                    team === 'Tomasz P.' ? 'bg-green-600' : 
-                                                    team === 'Tomasz J.' ? 'bg-amber-600' : 
-                                                    team === 'Madzia' ? 'bg-pink-600' : 'bg-blue-600'
-                                                }`}>{team.charAt(0)}</div>
-                                                <span className="text-sm md:text-base">{team}</span>
-                                            </td>
-                                            <td className="px-2 py-2 md:px-6 md:py-4 font-bold text-right text-base md:text-lg">{points}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             );
@@ -869,97 +842,77 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 return list;
             }, [contests, sortMode, filterMode]);
 
-            const fileName = `Klasyfikacja_Indywidualna_${new Date().toLocaleDateString('pl-PL').replace(/\./g, '-')}`;
-
             return (
-                <div className="space-y-4 mt-12">
-                    
-                    {/* --- SEKCJA POBIERANIA (NAD CAŁOŚCIĄ) --- */}
-                    <div className="flex justify-center items-center gap-3 py-2">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">Pobierz tabelę:</span>
-                        <div className="flex gap-2">
-                            <button onClick={() => handleDownloadJpg('individual-content', fileName)} className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-full text-xs font-bold hover:bg-slate-50 hover:text-blue-600 transition shadow-sm transform hover:scale-105" title="Pobierz JPG">
-                                <Image size={14} /> JPG
-                            </button>
-                            <button onClick={() => handleDownloadPdf('individual-content', fileName)} className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-full text-xs font-bold hover:bg-slate-50 hover:text-red-600 transition shadow-sm transform hover:scale-105" title="Pobierz PDF">
-                                <FileText size={14} /> PDF
-                            </button>
+                <div className="space-y-6 mt-8">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+                        <h2 className="text-xl font-bold flex items-center gap-2"><Medal className="text-orange-500" /> Indywidualnie</h2>
+                        <div className="flex gap-2 text-sm flex-wrap w-full md:w-auto">
+                            <select value={sortMode} onChange={(e) => setSortMode(e.target.value)} className="flex-1 md:flex-none p-2 border rounded bg-white min-w-[120px]">
+                                <option value="draft">Sortuj: Draft Pkt</option>
+                                <option value="fis">Sortuj: FIS Pkt</option>
+                            </select>
+                            <select value={filterMode} onChange={(e) => setFilterMode(e.target.value)} className="flex-1 md:flex-none p-2 border rounded bg-white min-w-[120px]">
+                                <option value="all">Wszyscy Skoczkowie</option>
+                                {Object.keys(TEAMS).map(team => (
+                                    <option key={team} value={team}>Tylko: {team}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
-
-                    {/* --- KONTENER DO POBRANIA (TYTUŁ + TABELA) --- */}
-                    <div id="individual-content" className="bg-slate-100 p-1">
-                        
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
-                            <h2 className="text-xl font-bold flex items-center gap-2"><Medal className="text-orange-500" /> Indywidualnie</h2>
-                            <div className="flex gap-2 text-sm flex-wrap w-full md:w-auto">
-                                <select value={sortMode} onChange={(e) => setSortMode(e.target.value)} className="flex-1 md:flex-none p-2 border rounded bg-white min-w-[120px]">
-                                    <option value="draft">Sort: Draft</option>
-                                    <option value="fis">Sort: FIS</option>
-                                </select>
-                                <select value={filterMode} onChange={(e) => setFilterMode(e.target.value)} className="flex-1 md:flex-none p-2 border rounded bg-white min-w-[120px]">
-                                    <option value="all">Wszyscy</option>
-                                    {Object.keys(TEAMS).map(team => (
-                                        <option key={team} value={team}>Tylko: {team}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                            <table className="w-full text-left text-xs md:text-sm table-fixed">
-                                <thead className="bg-slate-50 border-b border-slate-200">
-                                    <tr>
-                                        <th className="w-8 px-1 py-2 md:px-2 md:py-3 whitespace-nowrap text-[10px] md:text-sm pl-2 sticky-col bg-slate-50">#</th>
-                                        <th className="w-auto px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Zawodnik</th>
-                                        <th className="w-12 md:w-24 px-0.5 py-2 md:px-2 md:py-3 text-center text-[10px] md:text-sm whitespace-nowrap">Wł.</th>
-                                        <th className="w-16 md:w-24 px-0.5 py-2 md:px-2 md:py-3 text-right pr-2 text-[10px] md:text-sm whitespace-nowrap">
-                                            {sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100">
-                                    {jumperScores.map((j) => (
-                                        <tr key={j.name} className="hover:bg-slate-50 group">
-                                            <td className="px-1 py-2 md:px-2 md:py-3 text-slate-500 font-bold pl-2 text-xs md:text-sm sticky-col bg-white group-hover:bg-slate-50 border-r border-transparent">
-                                                {j.globalRank}.
-                                            </td>
-                                            <td className="px-1 py-2 md:px-2 md:py-3 font-medium leading-tight whitespace-normal break-words">
-                                                <div className="flex flex-col justify-center h-full">
-                                                    <div className="flex items-start">
-                                                        <Flag name={j.name} country={j.country} className="mr-1 mt-0.5 shrink-0" /> 
-                                                        <span>{j.name}</span>
-                                                    </div>
-                                                    {RESERVES.includes(j.name) && (
-                                                        <div className="mt-1.5 ml-0 text-[9px] uppercase font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded w-fit border border-amber-100 leading-snug">
-                                                            <div>REZERWOWY</div>
-                                                            <div className="normal-case font-semibold text-amber-800 opacity-90">
-                                                                (Dla zespołu: {sortMode === 'draft' ? j.teamDraft : j.teamFis} pkt)
-                                                            </div>
-                                                        </div>
-                                                    )}
+                    
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table className="w-full text-left text-xs md:text-sm table-fixed">
+                            <thead className="bg-slate-50 border-b border-slate-200">
+                                <tr>
+                                    <th className="w-8 px-1 py-2 md:px-2 md:py-3 whitespace-nowrap text-[10px] md:text-sm pl-2 sticky-col bg-slate-50">#</th>
+                                    <th className="w-auto px-1 py-2 md:px-2 md:py-3 text-[10px] md:text-sm">Zawodnik</th>
+                                    <th className="w-12 md:w-24 px-0.5 py-2 md:px-2 md:py-3 text-center text-[10px] md:text-sm whitespace-nowrap">Wł.</th>
+                                    <th className="w-16 md:w-24 px-0.5 py-2 md:px-2 md:py-3 text-right pr-2 text-[10px] md:text-sm whitespace-nowrap">
+                                        {sortMode === 'draft' ? 'Draft Pkt.' : 'FIS Pkt.'}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {jumperScores.map((j) => (
+                                    <tr key={j.name} className="hover:bg-slate-50 group">
+                                        <td className="px-1 py-2 md:px-2 md:py-3 text-slate-500 font-bold pl-2 text-xs md:text-sm sticky-col bg-white group-hover:bg-slate-50 border-r border-transparent">
+                                            {j.globalRank}.
+                                        </td>
+                                        <td className="px-1 py-2 md:px-2 md:py-3 font-medium leading-tight whitespace-normal break-words">
+                                            <div className="flex flex-col justify-center h-full">
+                                                <div className="flex items-start">
+                                                    <Flag name={j.name} country={j.country} className="mr-1 mt-0.5 shrink-0" /> 
+                                                    <span>{j.name}</span>
                                                 </div>
-                                            </td>
-                                            <td className="px-0.5 py-2 md:px-2 md:py-3 text-center text-[9px] md:text-xs align-middle">
-                                                {j.owner ? (
-                                                    <span className={`px-1 py-0.5 rounded whitespace-nowrap inline-block ${
-                                                        j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
-                                                        j.owner === 'Tomasz P.' ? 'bg-green-100 text-green-800' :
-                                                        j.owner === 'Tomasz J.' ? 'bg-amber-100 text-amber-800' :
-                                                        'bg-pink-100 text-pink-800'
-                                                    }`}>
-                                                        {j.owner}
-                                                    </span>
-                                                ) : <span className="text-slate-300">-</span>}
-                                            </td>
-                                            <td className="px-0.5 py-2 md:px-2 md:py-3 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm align-middle">
-                                                {sortMode === 'draft' ? j.draft : j.fis}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                                {RESERVES.includes(j.name) && (
+                                                    <div className="mt-1.5 ml-0 text-[9px] uppercase font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded w-fit border border-amber-100 leading-snug">
+                                                        <div>REZERWOWY</div>
+                                                        <div className="normal-case font-semibold text-amber-800 opacity-90">
+                                                            (Dla zespołu: {sortMode === 'draft' ? j.teamDraft : j.teamFis} pkt)
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="px-0.5 py-2 md:px-2 md:py-3 text-center text-[9px] md:text-xs align-middle">
+                                            {j.owner ? (
+                                                <span className={`px-1 py-0.5 rounded whitespace-nowrap inline-block ${
+                                                    j.owner === 'Dawid' ? 'bg-blue-100 text-blue-800' :
+                                                    j.owner === 'Tomasz P.' ? 'bg-green-100 text-green-800' :
+                                                    j.owner === 'Tomasz J.' ? 'bg-amber-100 text-amber-800' :
+                                                    'bg-pink-100 text-pink-800'
+                                                }`}>
+                                                    {j.owner}
+                                                </span>
+                                            ) : <span className="text-slate-300">-</span>}
+                                        </td>
+                                        <td className="px-0.5 py-2 md:px-2 md:py-3 text-right font-bold text-blue-600 pr-2 text-xs md:text-sm align-middle">
+                                            {sortMode === 'draft' ? j.draft : j.fis}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             );
@@ -1382,40 +1335,23 @@ const handleDownloadJpg = async (elementId, fileName) => {
 
             if (!activeContest) return <div className="p-8 text-center text-slate-500 animate-pulse">Ładowanie danych zespołów...</div>;
 
-            const fileName = `Zespoly_${activeContest.location.split('(')[0].trim()}_${new Date().toLocaleDateString('pl-PL').replace(/\./g, '-')}`;
-
             return (
-                <div className="space-y-4">
-                    
-                    {/* --- SEKCJA POBIERANIA --- */}
-                    <div className="flex justify-center items-center gap-3 py-2">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">Pobierz tabelę:</span>
-                        <div className="flex gap-2">
-                            <button onClick={() => handleDownloadJpg('teams-content', fileName)} className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-full text-xs font-bold hover:bg-slate-50 hover:text-blue-600 transition shadow-sm transform hover:scale-105" title="Pobierz JPG">
-                                <Image size={14} /> JPG
-                            </button>
-                            <button onClick={() => handleDownloadPdf('teams-content', fileName)} className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-full text-xs font-bold hover:bg-slate-50 hover:text-red-600 transition shadow-sm transform hover:scale-105" title="Pobierz PDF">
-                                <FileText size={14} /> PDF
-                            </button>
+                <div className="space-y-6">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <div className="flex items-center gap-2"><Calendar className="text-blue-500" /><h2 className="font-bold text-slate-800">Wyniki Zespołów</h2></div>
+                        
+                        <div className="flex gap-2 w-full md:w-auto">
+                            <select value={scoreType} onChange={(e) => setScoreType(e.target.value)} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:w-auto min-w-[120px]">
+                                <option value="draft">Draft Pkt (30-1)</option>
+                                <option value="fis">FIS Pkt (100-1)</option>
+                            </select>
+                            <select value={selectedContestId} onChange={(e) => setSelectedContestId(Number(e.target.value))} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:min-w-[200px]">
+                                {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
+                            </select>
                         </div>
                     </div>
-
-                    {/* --- KONTENER DO POBRANIA (TYTUŁ + TREŚĆ) --- */}
-                    <div id="teams-content" className="bg-slate-100 p-1">
-                        
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between mb-4">
-                            <div className="flex items-center gap-2"><Calendar className="text-blue-500" /><h2 className="font-bold text-slate-800">Wyniki Zespołów</h2></div>
-                            <div className="flex gap-2 flex-wrap">
-                                <select value={scoreType} onChange={(e) => setScoreType(e.target.value)} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:w-auto min-w-[120px]">
-                                    <option value="draft">Draft Pkt</option>
-                                    <option value="fis">FIS Pkt</option>
-                                </select>
-                                <select value={selectedContestId} onChange={(e) => setSelectedContestId(Number(e.target.value))} className="p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 w-full md:w-auto min-w-[200px]">
-                                    {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
-                                </select>
-                            </div>
-                        </div>
-
+                    
+                    {/* WIDOK ZESPOŁÓW */}
                         {/* WARUNEK DLA ODWOŁANEGO KONKURSU (ID 5) */}
                         {activeContest.id === 5 ? (
                             <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 text-center animate-fade-in">
@@ -1538,7 +1474,6 @@ const handleDownloadJpg = async (elementId, fileName) => {
                                 })}
                             </div>
                         )}
-                    </div>
                 </div>
             );
         };
@@ -1654,7 +1589,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">07.12 godzina 00:30</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">06.12 godzina 23:45</span>
                                     </span>
                                 </div>
                             </div>
