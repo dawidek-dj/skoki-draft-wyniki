@@ -241,15 +241,27 @@ const handleDownloadJpg = async (elementId, fileName) => {
             "Dawid": ["Daniel Tschofenig", "Domen Prevc", "Stephan Embacher", "Kacper Tomasiak", "Andreas Wellinger", "Gregor Deschwanden"]
         };
 		
-		// --- NOWA FUNKCJA POMOCNICZA DO ZMIAN W SKŁADACH ---
-    const getTeamMembersForContest = (teamName, contestId) => {
+        // --- FUNKCJA POMOCNICZA DO ZMIAN W SKŁADACH ---
+        const getTeamMembersForContest = (teamName, contestId) => {
             // Domyślny skład (bazowy)
             let members = TEAMS[teamName];
 
             // Specjalna logika dla zespołu Tomasz P.
             if (teamName === "Tomasz P.") {
-                // 1. WISŁA (ID 6) i kolejne: Kraft nadal out, ale Aigro WRACA (za Ortnera)
-                if (contestId >= 6) {
+                // 1. KLINGENTHAL (ID 8) i kolejne: POWRÓT STEFANA KRAFTA
+                // Skład wraca do optymalnego ustawienia (Kraft + Aigro, bez rezerwowych)
+                if (contestId >= 8) {
+                    return [
+                        "Stefan Kraft",              // Powrót lidera
+                        "Philipp Raimund",
+                        "Felix Hoffmann",
+                        "Sakutaro Kobayashi",
+                        "Artti Aigro",
+                        "Antti Aalto"
+                    ];
+                }
+                // 2. WISŁA (ID 6-7): Kraft out (Sundal in), Aigro wraca (za Ortnera)
+                else if (contestId >= 6) {
                     return [
                         "Kristoffer Eriksen Sundal", // Zastępuje Krafta
                         "Philipp Raimund",
@@ -259,7 +271,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                         "Antti Aalto"
                     ];
                 }
-                // 2. RUKA (ID 4-5): Kraft i Aigro nieobecni (zastępują ich Sundal i Ortner)
+                // 3. RUKA (ID 4-5): Kraft i Aigro nieobecni (Sundal i Ortner in)
                 else if (contestId >= 4) {
                     return [
                         "Kristoffer Eriksen Sundal", 
@@ -270,7 +282,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                         "Antti Aalto"
                     ];
                 } 
-                // 3. LILLEHAMMER / FALUN (ID 1-3): Podstawowy skład
+                // 4. LILLEHAMMER / FALUN (ID 1-3): Podstawowy skład
                 else {
                     return [
                         "Stefan Kraft",
@@ -281,6 +293,8 @@ const handleDownloadJpg = async (elementId, fileName) => {
                         "Antti Aalto"
                     ];
                 }
+
+            return members.slice(0, 6); 
         };
             
             // Dla innych zespołów zwracamy po prostu ich stały skład (chyba że też będą mieli zmiany)
@@ -334,6 +348,14 @@ const handleDownloadJpg = async (elementId, fileName) => {
 
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
+        {
+                date: "14.12.2025 00:30",
+                version: "v1.7",
+                desc: `*** KLINGENTHAL (Sobota): Dodano oficjalne wyniki konkursu indywidualnego. Domen Prevc zwycięzcą! Tomasiak był piąty po 1 serii... Wynik drugiej serii - 29, finalnie skończył na 18 miejscu. Stoch najwolniejszy na progu, zarówno w seriach treningowych wolny, w 1 serii konkursowej 50 miejsce speed...
+                *** INTERFEJS: Rozdzielono linki do protokołów (PDF) i relacji FIS Live na osobne sekcje dla Kwalifikacji i Konkursu.
+                *** ZESPOŁY: Stefan Kraft wraca do składu drużyny Tomasz P. po przerwie spowodowanej narodzinami dziecka (zastępuje K.E. Sundala).
+                *** KLASYFIKACJE: Zaktualizowano tabele generalne i zespołowe po konkursie.`
+            },
         {
                 date: "07.12.2025 22:00",
                 version: "v1.6",
@@ -408,7 +430,9 @@ const handleDownloadJpg = async (elementId, fileName) => {
             3: {A: "FIN", B: "POL", C: "JPN", D: "AUT", E: "SWE"},  // Falun HS 132 Protocol
 			      4: {A: "CAN", B: "SUI", C: "ITA", D: "FIN", E: "GER"}, // Ruka 29.11.2025
             6: {A: "SLO", B: "POR", C: "GER", D: "USA", E: "FRA"}, //
-            7: {A: "POL", B: "GER", C: "SLO", D: "FRA", E: "USA"} // <--- NOWY WPIS (Niedziela)
+            7: {A: "POL", B: "GER", C: "SLO", D: "FRA", E: "USA"}, // <--- NOWY WPIS (Niedziela)
+            // --- NOWY WPIS ---
+            8: {A: "NOR", B: "GER", C: "SUI", D: "KOR", E: "AUT"}
         };
 
         const INITIAL_CONTESTS = [
@@ -748,39 +772,77 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 ]
             },
             {
-                id: 8,
+              id: 8,
                 date: "13.12.2025",
                 location: "Klingenthal (GER) - HS 140 (K-125)",
                 hill: "HS 140",
-                jury: {},
-                upcomingData: {
+                jury: JURY_FLAGS[8],
+                // --- NOWA STRUKTURA LINKÓW ---
+                links: {
                     quali: {
-                        time: "19:30 (12.12)",
+                        label: "Kwalifikacje (Pt)",
                         fis: "https://live.fis-ski.com/jp-3222/results-pda.htm",
-                        berkutschi: "https://live.berkutschi.com/skijumping/3222"
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3222/2026JP3222RLQ.pdf"
                     },
                     comp: {
-                        time: "15:45 (13.12)",
+                        label: "Konkurs (Sb)",
                         fis: "https://live.fis-ski.com/jp-3223/results-pda.htm",
-                        berkutschi: "https://live.berkutschi.com/skijumping/3223"
-                    },
-                    broadcast: [
-                        { 
-                            day: "Piątek, 12.12.2025", 
-                            events: [
-                                "19:00 - Kwalifikacje (Eurosport 1, Player/HBO Max)"
-                            ] 
-                        },
-                        { 
-                            day: "Sobota, 13.12.2025", 
-                            events: [
-                                "15:15 - Konkurs indywidualny (Eurosport 1, Player/HBO Max)",
-                                "15:25 - Konkurs indywidualny (TVN)"
-                            ] 
-                        }
-                    ]
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3223/2026JP3223RL.pdf"
+                    }
                 },
-                results: []
+                results: [
+                    { rank: 1, bib: "50", country: "SLO", name: "Domen Prevc", points: 298.5, r1_dist: "142.5", r1_note: "55.5", r1_wind: "2.9", r1_total: "149.9", r2_dist: "143.0", r2_note: "56.0", r2_wind: "-0.01", r2_total: "148.6", r1_rank: 1, r2_rank: 1, r1_speed: "89.9", r2_speed: "90.1", r1_dpts: "91.5", r2_dpts: "92.4", r1_judges: "18.5 19.0 17.5 18.5 18.5", r2_judges: "18.5 18.0 19.0 18.5 19.0", r1_comp: "2.9", r2_comp: "-0.01" },
+                    { rank: 2, bib: "43", country: "AUT", name: "Stefan Kraft", points: 273.0, r1_dist: "132.5", r1_note: "55.0", r1_wind: "6.6", r1_total: "135.1", r2_dist: "133.5", r2_note: "56.0", r2_wind: "6.6", r2_total: "137.9", r1_rank: 4, r2_rank: 3, r1_speed: "90.3", r2_speed: "89.9", r1_dpts: "73.5", r2_dpts: "75.3", r1_judges: "18.5 19.0 18.5 18.0 18.0", r2_judges: "18.5 18.5 19.0 18.5 19.0", r1_comp: "6.6", r2_comp: "6.6" },
+                    { rank: 3, bib: "47", country: "GER", name: "Philipp Raimund", points: 271.9, r1_dist: "134.0", r1_note: "54.5", r1_wind: "-0.41", r1_total: "127.9", r2_dist: "133.0", r2_note: "54.5", r2_wind: "9.9", r2_total: "144.0", r1_rank: 11, r2_rank: 2, r1_speed: "90.5", r2_speed: "90.5", r1_dpts: "76.2", r2_dpts: "74.4", r1_judges: "18.5 18.5 18.0 17.5 18.0", r2_judges: "18.0 18.0 18.5 18.0 18.5", r1_comp: "-0.41", r2_comp: "9.9" },
+                    { rank: 4, bib: "45", country: "JPN", name: "Ren Nikaido", points: 266.7, r1_dist: "131.0", r1_note: "54.0", r1_wind: "-0.41", r1_total: "127.9", r2_dist: "133.0", r2_note: "54.5", r2_wind: "-0.61", r2_total: "138.8", r1_rank: 10, r2_rank: 4, r1_speed: "90.5", r2_speed: "90.2", r1_dpts: "70.8", r2_dpts: "74.4", r1_judges: "18.0 18.0 18.0 18.0 18.0", r2_judges: "18.0 18.5 18.0 18.0 18.5", r1_comp: "-0.41", r2_comp: "-0.61" },
+                    { rank: 5, bib: "48", country: "JPN", name: "Ryoyu Kobayashi", points: 265.7, r1_dist: "129.5", r1_note: "53.5", r1_wind: "9.9", r1_total: "128.5", r2_dist: "134.0", r2_note: "55.0", r2_wind: "-0.40", r2_total: "137.2", r1_rank: 9, r2_rank: 4, r1_speed: "90.5", r2_speed: "90.5", r1_dpts: "68.1", r2_dpts: "76.2", r1_judges: "17.5 18.0 18.0 17.5 18.0", r2_judges: "18.5 18.0 18.5 18.0 18.5", r1_comp: "9.9", r2_comp: "-0.40" },
+                    { rank: 6, bib: "42", country: "AUT", name: "Jan Hoerl", points: 264.3, r1_dist: "133.5", r1_note: "54.0", r1_wind: "6.2", r1_total: "135.5", r2_dist: "129.0", r2_note: "54.0", r2_wind: "-0.38", r2_total: "128.8", r1_rank: 3, r2_rank: 13, r1_speed: "89.9", r2_speed: "89.9", r1_dpts: "75.3", r2_dpts: "67.2", r1_judges: "18.0 18.0 18.5 18.0 18.0", r2_judges: "18.0 17.5 18.0 18.0 18.0", r1_comp: "6.2", r2_comp: "-0.38" },
+                    { rank: 7, bib: "22", country: "NOR", name: "Halvor Egner Granerud", points: 263.5, r1_dist: "130.5", r1_note: "53.5", r1_wind: "-0.38", r1_total: "129.6", r2_dist: "133.0", r2_note: "54.5", r2_wind: "6.2", r2_total: "133.9", r1_rank: 8, r2_rank: 5, r1_speed: "90.1", r2_speed: "90.4", r1_dpts: "69.9", r2_dpts: "74.4", r1_judges: "17.5 18.0 17.5 18.0 18.5", r2_judges: "18.0 18.0 18.5 18.0 18.5", r1_comp: "-0.38", r2_comp: "6.2" },
+                    { rank: 8, bib: "31", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 261.5, r1_dist: "132.5", r1_note: "54.0", r1_wind: "-0.16", r1_total: "130.1", r2_dist: "131.0", r2_note: "54.0", r2_wind: "2.6", r2_total: "131.4", r1_rank: 6, r2_rank: 8, r1_speed: "90.1", r2_speed: "90.3", r1_dpts: "73.5", r2_dpts: "70.8", r1_judges: "18.0 18.5 18.0 18.0 18.5", r2_judges: "17.5 18.0 18.0 17.5 18.0", r1_comp: "-0.16", r2_comp: "2.6" },
+                    { rank: 9, bib: "33", country: "SLO", name: "Timi Zajc", points: 260.9, r1_dist: "126.0", r1_note: "53.0", r1_wind: "12.6", r1_total: "127.4", r2_dist: "131.0", r2_note: "54.0", r2_wind: "-0.78", r2_total: "133.5", r1_rank: 13, r2_rank: 6, r1_speed: "89.9", r2_speed: "90.5", r1_dpts: "61.8", r2_dpts: "70.8", r1_judges: "18.0 18.5 18.0 17.0 17.5", r2_judges: "18.0 18.0 18.0 18.0 17.0", r1_comp: "12.6", r2_comp: "-0.78" },
+                    { rank: 10, bib: "23", country: "NOR", name: "Johann Andre Forfang", points: 257.9, r1_dist: "130.0", r1_note: "53.0", r1_wind: "6.6", r1_total: "128.6", r2_dist: "131.5", r2_note: "54.0", r2_wind: "-0.41", r2_total: "129.3", r1_rank: 9, r2_rank: 11, r1_speed: "90.4", r2_speed: "90.4", r1_dpts: "69.0", r2_dpts: "71.7", r1_judges: "18.0 18.0 17.5 18.0 17.5", r2_judges: "17.5 17.5 18.0 17.5 18.0", r1_comp: "6.6", r2_comp: "-0.41" },
+                    { rank: 11, bib: "17", country: "AUT", name: "Jonas Schuster", points: 255.3, r1_dist: "131.5", r1_note: "49.5", r1_wind: "-0.08", r1_total: "122.5", r2_dist: "131.5", r2_note: "53.5", r2_wind: "1.3", r2_total: "132.8", r1_rank: 18, r2_rank: 7, r1_speed: "90.2", r2_speed: "90.6", r1_dpts: "71.7", r2_dpts: "71.7", r1_judges: "16.5 18.0 17.0 16.5 16.0", r2_judges: "17.5 18.0 17.5 18.0 18.0", r1_comp: "-0.08", r2_comp: "1.3" },
+                    { rank: 12, bib: "38", country: "FRA", name: "Valentin Foubert", points: 254.8, r1_dist: "133.5", r1_note: "52.5", r1_wind: "2.1", r1_total: "129.9", r2_dist: "127.5", r2_note: "52.5", r2_wind: "-0.13", r2_total: "124.9", r1_rank: 7, r2_rank: 16, r1_speed: "89.9", r2_speed: "89.9", r1_dpts: "75.3", r2_dpts: "64.5", r1_judges: "17.0 17.5 17.5 17.5 18.5", r2_judges: "17.5 17.5 18.0 17.5 17.5", r1_comp: "2.1", r2_comp: "-0.13" },
+                    { rank: 13, bib: "46", country: "AUT", name: "Daniel Tschofenig", points: 253.6, r1_dist: "126.5", r1_note: "52.5", r1_wind: "-0.49", r1_total: "123.1", r2_dist: "129.5", r2_note: "54.0", r2_wind: "7.9", r2_total: "130.5", r1_rank: 16, r2_rank: 10, r1_speed: "89.8", r2_speed: "90.3", r1_dpts: "62.7", r2_dpts: "68.1", r1_judges: "17.5 18.0 17.5 17.0 17.5", r2_judges: "18.0 17.0 18.0 18.0 18.0", r1_comp: "-0.49", r2_comp: "7.9" },
+                    { rank: 14, bib: "36", country: "JPN", name: "Naoki Nakamura", points: 252.2, r1_dist: "131.0", r1_note: "53.0", r1_wind: "1.5", r1_total: "125.3", r2_dist: "127.5", r2_note: "52.5", r2_wind: "-0.09", r2_total: "126.9", r1_rank: 14, r2_rank: 14, r1_speed: "89.8", r2_speed: "90.3", r1_dpts: "70.8", r2_dpts: "64.5", r1_judges: "18.5 17.5 18.0 17.0 17.5", r2_judges: "17.5 17.5 17.5 17.5 17.5", r1_comp: "1.5", r2_comp: "-0.09" },
+                    { rank: 15, bib: "40", country: "BUL", name: "Vladimir Zografski", points: 250.6, r1_dist: "130.0", r1_note: "52.5", r1_wind: "-0.2", r1_total: "121.3", r2_dist: "129.0", r2_note: "53.5", r2_wind: "-0.53", r2_total: "129.3", r1_rank: 22, r2_rank: 11, r1_speed: "89.7", r2_speed: "90.2", r1_dpts: "69.0", r2_dpts: "67.2", r1_judges: "17.5 18.0 17.5 17.0 17.5", r2_judges: "18.0 17.5 18.0 17.5 18.0", r1_comp: "-0.2", r2_comp: "-0.53" },
+                    { rank: 16, bib: "49", country: "SLO", name: "Anze Lanisek", points: 249.6, r1_dist: "127.5", r1_note: "52.0", r1_wind: "6.3", r1_total: "122.8", r2_dist: "128.5", r2_note: "53.0", r2_wind: "-0.39", r2_total: "126.8", r1_rank: 17, r2_rank: 15, r1_speed: "90.3", r2_speed: "90.5", r1_dpts: "64.5", r2_dpts: "66.3", r1_judges: "17.5 18.0 17.0 17.0 17.5", r2_judges: "17.5 18.0 17.5 17.5 17.5", r1_comp: "6.3", r2_comp: "-0.39" },
+                    { rank: 17, bib: "6", country: "KAZ", name: "Danil Vassilyev", points: 247.5, r1_dist: "128.5", r1_note: "51.0", r1_wind: "10.2", r1_total: "127.5", r2_dist: "125.5", r2_note: "51.0", r2_wind: "-0.63", r2_total: "120.0", r1_rank: 12, r2_rank: 22, r1_speed: "89.8", r2_speed: "90.1", r1_dpts: "66.3", r2_dpts: "60.9", r1_judges: "17.0 17.0 17.0 17.0 16.5", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "10.2", r2_comp: "-0.63" },
+                    { rank: 18, bib: "37", country: "POL", name: "Kacper Tomasiak", points: 246.8, r1_dist: "134.0", r1_note: "54.5", r1_wind: "0.6", r1_total: "131.3", r2_dist: "126.5", r2_note: "47.5", r2_wind: "-0.04", r2_total: "115.5", r1_rank: 5, r2_rank: 29, r1_speed: "90.2", r2_speed: "90.4", r1_dpts: "76.2", r2_dpts: "62.7", r1_judges: "18.0 16.0 18.5 18.5 16.0", r2_judges: "18.0 16.0 15.5 15.5 16.0", r1_comp: "0.6", r2_comp: "-0.04" },
+                    { rank: 19, bib: "41", country: "AUT", name: "Stephan Embacher", points: 246.1, r1_dist: "128.5", r1_note: "53.5", r1_wind: "-0.09", r1_total: "121.3", r2_dist: "128.0", r2_note: "51.5", r2_wind: "1.5", r2_total: "124.8", r1_rank: 22, r2_rank: 17, r1_speed: "89.7", r2_speed: "90.1", r1_dpts: "66.3", r2_dpts: "65.4", r1_judges: "17.5 17.0 17.5 18.0 18.0", r2_judges: "17.5 17.0 17.0 17.5 17.0", r1_comp: "-0.09", r2_comp: "1.5" },
+                    { rank: 20, bib: "30", country: "POL", name: "Kamil Stoch", points: 245.1, r1_dist: "129.5", r1_note: "54.5", r1_wind: "-0.9", r1_total: "121.7", r2_dist: "127.5", r2_note: "54.0", r2_wind: "0.08", r2_total: "123.4", r1_rank: 20, r2_rank: 20, r1_speed: "89.4", r2_speed: "89.9", r1_dpts: "68.1", r2_dpts: "64.5", r1_judges: "18.5 18.0 18.5 17.5 18.0", r2_judges: "18.0 18.0 18.0 18.0 17.0", r1_comp: "-0.9", r2_comp: "0.08" },
+                    { rank: 21, bib: "12", country: "USA", name: "Kevin Bickner", points: 244.1, r1_dist: "130.0", r1_note: "51.5", r1_wind: "-0.2", r1_total: "120.3", r2_dist: "127.5", r2_note: "51.0", r2_wind: "0.02", r2_total: "123.8", r1_rank: 26, r2_rank: 19, r1_speed: "90.2", r2_speed: "90.7", r1_dpts: "69.0", r2_dpts: "64.5", r1_judges: "17.0 17.0 17.5 17.5 17.0", r2_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "-0.2", r2_comp: "0.02" },
+                    { rank: 22, bib: "35", country: "NOR", name: "Marius Lindvik", points: 243.4, r1_dist: "127.5", r1_note: "52.5", r1_wind: "-0.41", r1_total: "123.6", r2_dist: "125.0", r2_note: "52.0", r2_wind: "6.6", r2_total: "119.8", r1_rank: 15, r2_rank: 23, r1_speed: "89.8", r2_speed: "90.2", r1_dpts: "64.5", r2_dpts: "60.0", r1_judges: "18.0 17.5 17.5 17.5 17.0", r2_judges: "18.0 17.0 17.0 17.5 17.5", r1_comp: "-0.41", r2_comp: "6.6" },
+                    { rank: 23, bib: "39", country: "AUT", name: "Manuel Fettner", points: 243.2, r1_dist: "129.0", r1_note: "52.5", r1_wind: "1.0", r1_total: "120.7", r2_dist: "127.0", r2_note: "51.0", r2_wind: "-0.06", r2_total: "122.5", r1_rank: 25, r2_rank: 21, r1_speed: "90.3", r2_speed: "90.7", r1_dpts: "67.2", r2_dpts: "63.6", r1_judges: "17.5 16.5 17.5 17.5 18.0", r2_judges: "17.0 17.0 17.5 16.5 17.0", r1_comp: "1.0", r2_comp: "-0.06" },
+                    { rank: 24, bib: "24", country: "USA", name: "Jason Colby", points: 242.5, r1_dist: "126.0", r1_note: "51.0", r1_wind: "5.5", r1_total: "118.3", r2_dist: "128.0", r2_note: "52.5", r2_wind: "-0.34", r2_total: "124.2", r1_rank: 30, r2_rank: 18, r1_speed: "90.3", r2_speed: "90.9", r1_dpts: "61.8", r2_dpts: "65.4", r1_judges: "17.0 17.5 17.0 16.5 17.0", r2_judges: "17.5 17.0 17.5 17.5 17.5", r1_comp: "5.5", r2_comp: "-0.34" },
+                    { rank: 25, bib: "16", country: "POL", name: "Maciej Kot", points: 240.5, r1_dist: "129.0", r1_note: "52.5", r1_wind: "-0.17", r1_total: "122.5", r2_dist: "125.0", r2_note: "51.5", r2_wind: "2.8", r2_total: "118.0", r1_rank: 18, r2_rank: 25, r1_speed: "90.0", r2_speed: "90.2", r1_dpts: "67.2", r2_dpts: "60.0", r1_judges: "17.5 17.0 18.0 17.0 17.5", r2_judges: "17.5 17.0 17.5 17.0 17.0", r1_comp: "-0.17", r2_comp: "2.8" },
+                    { rank: 26, bib: "21", country: "JPN", name: "Yukiya Sato", points: 238.4, r1_dist: "127.5", r1_note: "51.5", r1_wind: "5.7", r1_total: "121.7", r2_dist: "124.0", r2_note: "51.0", r2_wind: "-0.35", r2_total: "116.7", r1_rank: 20, r2_rank: 27, r1_speed: "90.0", r2_speed: "90.3", r1_dpts: "64.5", r2_dpts: "58.2", r1_judges: "16.5 16.0 17.0 17.0 17.5", r2_judges: "18.0 17.0 17.0 17.0 17.0", r1_comp: "5.7", r2_comp: "-0.35" },
+                    { rank: 27, bib: "10", country: "SUI", name: "Simon Ammann", points: 237.6, r1_dist: "128.5", r1_note: "52.0", r1_wind: "-0.03", r1_total: "118.8", r2_dist: "126.0", r2_note: "51.0", r2_wind: "0.5", r2_total: "118.8", r1_rank: 29, r2_rank: 24, r1_speed: "90.5", r2_speed: "91.0", r1_dpts: "66.3", r2_dpts: "61.8", r1_judges: "17.0 17.0 17.5 17.0 17.0", r2_judges: "17.5 17.5 17.0 16.5 16.5", r1_comp: "-0.03", r2_comp: "0.5" },
+                    { rank: 28, bib: "29", country: "POL", name: "Piotr Zyla", points: 236.8, r1_dist: "130.5", r1_note: "49.5", r1_wind: "-0.03", r1_total: "119.9", r2_dist: "122.0", r2_note: "51.0", r2_wind: "0.5", r2_total: "116.9", r1_rank: 27, r2_rank: 26, r1_speed: "90.1", r2_speed: "90.5", r1_dpts: "69.9", r2_dpts: "54.6", r1_judges: "16.5 17.0 16.0 17.0 16.5", r2_judges: "17.0 16.5 17.0 17.0 17.0", r1_comp: "-0.03", r2_comp: "0.5" },
+                    { rank: 29, bib: "44", country: "GER", name: "Felix Hoffmann", points: 234.9, r1_dist: "125.5", r1_note: "52.5", r1_wind: "-0.34", r1_total: "118.9", r2_dist: "122.5", r2_note: "50.5", r2_wind: "5.5", r2_total: "116.0", r1_rank: 28, r2_rank: 28, r1_speed: "89.7", r2_speed: "90.2", r1_dpts: "60.9", r2_dpts: "55.5", r1_judges: "17.5 16.5 17.5 17.0 18.0", r2_judges: "17.0 17.5 17.0 17.0 16.5", r1_comp: "-0.34", r2_comp: "5.5" },
+                    { rank: 30, bib: "9", country: "USA", name: "Tate Frantz", points: 230.4, r1_dist: "129.5", r1_note: "52.0", r1_wind: "-0.07", r1_total: "121.2", r2_dist: "120.5", r2_note: "49.5", r2_wind: "1.1", r2_total: "109.2", r1_rank: 24, r2_rank: 30, r1_speed: "90.1", r2_speed: "90.6", r1_dpts: "68.1", r2_dpts: "51.9", r1_judges: "17.5 16.5 17.0 16.5 17.5", r2_judges: "16.5 17.0 17.5 16.5 16.5", r1_comp: "-0.07", r2_comp: "1.1" },
+                    
+                    { rank: 31, bib: "28", country: "FIN", name: "Niko Kytosaho", points: 117.8, r1_dist: "127.5", r1_note: "52.5", r1_wind: "-0.05", r1_total: "117.8", r1_rank: 31, r1_speed: "89.6", r1_dpts: "64.5", r1_judges: "17.5 17.0 18.0 17.5 17.5", r1_comp: "-0.05" },
+                    { rank: 32, bib: "20", country: "POL", name: "Dawid Kubacki", points: 117.4, r1_dist: "127.0", r1_note: "52.0", r1_wind: "-0.11", r1_total: "117.4", r1_rank: 32, r1_speed: "90.2", r1_dpts: "63.6", r1_judges: "17.5 17.5 17.5 17.0 17.0", r1_comp: "-0.11" },
+                    { rank: 33, bib: "32", country: "SUI", name: "Gregor Deschwanden", points: 116.5, r1_dist: "125.0", r1_note: "51.5", r1_wind: "-0.31", r1_total: "116.5", r1_rank: 33, r1_speed: "90.4", r1_dpts: "60.0", r1_judges: "17.5 17.0 17.5 17.0 17.0", r1_comp: "-0.31" },
+                    { rank: 34, bib: "5", country: "SUI", name: "Sandro Hauswirth", points: 116.0, r1_dist: "122.0", r1_note: "51.0", r1_wind: "-0.64", r1_total: "116.0", r1_rank: 34, r1_speed: "90.5", r1_dpts: "54.6", r1_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "-0.64" },
+                    { rank: 35, bib: "27", country: "EST", name: "Artti Aigro", points: 115.5, r1_dist: "126.5", r1_note: "52.0", r1_wind: "-0.05", r1_total: "115.5", r1_rank: 35, r1_speed: "89.6", r1_dpts: "62.7", r1_judges: "17.5 17.5 18.0 17.0 17.0", r1_comp: "-0.05" },
+                    { rank: 36, bib: "25", country: "FIN", name: "Antti Aalto", points: 115.2, r1_dist: "126.5", r1_note: "51.0", r1_wind: "-0.09", r1_total: "115.2", r1_rank: 36, r1_speed: "90.2", r1_dpts: "62.7", r1_judges: "16.5 17.0 17.5 16.5 17.5", r1_comp: "-0.09" },
+                    { rank: 37, bib: "19", country: "SLO", name: "Rok Oblak", points: 114.9, r1_dist: "126.0", r1_note: "52.0", r1_wind: "-0.07", r1_total: "114.9", r1_rank: 37, r1_speed: "90.5", r1_dpts: "61.8", r1_judges: "17.5 17.0 17.5 17.0 17.5", r1_comp: "-0.07" },
+                    { rank: 38, bib: "11", country: "KAZ", name: "Ilya Mizernykh", points: 114.8, r1_dist: "126.0", r1_note: "52.0", r1_wind: "-0.06", r1_total: "114.8", r1_rank: 38, r1_speed: "90.3", r1_dpts: "61.8", r1_judges: "16.5 17.5 17.0 17.5 17.5", r1_comp: "-0.06" },
+                    { rank: 39, bib: "15", country: "POL", name: "Pawel Wasek", points: 112.5, r1_dist: "123.5", r1_note: "50.5", r1_wind: "-0.29", r1_total: "112.5", r1_rank: 39, r1_speed: "90.0", r1_dpts: "57.3", r1_judges: "17.0 17.0 16.5 17.0 16.5", r1_comp: "-0.29" },
+                    { rank: 40, bib: "26", country: "GER", name: "Andreas Wellinger", points: 112.1, r1_dist: "123.5", r1_note: "52.5", r1_wind: "-0.14", r1_total: "112.1", r1_rank: 40, r1_speed: "90.7", r1_dpts: "57.3", r1_judges: "17.5 17.5 17.5 17.0 17.5", r1_comp: "-0.14" },
+                    { rank: 41, bib: "34", country: "GER", name: "Pius Paschke", points: 109.9, r1_dist: "117.0", r1_note: "50.5", r1_wind: "-0.85", r1_total: "109.9", r1_rank: 41, r1_speed: "89.9", r1_dpts: "45.6", r1_judges: "17.0 16.5 17.0 16.0 17.0", r1_comp: "-0.85" },
+                    { rank: 42, bib: "14", country: "JPN", name: "Tomofumi Naito", points: 108.7, r1_dist: "121.5", r1_note: "51.0", r1_wind: "-0.25", r1_total: "108.7", r1_rank: 42, r1_speed: "89.7", r1_dpts: "53.7", r1_judges: "16.5 17.0 17.0 17.0 17.0", r1_comp: "-0.25" },
+                    { rank: 43, bib: "3", country: "FIN", name: "Vilho Palosaari", points: 107.9, r1_dist: "119.0", r1_note: "49.5", r1_wind: "-0.57", r1_total: "107.9", r1_rank: 43, r1_speed: "90.2", r1_dpts: "49.2", r1_judges: "16.5 16.5 16.5 16.5 16.0", r1_comp: "-0.57" },
+                    { rank: 44, bib: "18", country: "NOR", name: "Benjamin Oestvold", points: 103.2, r1_dist: "120.5", r1_note: "50.5", r1_wind: "-0.05", r1_total: "103.2", r1_rank: 44, r1_speed: "90.2", r1_dpts: "51.9", r1_judges: "17.0 17.0 17.0 16.5 16.5", r1_comp: "-0.05" },
+                    { rank: 45, bib: "7", country: "GER", name: "Luca Roth", points: 102.1, r1_dist: "116.5", r1_note: "49.5", r1_wind: "-0.49", r1_total: "102.1", r1_rank: 45, r1_speed: "90.7", r1_dpts: "44.7", r1_judges: "16.5 16.5 16.5 16.5 16.5", r1_comp: "-0.49" },
+                    { rank: 46, bib: "2", country: "FRA", name: "Jules Chervet", points: 100.7, r1_dist: "118.0", r1_note: "48.0", r1_wind: "-0.33", r1_total: "100.7", r1_rank: 46, r1_speed: "90.1", r1_dpts: "47.4", r1_judges: "16.0 16.0 15.5 16.0 16.0", r1_comp: "-0.33" },
+                    { rank: 47, bib: "13", country: "ITA", name: "Alex Insam", points: 100.1, r1_dist: "119.5", r1_note: "49.0", r1_wind: "-0.06", r1_total: "100.1", r1_rank: 47, r1_speed: "89.9", r1_dpts: "50.1", r1_judges: "16.5 17.0 16.5 16.0 16.0", r1_comp: "-0.06" },
+                    { rank: 47, bib: "8", country: "CZE", name: "Roman Koudelka", points: 100.1, r1_dist: "118.0", r1_note: "48.5", r1_wind: "-0.26", r1_total: "100.1", r1_rank: 47, r1_speed: "90.2", r1_dpts: "47.4", r1_judges: "16.0 15.0 16.5 16.5 16.0", r1_comp: "-0.26" },
+                    { rank: 49, bib: "4", country: "SLO", name: "Lovro Kos", points: 99.4, r1_dist: "116.5", r1_note: "49.5", r1_wind: "-0.32", r1_total: "99.4", r1_rank: 49, r1_speed: "90.3", r1_dpts: "44.7", r1_judges: "16.5 16.5 16.5 16.0 16.5", r1_comp: "-0.32" },
+                    { rank: 50, bib: "1", country: "SUI", name: "Killian Peier", points: 95.1, r1_dist: "115.0", r1_note: "49.5", r1_wind: "-0.22", r1_total: "95.1", r1_rank: 50, r1_speed: "90.3", r1_dpts: "42.0", r1_judges: "16.5 17.0 16.5 15.5 16.5", r1_comp: "-0.22" }
+                ]
             },
             {
                 id: 9,
@@ -1092,23 +1154,48 @@ const handleDownloadJpg = async (elementId, fileName) => {
                                 </select>
                             </div>
 						<div>
-						{/* --- NOWA SEKCJA LINKÓW (Dodaj ten fragment) --- */}
-                        {activeContest.links && (
-                            <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100 mt-2">
-                                <span className="text-xs font-bold text-slate-500 uppercase self-center mr-2">Raporty FIS:</span>
-                                {activeContest.links.fis && (
-                                    <a href={activeContest.links.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-xs rounded hover:bg-slate-700 transition-colors">
-                                        <ExternalLink size={12} /> WWW FIS
-                                    </a>
+					{/* --- NOWA SEKCJA LINKÓW (ZMODYFIKOWANA v3) --- */}
+          {activeContest.links && (
+                            <div className="flex flex-col gap-2 pt-2 border-t border-slate-100 mt-2 w-full">
+                                {/* Wersja: Nowy format (Quali + Comp z podziałem) */}
+                                {activeContest.links.quali && (
+                                    <div className="flex flex-col gap-1.5 mb-1">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kwalifikacje:</span>
+                                        <div className="flex gap-2">
+                                            <a href={activeContest.links.quali.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-700 text-white text-[10px] md:text-xs rounded hover:bg-slate-600 transition-colors">
+                                                <ExternalLink size={12} /> FIS Live
+                                            </a>
+                                            <a href={activeContest.links.quali.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-[10px] md:text-xs rounded hover:bg-red-500 transition-colors">
+                                                <FileText size={12} /> Protokół PDF
+                                            </a>
+                                        </div>
+                                    </div>
                                 )}
-                                {activeContest.links.pdf && (
-                                    <a href={activeContest.links.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-xs rounded hover:bg-red-500 transition-colors">
-                                        <ExternalLink size={12} /> Protokół PDF
-                                    </a>
+
+                                {/* SEPARATOR ŚRODKOWY (Pomiędzy seriami) */}
+                                {(activeContest.links.quali && activeContest.links.comp) && (
+                                    <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-300 to-transparent opacity-50 my-1"></div>
                                 )}
+
+                                {activeContest.links.comp && (
+                                    <div className="flex flex-col gap-1.5 mt-1">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Konkurs:</span>
+                                        <div className="flex gap-2">
+                                            <a href={activeContest.links.comp.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-[10px] md:text-xs rounded hover:bg-slate-700 transition-colors">
+                                                <ExternalLink size={12} /> FIS Live
+                                            </a>
+                                            <a href={activeContest.links.comp.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-700 text-white text-[10px] md:text-xs rounded hover:bg-red-600 transition-colors">
+                                                <FileText size={12} /> Protokół PDF
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {/* SEPARATOR DOLNY (Oddzielający od "Wybierz konkurs") */}
+                                <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-300 to-transparent opacity-50 mt-3 mb-1"></div>
                             </div>
                         )}
-                        {/* ----------------------------------------------- */}
+                               
                     </div>
 
                             {/* View data selector (bottom on mobile) */}
@@ -1617,6 +1704,21 @@ const handleDownloadJpg = async (elementId, fileName) => {
                                                     </div>
                                                 )}
 
+                                                {/* --- SEKCJA: KLINGENTHAL (ID 8 i 9) - POWRÓT KRAFTA --- */}
+                                                {teamName === "Tomasz P." && (activeContest.id === 8 || activeContest.id === 9) && (
+                                                    <div className="bg-green-50 border-t border-green-100 p-3 text-xs text-green-800">
+                                                        <div className="font-bold mb-1 flex items-center gap-1">
+                                                            <RefreshCw size={14} /> Status kadry:
+                                                        </div>
+                                                        <ul className="space-y-1 ml-1">
+                                                            <li className="flex items-start gap-2">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-green-600 mt-1.5 shrink-0"></span>
+                                                                <span><span className="font-bold">Stefan Kraft</span>: powrót do składu po absencji.</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+
                                                 {/* --- SEKCJA: WISŁA (ID 6 i 7) - POWRÓT AIGRO --- */}
                                                 {teamName === "Tomasz P." && (activeContest.id === 6 || activeContest.id === 7) && (
                                                     <div className="bg-blue-50 border-t border-blue-100 p-3 text-xs text-slate-700">
@@ -1824,7 +1926,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">07.12 godzina 22:00</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">14.12 godzina 00:30</span>
                                     </span>
                                 </div>
                             </div>
