@@ -652,10 +652,20 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 location: "Wisła (POL) - HS 134 (K-120)",
                 hill: "HS 134",
                 jury: JURY_FLAGS[6],
+                // --- PODMIEŃ SEKCJĘ LINKS ---
                 links: {
-                    fis: "https://live.fis-ski.com/jp-3087/results-pda.htm",
-                    pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3087/2026JP3087RL.pdf"
+                    quali: {
+                        label: "Kwalifikacje (Pt)",
+                        fis: "https://live.fis-ski.com/jp-3086/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3086/2026JP3086RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs (Sb)",
+                        fis: "https://live.fis-ski.com/jp-3087/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3087/2026JP3087RL.pdf"
+                    }
                 },
+                // -----------------------------
                 results: [
                     { rank: 1, bib: "49", country: "SLO", name: "Domen Prevc", points: 286.2, r1_dist: "136.0", r1_note: "53.0", r1_wind: "-1.2", r1_total: "140.6", r2_dist: "130.0", r2_note: "53.5", r2_wind: "14.1", r2_total: "145.6", r1_rank: 1, r2_rank: 1, r1_speed: "90.5", r2_speed: "90.8", r1_dpts: "78.0", r2_dpts: "78.0", r1_judges: "17.5 17.0 19.0 18.0 17.5", r2_judges: "18.0 18.0 17.5 17.5 18.0", r1_comp: "-1.2", r2_comp: "14.1" },
                     { rank: 2, bib: "44", country: "GER", name: "Philipp Raimund", points: 279.4, r1_dist: "129.0", r1_note: "52.5", r1_wind: "-0.47", r1_total: "136.3", r2_dist: "130.5", r2_note: "52.5", r2_wind: "11.7", r2_total: "143.1", r1_rank: 2, r2_rank: 2, r1_speed: "91.0", r2_speed: "91.1", r1_dpts: "76.2", r2_dpts: "78.9", r1_judges: "18.0 17.5 18.0 17.0 17.0", r2_judges: "18.0 17.5 17.0 17.5 17.5", r1_comp: "-0.47", r2_comp: "11.7" },
@@ -715,10 +725,20 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 location: "Wisła (POL) - HS 134 (K-120)",
                 hill: "HS 134",
                 jury: JURY_FLAGS[7],
+                // --- PODMIEŃ TĘ SEKCJĘ LINKS ---
                 links: {
-                    fis: "https://live.fis-ski.com/jp-3089/results-pda.htm",
-                    pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3089/2026JP3089RL.pdf"
+                    quali: {
+                        label: "Kwalifikacje",
+                        fis: "https://live.fis-ski.com/jp-3088/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3088/2026JP3088RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs",
+                        fis: "https://live.fis-ski.com/jp-3089/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3089/2026JP3089RL.pdf"
+                    }
                 },
+                // -------------------------------
                 results: [
                     { rank: 1, bib: "68", country: "SLO", name: "Domen Prevc", points: 282.3, r1_dist: "137.0", r1_note: "45.5", r1_wind: "3.6", r1_total: "137.6", r2_dist: "132.0", r2_note: "54.5", r2_wind: "8.6", r2_total: "144.7", r1_rank: 4, r2_rank: 1, r1_speed: "90.7", r2_speed: "90.9", r1_dpts: "75.6", r2_dpts: "81.6", r1_judges: "15.0 14.5 15.5 15.0 15.5", r2_judges: "18.0 18.0 18.5 18.5 18.0", r1_comp: "3.6", r2_comp: "8.6" },
                     { rank: 2, bib: "67", country: "JPN", name: "Ryoyu Kobayashi", points: 281.4, r1_dist: "130.5", r1_note: "55.5", r1_wind: "3.6", r1_total: "139.0", r2_dist: "129.5", r2_note: "54.0", r2_wind: "7.9", r2_total: "142.4", r1_rank: 1, r2_rank: 2, r1_speed: "90.6", r2_speed: "90.7", r1_dpts: "78.9", r2_dpts: "77.1", r1_judges: "18.5 19.0 18.5 18.5 18.5", r2_judges: "18.0 18.0 18.0 18.0 18.0", r1_comp: "3.6", r2_comp: "7.9" },
@@ -2017,7 +2037,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                     </main>
                     
                     <footer className="text-center text-slate-400 mt-12 text-xs pb-8 px-4">
-                        <p>Fantasy Draft Skoki Narciarskie 2025/26 • Zasady: Top 5 z 6</p>
+                        <p>Fantasy Draft Skoki Narciarskie 2025/26</p>
                     </footer>
                 </div>
             );
