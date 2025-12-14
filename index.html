@@ -1162,15 +1162,74 @@ const handleDownloadJpg = async (elementId, fileName) => {
 
             return (
                 <div className="space-y-6">
-                    {/* Header */}
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <Flask className="text-purple-500" />
-                            <h2 className="font-bold text-slate-800">Wyniki Konkursu</h2>
+                    {/* Header + Linki + Selectory */}
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-start justify-between">
+                        
+                        {/* LEWA STRONA: Tytuł i Linki */}
+                        <div className="flex flex-col gap-3 w-full md:w-auto">
+                            <div className="flex items-center gap-2">
+                                <Flask className="text-purple-500" />
+                                <h2 className="font-bold text-slate-800 text-lg">Wyniki Konkursu</h2>
+                            </div>
+
+                            {/* --- SEKCJA LINKÓW --- */}
+                            {activeContest.links && (
+                                <div className="flex flex-col gap-2 mt-1 w-full">
+                                    {/* Wersja: Nowy format (Quali + Comp z podziałem) */}
+                                    {activeContest.links.quali && (
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kwalifikacje:</span>
+                                            <div className="flex gap-2">
+                                                <a href={activeContest.links.quali.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-700 text-white text-[10px] md:text-xs rounded hover:bg-slate-600 transition-colors">
+                                                    <ExternalLink size={12} /> FIS Live
+                                                </a>
+                                                <a href={activeContest.links.quali.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-[10px] md:text-xs rounded hover:bg-red-500 transition-colors">
+                                                    <FileText size={12} /> Protokół PDF
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* SEPARATOR ŚRODKOWY (Pomiędzy seriami) */}
+                                    {(activeContest.links.quali && activeContest.links.comp) && (
+                                        <div className="h-px w-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 opacity-50 my-0.5"></div>
+                                    )}
+
+                                    {activeContest.links.comp && (
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Konkurs:</span>
+                                            <div className="flex gap-2">
+                                                <a href={activeContest.links.comp.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-[10px] md:text-xs rounded hover:bg-slate-700 transition-colors">
+                                                    <ExternalLink size={12} /> FIS Live
+                                                </a>
+                                                <a href={activeContest.links.comp.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-700 text-white text-[10px] md:text-xs rounded hover:bg-red-600 transition-colors">
+                                                    <FileText size={12} /> Protokół PDF
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Obsługa starego formatu (tylko jeden link) */}
+                                    {(!activeContest.links.quali && !activeContest.links.comp && activeContest.links.fis) && (
+                                         <div className="flex gap-2">
+                                            <a href={activeContest.links.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-xs rounded hover:bg-slate-700 transition-colors">
+                                                <ExternalLink size={12} /> FIS Live
+                                            </a>
+                                            {activeContest.links.pdf && (
+                                                <a href={activeContest.links.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-xs rounded hover:bg-red-500 transition-colors">
+                                                    <FileText size={12} /> Protokół PDF
+                                                </a>
+                                            )}
+                                         </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
-                        <div className="flex flex-col gap-2 w-full md:w-auto">
-                            {/* Konkurs selector (top on mobile) */}
-                            <div className="w-full md:w-auto order-1 md:order-2">
+
+                        {/* PRAWA STRONA: Wybór konkursu */}
+                        {/* ZMIANA: Dodano klasę 'md:self-center', która centruje ten element w pionie tylko na desktopie */}
+                        <div className="flex flex-col gap-2 w-full md:w-auto md:self-center">
+                            <div className="w-full md:w-auto">
                                 <label className="text-xs text-slate-500 font-semibold uppercase ml-1 md:hidden">Wybierz konkurs:</label>
                                 <select 
                                     value={selectedContestId} 
@@ -1180,53 +1239,9 @@ const handleDownloadJpg = async (elementId, fileName) => {
                                     {contests.slice().reverse().map(c => <option key={c.id} value={c.id}>{c.date} - {c.location}</option>)}
                                 </select>
                             </div>
-						<div>
-					{/* --- NOWA SEKCJA LINKÓW (ZMODYFIKOWANA v3) --- */}
-          {activeContest.links && (
-                            <div className="flex flex-col gap-2 pt-2 border-t border-slate-100 mt-2 w-full">
-                                {/* Wersja: Nowy format (Quali + Comp z podziałem) */}
-                                {activeContest.links.quali && (
-                                    <div className="flex flex-col gap-1.5 mb-1">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kwalifikacje:</span>
-                                        <div className="flex gap-2">
-                                            <a href={activeContest.links.quali.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-700 text-white text-[10px] md:text-xs rounded hover:bg-slate-600 transition-colors">
-                                                <ExternalLink size={12} /> FIS Live
-                                            </a>
-                                            <a href={activeContest.links.quali.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-[10px] md:text-xs rounded hover:bg-red-500 transition-colors">
-                                                <FileText size={12} /> Protokół PDF
-                                            </a>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* SEPARATOR ŚRODKOWY (Pomiędzy seriami) */}
-                                {(activeContest.links.quali && activeContest.links.comp) && (
-                                    <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-300 to-transparent opacity-50 my-1"></div>
-                                )}
-
-                                {activeContest.links.comp && (
-                                    <div className="flex flex-col gap-1.5 mt-1">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Konkurs:</span>
-                                        <div className="flex gap-2">
-                                            <a href={activeContest.links.comp.fis} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 text-white text-[10px] md:text-xs rounded hover:bg-slate-700 transition-colors">
-                                                <ExternalLink size={12} /> FIS Live
-                                            </a>
-                                            <a href={activeContest.links.comp.pdf} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-1.5 bg-red-700 text-white text-[10px] md:text-xs rounded hover:bg-red-600 transition-colors">
-                                                <FileText size={12} /> Protokół PDF
-                                            </a>
-                                        </div>
-                                    </div>
-                                )}
-                                
-                                {/* SEPARATOR DOLNY (Oddzielający od "Wybierz konkurs") */}
-                                <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-300 to-transparent opacity-50 mt-3 mb-1"></div>
-                            </div>
-                        )}
-                               
-                    </div>
 
                             {/* View data selector (bottom on mobile) */}
-                            <div className="md:hidden w-full relative order-2 md:order-1 mt-2 md:mt-0">
+                            <div className="md:hidden w-full relative mt-2 md:mt-0">
                                 <label className="text-xs text-slate-500 font-semibold uppercase ml-1">Widok danych:</label>
                                 <select 
                                     value={mobileViewMode} 
@@ -1239,8 +1254,8 @@ const handleDownloadJpg = async (elementId, fileName) => {
                         </div>
                     </div>
 
-                        {/* DESKTOP TABS */}
-						<div className="bg-white md:rounded-xl shadow-sm border border-slate-200 overflow-hidden custom-scrollbar">
+                    {/* TABELA WYNIKÓW (BEZ ZMIAN PONIŻEJ) */}
+                    <div className="bg-white md:rounded-xl shadow-sm border border-slate-200 overflow-hidden custom-scrollbar">
                         {/* DESKTOP TABS - Pokazuj tylko jeśli są wyniki */}
                         {activeContest.results.length > 0 && (
                             <div className="hidden md:flex border-b border-slate-200 bg-slate-50">
@@ -1266,7 +1281,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             </div>
                         )}
 
-						{/* --- OBSŁUGA PUSTEGO KONKURSU (ODWOŁANY/OCZEKIWANIE) --- */}
+                        {/* --- OBSŁUGA PUSTEGO KONKURSU (ODWOŁANY/OCZEKIWANIE) --- */}
                         {activeContest.results.length === 0 ? (
                             <div className="p-8 text-center bg-white">
                                 
@@ -1283,8 +1298,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                                     </>
                                 )}
 
-                                {/* WIDOK DLA NADCHODZĄCEJ WISŁY (ID 7) */}
-                               {/* WIDOK DLA NADCHODZĄCYCH KONKURSÓW (ID 7, 8, 9...) */}
+                                {/* WIDOK DLA NADCHODZĄCYCH KONKURSÓW (ID 7, 8, 9...) */}
                                {activeContest.results.length === 0 && activeContest.upcomingData && (
                                     <div className="max-w-2xl mx-auto">
                                         <div className="text-center mb-8">
