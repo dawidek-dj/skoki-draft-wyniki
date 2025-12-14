@@ -349,6 +349,15 @@ const handleDownloadJpg = async (elementId, fileName) => {
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
         {
+                date: "15.12.2025 00:00",
+                version: "v1.9",
+                desc: `*** KLINGENTHAL (Niedziela): Dodano oficjalne wyniki konkursu indywidualnego oraz kwalifikacji (protokół).
+                *** KWALIFIKACJE: Zwycięstwo Mariusa Lindvika. Wszyscy Polacy wywalczyli awans do konkursu.
+                *** WYNIKI KONKURSU: Triumf Domena Prevca (SLO).
+                *** POLACY: Piotr Żyła najlepszy z Polaków (20. miejsce). Kamil Stoch (31.) i Kacper Tomasiak (32.) pechowo tuż za finałową trzydziestką.
+                `
+            },
+        {
                 date: "14.12.2025 14:45",
                 version: "v1.8",
                 desc: `*** Wprowadziłem korektę odnośnie obliczeń punktacji, system zliczał punkty wg zasad: TOP 5 z 6 zawodników, zmieniłem na to, co zostało ustalone pierwotnie, czyli liczymy punkty wszystkich zawodników.`
@@ -441,12 +450,26 @@ const handleDownloadJpg = async (elementId, fileName) => {
         };
 
         const INITIAL_CONTESTS = [
-            {
+        {
                 id: 1,
                 date: "23.11.2025",
                 location: "Lillehammer (NOR) - HS 140 (K-123)",
                 hill: "HS 140",
                 jury: JURY_FLAGS[1],
+                // --- NOWA SEKCJA LINKÓW ---
+                links: {
+                    quali: {
+                        label: "Kwalifikacje",
+                        fis: "https://live.fis-ski.com/jp-3066/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3066/2026JP3066RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs",
+                        fis: "https://live.fis-ski.com/jp-3069/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3069/2026JP3069RL.pdf"
+                    }
+                },
+                // --------------------------
                 results: [
                     { rank: 1, bib: "65", country: "JPN", name: "Ryoyu Kobayashi", points: 290.5, r1_dist: "138.0", r1_note: "56.5", r1_wind: "-5.1", r1_total: "144.4", r2_dist: "139.5", r2_note: "57.0", r2_wind: "-0.6", r2_total: "146.1", r1_rank: 2, r2_rank: 1, r1_speed: "90.2", r2_speed: "90.7", r1_dpts: "87.0", r2_dpts: "89.7", r1_judges: "*18.5 19.0 19.0 19.0 *19.0", r2_judges: "19.0 19.0 19.0 *18.5 *19.0", r1_comp: "-5.1", r2_comp: "-0.6" },
                     { rank: 2, bib: "66", country: "SLO", name: "Domen Prevc", points: 287.3, r1_dist: "140.0", r1_note: "54.0", r1_wind: "-2.7", r1_total: "147.9", r2_dist: "139.0", r2_note: "53.0", r2_wind: "-2.4", r2_total: "139.4", r1_rank: 1, r2_rank: 6, r1_speed: "89.8", r2_speed: "90.2", r1_dpts: "90.6", r2_dpts: "88.8", r1_judges: "18.5 *17.5 18.0 18.0 *18.0", r2_judges: "*18.0 18.0 18.0 *16.0 17.5", r1_comp: "-2.7", r2_comp: "-2.4" },
@@ -486,6 +509,20 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 location: "Falun (SWE) - HS 95 (K-90)",
                 hill: "HS 95",
                 jury: JURY_FLAGS[2],
+                // --- NOWA SEKCJA LINKÓW ---
+                links: {
+                    quali: {
+                        label: "Kwalifikacje",
+                        fis: "https://live.fis-ski.com/jp-3070/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3070/2026JP3070RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs",
+                        fis: "https://live.fis-ski.com/jp-3071/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3071/2026JP3071RL.pdf"
+                    }
+                },
+                // --------------------------
                 results: [
                     { rank: 1, bib: "46", country: "AUT", name: "Stefan Kraft", points: 249.9, r1_dist: "97.5", r1_note: "56.5", r1_wind: "-4.1", r1_total: "127.4", r2_dist: "96.5", r2_note: "56.5", r2_wind: "-7.0", r2_total: "122.5", r1_judges: "19.0 19.0 19.0 18.5 18.5", r2_judges: "19.0 19.0 18.5 18.5 19.0", r1_comp: "0.5", r2_comp: "0.9", r1_rank: 1, r2_rank: 3, r1_speed: "82.1", r2_speed: "81.6", r1_dpts: "75.0", r2_dpts: "73.0" },
                     { rank: 2, bib: "43", country: "SLO", name: "Anze Lanisek", points: 247.7, r1_dist: "96.0", r1_note: "54.5", r1_wind: "-4.3", r1_total: "122.2", r2_dist: "96.0", r2_note: "55.5", r2_wind: "-5.7", r2_total: "125.5", r1_judges: "18.5 18.0 18.0 18.0 18.5", r2_judges: "19.0 18.5 18.5 18.5 18.0", r1_comp: "0.5", r2_comp: "0.7", r1_rank: 2, r2_rank: 1, r1_speed: "81.9", r2_speed: "81.2", r1_dpts: "72.0", r2_dpts: "72.0" },
@@ -525,6 +562,20 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 location: "Falun (SWE) - HS 132 (K-120)",
                 hill: "HS 132",
                 jury: JURY_FLAGS[3],
+                // --- NOWA SEKCJA LINKÓW ---
+                links: {
+                    quali: {
+                        label: "Kwalifikacje",
+                        fis: "https://live.fis-ski.com/jp-3072/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3072/2026JP3072RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs",
+                        fis: "https://live.fis-ski.com/jp-3073/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3073/2026JP3073RL.pdf"
+                    }
+                },
+                // --------------------------
                 results: [
                     { rank: 1, bib: "46", country: "SLO", name: "Anze Lanisek", points: 262.9, r1_dist: "129.0", r1_note: "55.5", r1_wind: "-0.1", r1_total: "131.6", r2_dist: "129.0", r2_note: "56.0", r2_wind: "-0.9", r2_total: "131.3", r1_judges: "18.5 19.0 18.0 18.5 18.5", r2_judges: "18.5 18.5 18.5 18.0 18.0", r1_comp: "0.3", r2_comp: "0.2", r1_rank: 2, r2_rank: 2, r1_speed: "89.0", r2_speed: "88.2", r1_dpts: "76.2", r2_dpts: "76.2" },
                     { rank: 2, bib: "42", country: "AUT", name: "Stephan Embacher", points: 259.9, r1_dist: "128.5", r1_note: "54.0", r1_wind: "0.35", r1_total: "127.2", r2_dist: "129.0", r2_note: "55.5", r2_wind: "0.19", r2_total: "132.7", r1_judges: "18.5 19.0 18.0 18.5 17.5", r2_judges: "18.5 18.5 18.5 18.0 18.0", r1_comp: "0.4", r2_comp: "0.2", r1_rank: 6, r2_rank: 1, r1_speed: "88.8", r2_speed: "88.3", r1_dpts: "75.3", r2_dpts: "76.2" },
@@ -578,17 +629,26 @@ const handleDownloadJpg = async (elementId, fileName) => {
                     { rank: 50, bib: "1", country: "KAZ", name: "Danil Vassilyev", points: 82.7, r1_dist: "105.0", r1_note: "45.5", r1_wind: "4.2", r1_total: "82.7", r1_rank: 50, r1_speed: "87.9", r1_dpts: "33.0", r1_judges: "16.0 15.0 15.0 14.5 15.5", r1_comp: "4.2" }
                 ]
             },
-			{id: 4,
+            {
+                id: 4,
                 date: "29.11.2025",
                 location: "Ruka (FIN) - HS 142 (Tylko jedna seria)",
                 hill: "HS 142",
                 jury: JURY_FLAGS[4],
-				// --- NOWE POLE LINKS ---
+                // --- PODMIEŃ TĘ SEKCJĘ LINKS ---
                 links: {
-                    fis: "https://live.fis-ski.com/jp-3079/results-pda.htm",
-                    pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3079/2026JP3079RL1.pdf"
+                    quali: {
+                        label: "Kwalifikacje",
+                        fis: "https://live.fis-ski.com/jp-3078/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3078/2026JP3078RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs",
+                        fis: "https://live.fis-ski.com/jp-3079/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3079/2026JP3079RL1.pdf"
+                    }
                 },
-                // -----------------------
+                // -------------------------------
                 results: [
                     { rank: 1, bib: "68", country: "SLO", name: "Anze Lanisek", points: 141.0, r1_dist: "142.0", r1_note: "57.0", r1_wind: "1.33", r1_total: "141.0", r1_rank: 1, r1_speed: "86.0", r1_dpts: "99.6", r1_judges: "19.0 19.0 19.0 19.0 18.5", r1_comp: "15.6" },
                     { rank: 2, bib: "59", country: "JPN", name: "Ren Nikaido", points: 136.4, r1_dist: "141.0", r1_note: "55.0", r1_wind: "1.40", r1_total: "136.4", r1_rank: 2, r1_speed: "86.5", r1_dpts: "97.8", r1_judges: "18.0 18.0 19.0 18.5 18.5", r1_comp: "-16.4" },
@@ -874,31 +934,143 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 date: "14.12.2025",
                 location: "Klingenthal (GER) - HS 140 (K-125)",
                 hill: "HS 140",
+                jury: {A: "GER", B: "SUI", C: "KOR", D: "AUT", E: "NOR"},
+                links: {
+                    quali: {
+                        label: "Kwalifikacje",
+                        fis: "https://live.fis-ski.com/jp-3229/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3229/2026JP3229RLQ.pdf"
+                    },
+                    comp: {
+                        label: "Konkurs",
+                        fis: "https://live.fis-ski.com/jp-3228/results-pda.htm",
+                        pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3228/2026JP3228RL.pdf"
+                    }
+                },
+                results: [
+                    { rank: 1, bib: "64", country: "SLO", name: "Domen Prevc", points: 275.1, r1_dist: "141.0", r1_note: "56.0", r1_wind: "-7.2", r1_total: "141.1", r2_dist: "140.5", r2_note: "56.0", r2_wind: "-9.9", r2_total: "134.0", r1_rank: 1, r2_rank: 1, r1_speed: "88.9", r2_speed: "88.6", r1_dpts: "88.8", r2_dpts: "87.9", r1_judges: "18.5 18.5 18.5 19.0 19.0", r2_judges: "18.5 19.0 18.5 18.5 19.0", r1_comp: "-3.7", r2_comp: "-6.4" },
+                    { rank: 2, bib: "58", country: "JPN", name: "Ren Nikaido", points: 262.1, r1_dist: "141.0", r1_note: "56.5", r1_wind: "-10.3", r1_total: "139.0", r2_dist: "135.0", r2_note: "55.5", r2_wind: "-9.4", r2_total: "123.1", r1_rank: 3, r2_rank: 6, r1_speed: "88.6", r2_speed: "88.5", r1_dpts: "88.8", r2_dpts: "78.0", r1_judges: "19.0 18.0 19.0 18.5 19.0", r2_judges: "19.0 19.5 19.0 17.5 18.5", r1_comp: "-6.8", r2_comp: "-5.9" },
+                    { rank: 3, bib: "62", country: "JPN", name: "Ryoyu Kobayashi", points: 261.0, r1_dist: "142.0", r1_note: "55.0", r1_wind: "-10.2", r1_total: "140.9", r2_dist: "133.5", r2_note: "55.0", r2_wind: "-13.0", r2_total: "120.1", r1_rank: 2, r2_rank: 8, r1_speed: "88.9", r2_speed: "88.5", r1_dpts: "90.6", r2_dpts: "75.3", r1_judges: "19.0 18.0 18.0 18.5 18.5", r2_judges: "18.5 18.5 18.0 18.5 19.0", r1_comp: "-6.7", r2_comp: "-9.5" },
+                    { rank: 4, bib: "53", country: "FRA", name: "Valentin Foubert", points: 257.4, r1_dist: "140.0", r1_note: "55.5", r1_wind: "-10.2", r1_total: "132.0", r2_dist: "137.0", r2_note: "56.0", r2_wind: "-11.7", r2_total: "125.4", r1_rank: 4, r2_rank: 4, r1_speed: "88.7", r2_speed: "88.7", r1_dpts: "87.0", r2_dpts: "81.6", r1_judges: "19.0 19.0 19.0 18.5 18.5", r2_judges: "18.0 18.0 18.5 18.5 18.5", r1_comp: "-6.7", r2_comp: "-8.2" },
+                    { rank: 5, bib: "49", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 252.5, r1_dist: "138.5", r1_note: "56.0", r1_wind: "-13.4", r1_total: "130.4", r2_dist: "133.0", r2_note: "54.5", r2_wind: "-6.8", r2_total: "122.1", r1_rank: 5, r2_rank: 7, r1_speed: "88.9", r2_speed: "88.9", r1_dpts: "84.3", r2_dpts: "74.4", r1_judges: "19.0 18.5 18.0 18.5 18.0", r2_judges: "18.0 18.0 18.5 18.0 18.0", r1_comp: "-9.9", r2_comp: "-3.3" },
+                    { rank: 6, bib: "24", country: "JPN", name: "Tomofumi Naito", points: 252.0, r1_dist: "139.5", r1_note: "51.5", r1_wind: "-12.7", r1_total: "124.9", r2_dist: "136.0", r2_note: "54.5", r2_wind: "-7.2", r2_total: "127.1", r1_rank: 11, r2_rank: 3, r1_speed: "88.7", r2_speed: "88.6", r1_dpts: "86.1", r2_dpts: "79.8", r1_judges: "16.5 18.0 17.0 18.5 16.5", r2_judges: "18.0 18.0 18.0 18.5 17.5", r1_comp: "-12.7", r2_comp: "-7.2" },
+                    { rank: 7, bib: "43", country: "NOR", name: "Halvor Egner Granerud", points: 248.8, r1_dist: "134.0", r1_note: "54.0", r1_wind: "-12.1", r1_total: "121.6", r2_dist: "138.0", r2_note: "55.5", r2_wind: "-11.7", r2_total: "127.2", r1_rank: 12, r2_rank: 2, r1_speed: "88.7", r2_speed: "88.8", r1_dpts: "76.2", r2_dpts: "83.4", r1_judges: "18.0 18.5 18.0 18.5 18.5", r2_judges: "18.0 18.0 18.0 19.0 18.5", r1_comp: "-8.6", r2_comp: "-8.2" },
+                    { rank: 8, bib: "55", country: "AUT", name: "Stephan Embacher", points: 242.2, r1_dist: "131.5", r1_note: "54.0", r1_wind: "-10.3", r1_total: "118.9", r2_dist: "136.0", r2_note: "55.5", r2_wind: "-12.0", r2_total: "123.3", r1_rank: 13, r2_rank: 5, r1_speed: "88.1", r2_speed: "88.3", r1_dpts: "71.7", r2_dpts: "79.8", r1_judges: "18.0 18.5 18.5 18.5 18.0", r2_judges: "18.0 18.0 18.0 18.5 18.5", r1_comp: "-6.8", r2_comp: "-8.5" },
+                    { rank: 9, bib: "52", country: "AUT", name: "Manuel Fettner", points: 242.1, r1_dist: "138.5", r1_note: "54.0", r1_wind: "-13.0", r1_total: "128.8", r2_dist: "128.0", r2_note: "52.5", r2_wind: "-4.6", r2_total: "113.3", r1_rank: 6, r2_rank: 13, r1_speed: "89.1", r2_speed: "89.0", r1_dpts: "84.3", r2_dpts: "65.4", r1_judges: "18.0 17.5 18.0 17.5 18.0", r2_judges: "18.0 18.5 17.5 17.5 17.5", r1_comp: "-9.5", r2_comp: "-1.1" },
+                    { rank: 10, bib: "61", country: "GER", name: "Philipp Raimund", points: 238.0, r1_dist: "137.0", r1_note: "52.5", r1_wind: "-11.1", r1_total: "126.5", r2_dist: "127.5", r2_note: "52.5", r2_wind: "-5.5", r2_total: "111.5", r1_rank: 9, r2_rank: 15, r1_speed: "89.2", r2_speed: "88.8", r1_dpts: "81.6", r2_dpts: "64.5", r1_judges: "17.5 17.5 17.0 18.0 17.5", r2_judges: "17.5 18.0 17.5 17.5 17.5", r1_comp: "-7.6", r2_comp: "-2.0" },
+                    { rank: 11, bib: "59", country: "AUT", name: "Stefan Kraft", points: 237.1, r1_dist: "137.0", r1_note: "56.5", r1_wind: "-13.5", r1_total: "128.1", r2_dist: "127.0", r2_note: "52.5", r2_wind: "-7.1", r2_total: "109.0", r1_rank: 7, r2_rank: 17, r1_speed: "89.2", r2_speed: "89.3", r1_dpts: "81.6", r2_dpts: "63.6", r1_judges: "18.5 17.5 19.0 17.5 18.5", r2_judges: "19.5 19.0 17.0 17.5 18.0", r1_comp: "-10.0", r2_comp: "-3.6" },
+                    { rank: 12, bib: "56", country: "GER", name: "Felix Hoffmann", points: 234.2, r1_dist: "130.0", r1_note: "52.5", r1_wind: "-10.4", r1_total: "114.6", r2_dist: "134.0", r2_note: "55.0", r2_wind: "-11.6", r2_total: "119.6", r1_rank: 19, r2_rank: 9, r1_speed: "88.5", r2_speed: "88.4", r1_dpts: "69.0", r2_dpts: "76.2", r1_judges: "17.5 18.0 18.0 18.5 17.5", r2_judges: "17.5 17.5 18.5 18.0 18.5", r1_comp: "-6.9", r2_comp: "-8.1" },
+                    { rank: 13, bib: "41", country: "NOR", name: "Johann Andre Forfang", points: 233.5, r1_dist: "130.5", r1_note: "54.0", r1_wind: "-9.1", r1_total: "118.3", r2_dist: "132.5", r2_note: "52.5", r2_wind: "-10.8", r2_total: "115.2", r1_rank: 14, r2_rank: 10, r1_speed: "88.8", r2_speed: "88.6", r1_dpts: "69.9", r2_dpts: "73.5", r1_judges: "18.0 17.5 18.0 18.0 18.0", r2_judges: "17.5 18.0 17.5 17.5 17.5", r1_comp: "-5.6", r2_comp: "-7.3" },
+                    { rank: 14, bib: "54", country: "BUL", name: "Vladimir Zografski", points: 230.9, r1_dist: "131.0", r1_note: "53.5", r1_wind: "-11.3", r1_total: "116.5", r2_dist: "130.0", r2_note: "53.5", r2_wind: "-8.1", r2_total: "114.4", r1_rank: 15, r2_rank: 11, r1_speed: "88.3", r2_speed: "88.2", r1_dpts: "70.8", r2_dpts: "69.0", r1_judges: "18.0 18.0 18.0 18.0 17.5", r2_judges: "17.5 18.0 17.5 18.0 17.5", r1_comp: "-7.8", r2_comp: "-4.6" },
+                    { rank: 15, bib: "48", country: "SLO", name: "Timi Zajc", points: 227.7, r1_dist: "136.0", r1_note: "56.5", r1_wind: "-11.9", r1_total: "127.9", r2_dist: "122.5", r2_note: "52.0", r2_wind: "-7.7", r2_total: "99.8", r1_rank: 8, r2_rank: 26, r1_speed: "88.5", r2_speed: "88.5", r1_dpts: "79.8", r2_dpts: "55.5", r1_judges: "18.5 17.0 19.0 17.5 19.0", r2_judges: "19.0 18.0 16.5 17.5 17.5", r1_comp: "-8.4", r2_comp: "-4.2" },
+                    { rank: 16, bib: "47", country: "NOR", name: "Marius Lindvik", points: 226.0, r1_dist: "135.5", r1_note: "55.0", r1_wind: "-12.0", r1_total: "125.4", r2_dist: "123.5", r2_note: "51.0", r2_wind: "-7.7", r2_total: "100.6", r1_rank: 10, r2_rank: 25, r1_speed: "88.0", r2_speed: "88.2", r1_dpts: "78.9", r2_dpts: "57.3", r1_judges: "18.5 17.0 18.5 17.0 17.5", r2_judges: "18.5 18.0 17.0 17.0 17.0", r1_comp: "-8.5", r2_comp: "-4.2" },
+                    { rank: 17, bib: "50", country: "JPN", name: "Naoki Nakamura", points: 225.4, r1_dist: "128.5", r1_note: "52.5", r1_wind: "-8.4", r1_total: "113.9", r2_dist: "130.0", r2_note: "53.5", r2_wind: "-11.0", r2_total: "111.5", r1_rank: 20, r2_rank: 15, r1_speed: "88.6", r2_speed: "88.5", r1_dpts: "66.3", r2_dpts: "69.0", r1_judges: "17.5 18.0 17.5 17.5 18.0", r2_judges: "17.5 17.5 18.5 18.0 17.5", r1_comp: "-4.9", r2_comp: "-7.5" },
+                    { rank: 18, bib: "60", country: "AUT", name: "Daniel Tschofenig", points: 224.1, r1_dist: "128.0", r1_note: "53.5", r1_wind: "-12.5", r1_total: "109.9", r2_dist: "129.0", r2_note: "53.0", r2_wind: "-6.0", r2_total: "114.2", r1_rank: 27, r2_rank: 12, r1_speed: "88.1", r2_speed: "88.3", r1_dpts: "65.4", r2_dpts: "67.2", r1_judges: "18.0 18.0 18.5 17.5 18.0", r2_judges: "17.5 17.5 17.5 18.0 17.5", r1_comp: "-9.0", r2_comp: "-2.5" },
+                    { rank: 19, bib: "35", country: "AUT", name: "Jonas Schuster", points: 222.0, r1_dist: "126.0", r1_note: "52.5", r1_wind: "-8.4", r1_total: "109.4", r2_dist: "128.5", r2_note: "52.5", r2_wind: "-6.2", r2_total: "112.6", r1_rank: 28, r2_rank: 14, r1_speed: "88.7", r2_speed: "88.7", r1_dpts: "61.8", r2_dpts: "66.3", r1_judges: "17.5 17.5 17.5 17.5 17.0", r2_judges: "17.5 17.5 17.5 18.0 17.5", r1_comp: "-4.9", r2_comp: "-2.7" },
+                    { rank: 20, bib: "42", country: "POL", name: "Piotr Zyla", points: 221.1, r1_dist: "130.5", r1_note: "53.5", r1_wind: "-10.9", r1_total: "116.0", r2_dist: "129.0", r2_note: "52.5", r2_wind: "-14.6", r2_total: "105.1", r1_rank: 17, r2_rank: 21, r1_speed: "88.7", r2_speed: "88.5", r1_dpts: "69.9", r2_dpts: "67.2", r1_judges: "18.0 17.5 17.5 18.0 18.0", r2_judges: "18.0 17.5 17.0 17.5 17.5", r1_comp: "-7.4", r2_comp: "-11.1" },
+                    { rank: 21, bib: "25", country: "POL", name: "Pawel Wasek", points: 220.7, r1_dist: "132.0", r1_note: "52.5", r1_wind: "-13.3", r1_total: "111.8", r2_dist: "127.0", r2_note: "52.5", r2_wind: "-7.2", r2_total: "108.9", r1_rank: 22, r2_rank: 19, r1_speed: "88.9", r2_speed: "88.7", r1_dpts: "72.6", r2_dpts: "63.6", r1_judges: "17.5 17.5 16.5 17.5 18.0", r2_judges: "18.0 17.0 17.5 17.5 17.5", r1_comp: "-13.3", r2_comp: "-3.7" },
+                    { rank: 22, bib: "36", country: "FIN", name: "Antti Aalto", points: 217.8, r1_dist: "126.0", r1_note: "52.5", r1_wind: "-9.0", r1_total: "108.8", r2_dist: "128.0", r2_note: "52.5", r2_wind: "-8.9", r2_total: "109.0", r1_rank: 29, r2_rank: 17, r1_speed: "88.8", r2_speed: "88.6", r1_dpts: "61.8", r2_dpts: "65.4", r1_judges: "17.0 17.5 17.5 17.5 17.5", r1_comp: "-5.5", r2_comp: "-5.4" },
+                    { rank: 23, bib: "45", country: "SUI", name: "Gregor Deschwanden", points: 217.2, r1_dist: "129.0", r1_note: "51.5", r1_wind: "-11.2", r1_total: "111.0", r2_dist: "127.0", r2_note: "50.5", r2_wind: "-7.9", r2_total: "106.2", r1_rank: 24, r2_rank: 20, r1_speed: "89.0", r2_speed: "89.1", r1_dpts: "67.2", r2_dpts: "63.6", r1_judges: "17.0 17.5 17.5 17.5 17.0", r2_judges: "18.0 17.0 16.5 16.5 16.5", r1_comp: "-7.7", r2_comp: "-4.4" },
+                    { rank: 24, bib: "26", country: "KAZ", name: "Danil Vassilyev", points: 216.8, r1_dist: "134.5", r1_note: "53.0", r1_wind: "-14.0", r1_total: "116.1", r2_dist: "127.5", r2_note: "51.0", r2_wind: "-14.8", r2_total: "100.7", r1_rank: 16, r2_rank: 24, r1_speed: "88.3", r2_speed: "87.9", r1_dpts: "77.1", r2_dpts: "64.5", r1_judges: "18.0 17.5 17.5 17.0 18.0", r2_judges: "16.5 17.5 17.0 17.0 17.0", r1_comp: "-14.0", r2_comp: "-11.3" },
+                    { rank: 25, bib: "63", country: "SLO", name: "Anze Lanisek", points: 215.9, r1_dist: "128.5", r1_note: "52.0", r1_wind: "-7.0", r1_total: "114.8", r2_dist: "127.0", r2_note: "46.0", r2_wind: "-8.5", r2_total: "101.1", r1_rank: 18, r2_rank: 23, r1_speed: "88.7", r2_speed: "88.5", r1_dpts: "66.3", r2_dpts: "63.6", r1_judges: "17.5 15.5 17.0 15.5 17.5", r2_judges: "17.0 17.5 15.0 14.5 15.5", r1_comp: "-3.5", r2_comp: "-5.0" },
+                    { rank: 26, bib: "46", country: "GER", name: "Pius Paschke", points: 214.2, r1_dist: "128.0", r1_note: "51.5", r1_wind: "-10.2", r1_total: "110.2", r2_dist: "125.0", r2_note: "51.0", r2_wind: "-7.0", r2_total: "104.0", r1_rank: 26, r2_rank: 22, r1_speed: "88.4", r2_speed: "88.3", r1_dpts: "65.4", r2_dpts: "60.0", r1_judges: "17.0 17.0 17.0 17.0 17.5", r2_judges: "17.0 17.5 17.0 17.0 16.5", r1_comp: "-6.7", r2_comp: "-3.5" },
+                    { rank: 27, bib: "34", country: "JPN", name: "Yukiya Sato", points: 207.4, r1_dist: "133.5", r1_note: "52.0", r1_wind: "-14.1", r1_total: "113.2", r2_dist: "121.0", r2_note: "49.5", r2_wind: "-8.1", r2_total: "94.2", r1_rank: 21, r2_rank: 29, r1_speed: "88.9", r2_speed: "88.4", r1_dpts: "75.3", r2_dpts: "52.8", r1_judges: "17.5 16.5 17.5 16.5 17.0", r2_judges: "16.5 17.5 16.5 16.0 16.5", r1_comp: "-14.1", r2_comp: "-4.6" },
+                    { rank: 28, bib: "33", country: "POL", name: "Dawid Kubacki", points: 207.2, r1_dist: "129.5", r1_note: "52.5", r1_wind: "-10.2", r1_total: "110.4", r2_dist: "121.5", r2_note: "51.0", r2_wind: "-7.9", r2_total: "96.8", r1_rank: 25, r2_rank: 28, r1_speed: "89.0", r2_speed: "88.7", r1_dpts: "68.1", r2_dpts: "53.7", r1_judges: "17.5 17.0 17.5 17.0 17.5", r2_judges: "17.0 17.5 17.5 17.0 16.5", r1_comp: "-10.2", r2_comp: "-4.4" },
+                    { rank: 29, bib: "13", country: "SUI", name: "Sandro Hauswirth", points: 206.7, r1_dist: "129.0", r1_note: "52.5", r1_wind: "-11.3", r1_total: "108.4", r2_dist: "125.0", r2_note: "50.5", r2_wind: "-12.2", r2_total: "98.3", r1_rank: 30, r2_rank: 27, r1_speed: "89.3", r2_speed: "88.8", r1_dpts: "67.2", r2_dpts: "60.0", r1_judges: "17.5 17.0 17.5 17.0 17.5", r2_judges: "17.0 17.5 17.0 16.5 16.5", r1_comp: "-11.3", r2_comp: "-8.7" },
+                    { rank: 30, bib: "19", country: "USA", name: "Tate Frantz", points: 179.3, r1_dist: "133.0", r1_note: "53.0", r1_wind: "-15.7", r1_total: "111.7", r2_dist: "110.5", r2_note: "41.0", r2_wind: "-7.3", r2_total: "67.6", r1_rank: 23, r2_rank: 30, r1_speed: "88.9", r2_speed: "88.7", r1_dpts: "74.4", r2_dpts: "33.9", r1_judges: "17.5 14.0 17.0 13.5 17.5", r2_judges: "14.0 18.0 18.0 13.5 13.5", r1_comp: "-15.7", r2_comp: "-3.8" },
+                    { rank: 31, bib: "44", country: "POL", name: "Kamil Stoch", points: 108.1, r1_dist: "128.0", r1_note: "53.5", r1_wind: "-14.3", r1_total: "108.1", r1_rank: 31, r1_speed: "88.2", r1_dpts: "65.4", r1_judges: "17.5 18.0 17.5 18.0 18.0", r1_comp: "-10.8" },
+                    { rank: 32, bib: "51", country: "POL", name: "Kacper Tomasiak", points: 107.8, r1_dist: "125.5", r1_note: "52.0", r1_wind: "-8.6", r1_total: "107.8", r1_rank: 32, r1_speed: "88.8", r1_dpts: "60.9", r1_judges: "17.0 17.5 17.0 17.5 17.5", r1_comp: "-5.1" },
+                    { rank: 33, bib: "20", country: "KAZ", name: "Ilya Mizernykh", points: 107.1, r1_dist: "127.0", r1_note: "51.5", r1_wind: "-8.0", r1_total: "107.1", r1_rank: 33, r1_speed: "89.0", r1_dpts: "63.6", r1_judges: "17.5 17.0 17.0 17.5 17.0", r1_comp: "-8.0" },
+                    { rank: 34, bib: "31", country: "SLO", name: "Rok Oblak", points: 104.0, r1_dist: "127.5", r1_note: "52.5", r1_wind: "-13.0", r1_total: "104.0", r1_rank: 34, r1_speed: "89.5", r1_dpts: "64.5", r1_judges: "17.5 18.0 17.0 17.5 17.5", r1_comp: "-13.0" },
+                    { rank: 35, bib: "57", country: "AUT", name: "Jan Hoerl", points: 103.7, r1_dist: "123.5", r1_note: "51.0", r1_wind: "-8.1", r1_total: "103.7", r1_rank: 35, r1_speed: "88.6", r1_dpts: "57.3", r1_judges: "17.0 17.0 17.0 17.0 17.0", r1_comp: "-4.6" },
+                    { rank: 36, bib: "39", country: "EST", name: "Artti Aigro", points: 103.6, r1_dist: "123.5", r1_note: "49.0", r1_wind: "-6.2", r1_total: "103.6", r1_rank: 36, r1_speed: "88.3", r1_dpts: "57.3", r1_judges: "16.0 16.5 16.0 16.5 16.5", r1_comp: "-2.7" },
+                    { rank: 37, bib: "30", country: "POL", name: "Maciej Kot", points: 101.4, r1_dist: "126.5", r1_note: "51.0", r1_wind: "-12.3", r1_total: "101.4", r1_rank: 37, r1_speed: "88.7", r1_dpts: "62.7", r1_judges: "17.0 16.5 17.0 17.0 17.0", r1_comp: "-12.3" },
+                    { rank: 38, bib: "29", country: "NOR", name: "Benjamin Oestvold", points: 100.4, r1_dist: "125.5", r1_note: "50.5", r1_wind: "-11.0", r1_total: "100.4", r1_rank: 38, r1_speed: "89.3", r1_dpts: "60.9", r1_judges: "17.0 17.0 17.0 16.5 16.5", r1_comp: "-11.0" },
+                    { rank: 39, bib: "28", country: "USA", name: "Kevin Bickner", points: 99.5, r1_dist: "126.0", r1_note: "51.0", r1_wind: "-13.3", r1_total: "99.5", r1_rank: 39, r1_speed: "88.9", r1_dpts: "61.8", r1_judges: "17.0 17.5 17.0 17.0 17.0", r1_comp: "-13.3" },
+                    { rank: 40, bib: "8", country: "FIN", name: "Vilho Palosaari", points: 98.1, r1_dist: "123.5", r1_note: "50.0", r1_wind: "-9.2", r1_total: "98.1", r1_rank: 40, r1_speed: "88.9", r1_dpts: "57.3", r1_judges: "17.0 16.5 16.5 16.0 17.0", r1_comp: "-9.2" },
+                    { rank: 41, bib: "38", country: "USA", name: "Jason Colby", points: 95.5, r1_dist: "121.0", r1_note: "49.5", r1_wind: "-10.3", r1_total: "95.5", r1_rank: 41, r1_speed: "88.6", r1_dpts: "52.8", r1_judges: "16.5 17.0 17.0 16.0 16.0", r1_comp: "-6.8" },
+                    { rank: 42, bib: "5", country: "FRA", name: "Jules Chervet", points: 90.7, r1_dist: "120.0", r1_note: "49.5", r1_wind: "-9.8", r1_total: "90.7", r1_rank: 42, r1_speed: "89.0", r1_dpts: "51.0", r1_judges: "17.0 16.5 16.5 16.5 16.5", r1_comp: "-9.8" },
+                    { rank: 43, bib: "16", country: "GER", name: "Luca Roth", points: 90.0, r1_dist: "121.5", r1_note: "49.5", r1_wind: "-13.2", r1_total: "90.0", r1_rank: 43, r1_speed: "89.4", r1_dpts: "53.7", r1_judges: "16.5 16.5 16.5 16.5 16.5", r1_comp: "-13.2" },
+                    { rank: 44, bib: "12", country: "USA", name: "Erik Belshaw", points: 89.4, r1_dist: "121.0", r1_note: "50.5", r1_wind: "-13.9", r1_total: "89.4", r1_rank: 44, r1_speed: "88.7", r1_dpts: "52.8", r1_judges: "17.0 17.0 16.5 16.5 17.0", r1_comp: "-13.9" },
+                    { rank: 45, bib: "11", country: "SUI", name: "Killian Peier", points: 87.9, r1_dist: "119.0", r1_note: "50.5", r1_wind: "-11.8", r1_total: "87.9", r1_rank: 45, r1_speed: "89.2", r1_dpts: "49.2", r1_judges: "17.0 16.5 17.0 16.5 17.0", r1_comp: "-11.8" },
+                    { rank: 46, bib: "40", country: "FIN", name: "Niko Kytosaho", points: 86.0, r1_dist: "115.0", r1_note: "48.0", r1_wind: "-7.5", r1_total: "86.0", r1_rank: 46, r1_speed: "88.4", r1_dpts: "42.0", r1_judges: "16.0 16.0 16.5 16.0 15.5", r1_comp: "-4.0" },
+                    { rank: 47, bib: "23", country: "ITA", name: "Alex Insam", points: 84.4, r1_dist: "119.5", r1_note: "49.5", r1_wind: "-15.2", r1_total: "84.4", r1_rank: 47, r1_speed: "88.8", r1_dpts: "50.1", r1_judges: "16.5 16.5 16.5 16.5 16.0", r1_comp: "-15.2" },
+                    { rank: 48, bib: "17", country: "UKR", name: "Vitaliy Kalinichenko", points: 84.2, r1_dist: "117.5", r1_note: "48.5", r1_wind: "-10.8", r1_total: "84.2", r1_rank: 48, r1_speed: "89.0", r1_dpts: "46.5", r1_judges: "16.5 16.0 16.5 16.0 15.5", r1_comp: "-10.8" },
+                    { rank: 49, bib: "22", country: "SUI", name: "Simon Ammann", points: 76.8, r1_dist: "112.0", r1_note: "45.5", r1_wind: "-5.3", r1_total: "76.8", r1_rank: 49, r1_speed: "89.3", r1_dpts: "36.6", r1_judges: "15.0 14.0 15.0 15.5 15.5", r1_comp: "-5.3" },
+                    { rank: "DSQ", bib: "3", country: "TUR", name: "Fatih Arda Ipcioglu", points: 0, r1_dist: "-", r1_note: "-", r1_wind: "-", r1_total: "DSQ", r1_rank: "-", r1_speed: "-", r1_dpts: "-", r1_judges: "", r1_comp: "-" }
+                ]
+            },
+            {
+                id: 10,
+                date: "20.12.2025",
+                location: "Engelberg (SUI) - HS 140 (K-125)",
+                hill: "HS 140",
                 jury: {},
                 upcomingData: {
                     quali: {
-                        time: "14:30",
-                        fis: "https://live.fis-ski.com/jp-3229/results-pda.htm",
-                        berkutschi: "https://live.berkutschi.com/skijumping/3229"
+                        time: "15:45 (19.12)", // Kwalifikacje w piątek
+                        fis: "https://live.fis-ski.com",
+                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
                     },
                     comp: {
-                        time: "16:00",
-                        fis: "https://live.fis-ski.com/jp-3228/results-pda.htm",
-                        berkutschi: "https://live.berkutschi.com/skijumping/3228"
+                        time: "16:00 (20.12)",
+                        fis: "https://live.fis-ski.com",
+                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
                     },
                     broadcast: [
                         { 
-                            day: "Niedziela, 14.12.2025", 
+                            day: "Piątek, 19.12.2025", 
                             events: [
-                                "14:00 - Kwalifikacje (Eurosport 1, Player/HBO Max)",
-                                "15:15 - Konkurs indywidualny (Eurosport 1, Player/HBO Max)",
-                                "15:35 - Konkurs indywidualny (TVN)"
+                                "13:45 - Oficjalny trening",
+                                "15:15 - Kwalifikacje (Eurosport 1)",
+                                "15:35 - Kwalifikacje (Max)",
+                                "15:45 - START KWALIFIKACJI"
+                            ] 
+                        },
+                        { 
+                            day: "Sobota, 20.12.2025", 
+                            events: [
+                                "15:30 - Konkurs (Eurosport 1)",
+                                "15:35 - Konkurs (TVN)",
+                                "15:50 - Konkurs (Max)",
+                                "16:00 - START KONKURSU"
                             ] 
                         }
                     ]
                 },
                 results: []
-            }
+            },
+            {
+                id: 11,
+                date: "21.12.2025",
+                location: "Engelberg (SUI) - HS 140 (K-125)",
+                hill: "HS 140",
+                jury: {},
+                upcomingData: {
+                    quali: {
+                        time: "14:30",
+                        fis: "https://live.fis-ski.com",
+                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
+                    },
+                    comp: {
+                        time: "16:00",
+                        fis: "https://live.fis-ski.com",
+                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
+                    },
+                    broadcast: [
+                        { 
+                            day: "Niedziela, 21.12.2025", 
+                            events: [
+                                "14:20 - Kwalifikacje i Konkurs (Eurosport 1 / Max)",
+                                "14:30 - START KWALIFIKACJI",
+                                "15:40 - Konkurs (TVN)",
+                                "16:00 - START KONKURSU"
+                            ] 
+                        }
+                    ]
+                },
+                results: []
+            },
         ];
 
         // --- 4. KOMPONENTY APLIKACJI ---
@@ -1293,7 +1465,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                                         </div>
                                         <h3 className="text-xl font-bold text-slate-800 mb-2">Konkurs odwołany</h3>
                                         <p className="text-slate-500 mb-6">
-                                            Dzisiejszy Puchar Świata w skokach narciarskich w Ruka (FIN) został odwołany przez jury. Wiatr wiejący z prędkością do 11 m/s uniemożliwiał rywalizację.
+                                            Dzisiejszy Puchar Świata w skokach narciarskich w Ruka (FIN) został odwołany przez jury. Wiatr wiejący z prędkością do 11 m/s uniemożliwiał rywalizację. Kwalifikacje do konkursu również się nie odbyły.
                                         </p>
                                     </>
                                 )}
@@ -1811,7 +1983,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
             );
         };
 
-        // --- NOWY KOMPONENT: TERMINARZ ---
+        // --- NOWY KOMPONENT: TERMINARZ (ZAKTUALIZOWANY NA ENGELBERG) ---
         const Schedule = () => {
             return (
                 <div className="animate-fade-in space-y-6">
@@ -1819,56 +1991,73 @@ const handleDownloadJpg = async (elementId, fileName) => {
                         {/* Nagłówek */}
                         <h2 className="text-lg md:text-xl font-bold text-yellow-400 mb-8 flex items-center gap-3 border-b border-slate-700 pb-4 tracking-wide uppercase">
                             <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]"></span>
-                            Plan Transmisji TV (Klingenthal):
+                            Plan Transmisji TV (Engelberg):
                         </h2>
 
                         <div className="space-y-8">
                             {/* PIĄTEK - Niebieska Linia */}
                             <div className="relative pl-5">
                                 <div className="absolute left-0 top-1 bottom-1 w-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
-                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Piątek 12.12</h3>
-                                <div className="space-y-1">
+                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Piątek 19.12</h3>
+                                <div className="space-y-3">
+                                    <div className="text-sm md:text-base text-slate-300">
+                                        <span className="font-mono text-slate-500 mr-2">13:45</span> Oficjalny trening
+                                    </div>
                                     <div className="text-base md:text-lg">
-                                        <span className="text-blue-400 font-bold font-mono mr-2">19:30</span> 
+                                        <span className="text-blue-400 font-bold font-mono mr-2">15:45</span> 
                                         <span className="font-bold tracking-tight">KWALIFIKACJE</span>
                                     </div>
-                                    <div className="text-slate-400 text-sm md:text-base pl-0">(Eurosport 1, Player/HBO Max od 19:00)</div>
+                                    <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2">
+                                        📺 Eurosport 1 (15:15) <br/>
+                                        💻 Max (15:35)
+                                    </div>
                                 </div>
                             </div>
 
                             {/* SOBOTA - Zielona Linia */}
                             <div className="relative pl-5">
                                 <div className="absolute left-0 top-1 bottom-1 w-1 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Sobota 13.12</h3>
-                                <div className="space-y-1">
+                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Sobota 20.12</h3>
+                                <div className="space-y-3">
+                                    <div className="text-sm md:text-base text-slate-300">
+                                        <span className="font-mono text-slate-500 mr-2">15:00</span> Seria próbna
+                                    </div>
                                     <div className="text-base md:text-lg">
-                                        <span className="text-blue-400 font-bold font-mono mr-2">15:45</span> 
+                                        <span className="text-emerald-400 font-bold font-mono mr-2">16:00</span> 
                                         <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
                                     </div>
-                                    <div className="text-slate-400 text-sm md:text-base pl-0">(TVN od 15:25; Eurosport 1, Player/HBO Max od 15:15)</div>
+                                    <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2">
+                                        📺 Eurosport 1 (15:30) <br/>
+                                        📺 TVN (15:35) <br/>
+                                        💻 Max (15:50)
+                                    </div>
                                 </div>
                             </div>
 
                             {/* NIEDZIELA - Fioletowa Linia */}
                             <div className="relative pl-5">
                                 <div className="absolute left-0 top-1 bottom-1 w-1 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
-                                <h3 className="font-bold text-lg mb-3 uppercase tracking-wider text-white">Niedziela 14.12</h3>
-                                <div className="space-y-6">
-                                    {/* Wydarzenie 1 */}
+                                <h3 className="font-bold text-lg mb-3 uppercase tracking-wider text-white">Niedziela 21.12</h3>
+                                <div className="space-y-4">
+                                    {/* Kwalifikacje */}
                                     <div>
                                         <div className="text-base md:text-lg">
-                                            <span className="text-blue-400 font-bold font-mono mr-2">14:30</span> 
+                                            <span className="text-purple-300 font-bold font-mono mr-2">14:30</span> 
                                             <span className="font-bold tracking-tight">KWALIFIKACJE</span>
                                         </div>
-                                        <div className="text-slate-400 text-sm md:text-base pl-0">(Eurosport 1, Player/HBO Max od 14:00)</div>
+                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2 mt-1">
+                                            📺 Eurosport 1 / Max (14:20)
+                                        </div>
                                     </div>
-                                    {/* Wydarzenie 2 */}
+                                    {/* Konkurs */}
                                     <div>
                                         <div className="text-base md:text-lg">
-                                            <span className="text-blue-400 font-bold font-mono mr-2">16:00</span> 
+                                            <span className="text-purple-400 font-bold font-mono mr-2">16:00</span> 
                                             <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
                                         </div>
-                                        <div className="text-slate-400 text-sm md:text-base pl-0">(TVN od 15:35; Eurosport 1, Player/HBO Max od 15:15)</div>
+                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2 mt-1">
+                                            📺 TVN (15:40)
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1966,7 +2155,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">14.12 godzina 14:45</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">15.12 godzina 00:00</span>
                                     </span>
                                 </div>
                             </div>
