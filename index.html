@@ -1008,14 +1008,14 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 jury: {},
                 upcomingData: {
                     quali: {
-                        time: "15:45 (19.12)", // Kwalifikacje w piątek
-                        fis: "https://live.fis-ski.com",
-                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
+                        time: "15:45 (Pt)", 
+                        fis: "https://live.fis-ski.com/jp-3096/results-pda.htm",
+                        berkutschi: "https://live.berkutschi.com/skijumping/3096"
                     },
                     comp: {
-                        time: "16:00 (20.12)",
-                        fis: "https://live.fis-ski.com",
-                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
+                        time: "16:00 (Sb)",
+                        fis: "https://live.fis-ski.com/jp-3098/results-pda.htm",
+                        berkutschi: "https://live.berkutschi.com/skijumping/3098"
                     },
                     broadcast: [
                         { 
@@ -1049,13 +1049,13 @@ const handleDownloadJpg = async (elementId, fileName) => {
                 upcomingData: {
                     quali: {
                         time: "14:30",
-                        fis: "https://live.fis-ski.com",
-                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
+                        fis: "https://live.fis-ski.com/jp-3100/results-pda.htm",
+                        berkutschi: "https://live.berkutschi.com/skijumping/3100"
                     },
                     comp: {
                         time: "16:00",
-                        fis: "https://live.fis-ski.com",
-                        berkutschi: "https://berkutschi.com/pl/front/live_ticker"
+                        fis: "https://live.fis-ski.com/jp-3102/results-pda.htm",
+                        berkutschi: "https://live.berkutschi.com/skijumping/3102"
                     },
                     broadcast: [
                         { 
@@ -1983,8 +1983,30 @@ const handleDownloadJpg = async (elementId, fileName) => {
             );
         };
 
-        // --- NOWY KOMPONENT: TERMINARZ (ZAKTUALIZOWANY NA ENGELBERG) ---
-        const Schedule = () => {
+        // --- NOWY KOMPONENT: TERMINARZ (DYNAMICZNE LINKI Z DANYCH) ---
+        const Schedule = ({ contests }) => {
+            // Pobieramy dane z Twojej bazy (INITIAL_CONTESTS)
+            // ID 10 to Engelberg (Sobota) - zawiera też dane o kwalifikacjach w Piątek
+            const contestSat = contests.find(c => c.id === 10);
+            // ID 11 to Engelberg (Niedziela)
+            const contestSun = contests.find(c => c.id === 11);
+
+            // Komponent pomocniczy do wyświetlania przycisków
+            // Pobiera linki bezpośrednio z przekazanego obiektu (data)
+            const LiveButtons = ({ data }) => {
+                if (!data) return null;
+                return (
+                    <div className="flex flex-wrap gap-3 mt-3">
+                        <a href={data.fis} target="_blank" rel="noreferrer" className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 text-white text-[10px] md:text-xs font-bold uppercase px-3 py-1.5 rounded transition-colors shadow-sm">
+                            <ExternalLink size={11} /> FIS Live
+                        </a>
+                        <a href={data.berkutschi} target="_blank" rel="noreferrer" className="flex items-center gap-1 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-[10px] md:text-xs font-bold uppercase px-3 py-1.5 rounded transition-colors shadow-sm">
+                            <ExternalLink size={11} /> Berkutschi
+                        </a>
+                    </div>
+                );
+            };
+
             return (
                 <div className="animate-fade-in space-y-6">
                     <div className="bg-slate-900 text-white p-6 md:p-8 rounded-xl shadow-lg border border-slate-700 max-w-3xl mx-auto">
@@ -1994,70 +2016,92 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             Plan Transmisji TV (Engelberg):
                         </h2>
 
-                        <div className="space-y-8">
+                        <div className="space-y-10">
+                            
                             {/* PIĄTEK - Niebieska Linia */}
-                            <div className="relative pl-5">
+                            <div className="relative pl-6">
                                 <div className="absolute left-0 top-1 bottom-1 w-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
-                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Piątek 19.12</h3>
-                                <div className="space-y-3">
+                                <h3 className="font-bold text-lg mb-4 uppercase tracking-wider text-white">Piątek 19.12</h3>
+                                <div className="space-y-5">
                                     <div className="text-sm md:text-base text-slate-300">
                                         <span className="font-mono text-slate-500 mr-2">13:45</span> Oficjalny trening
                                     </div>
-                                    <div className="text-base md:text-lg">
-                                        <span className="text-blue-400 font-bold font-mono mr-2">15:45</span> 
-                                        <span className="font-bold tracking-tight">KWALIFIKACJE</span>
-                                    </div>
-                                    <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2">
-                                        📺 Eurosport 1 (15:15) <br/>
-                                        💻 Max (15:35)
+                                    <div>
+                                        <div className="text-base md:text-lg mb-1">
+                                            <span className="text-blue-400 font-bold font-mono mr-2">15:45</span> 
+                                            <span className="font-bold tracking-tight">KWALIFIKACJE</span>
+                                        </div>
+                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-3 mb-3 leading-relaxed">
+                                            📺 Eurosport 1 (15:15) <br/>
+                                            💻 Max (15:35)
+                                        </div>
+                                        {/* Linki pobierane z contestSat (ID 10) -> quali */}
+                                        {contestSat && contestSat.upcomingData && (
+                                            <LiveButtons data={contestSat.upcomingData.quali} />
+                                        )}
                                     </div>
                                 </div>
                             </div>
 
                             {/* SOBOTA - Zielona Linia */}
-                            <div className="relative pl-5">
+                            <div className="relative pl-6">
                                 <div className="absolute left-0 top-1 bottom-1 w-1 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-                                <h3 className="font-bold text-lg mb-2 uppercase tracking-wider text-white">Sobota 20.12</h3>
-                                <div className="space-y-3">
+                                <h3 className="font-bold text-lg mb-4 uppercase tracking-wider text-white">Sobota 20.12</h3>
+                                <div className="space-y-5">
                                     <div className="text-sm md:text-base text-slate-300">
                                         <span className="font-mono text-slate-500 mr-2">15:00</span> Seria próbna
                                     </div>
-                                    <div className="text-base md:text-lg">
-                                        <span className="text-emerald-400 font-bold font-mono mr-2">16:00</span> 
-                                        <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
-                                    </div>
-                                    <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2">
-                                        📺 Eurosport 1 (15:30) <br/>
-                                        📺 TVN (15:35) <br/>
-                                        💻 Max (15:50)
+                                    <div>
+                                        <div className="text-base md:text-lg mb-1">
+                                            <span className="text-emerald-400 font-bold font-mono mr-2">16:00</span> 
+                                            <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
+                                        </div>
+                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-3 mb-3 leading-relaxed">
+                                            📺 Eurosport 1 (15:30) <br/>
+                                            📺 TVN (15:35) <br/>
+                                            💻 Max (15:50)
+                                        </div>
+                                        {/* Linki pobierane z contestSat (ID 10) -> comp */}
+                                        {contestSat && contestSat.upcomingData && (
+                                            <LiveButtons data={contestSat.upcomingData.comp} />
+                                        )}
                                     </div>
                                 </div>
                             </div>
 
                             {/* NIEDZIELA - Fioletowa Linia */}
-                            <div className="relative pl-5">
+                            <div className="relative pl-6">
                                 <div className="absolute left-0 top-1 bottom-1 w-1 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
-                                <h3 className="font-bold text-lg mb-3 uppercase tracking-wider text-white">Niedziela 21.12</h3>
-                                <div className="space-y-4">
+                                <h3 className="font-bold text-lg mb-4 uppercase tracking-wider text-white">Niedziela 21.12</h3>
+                                <div className="space-y-8">
                                     {/* Kwalifikacje */}
                                     <div>
-                                        <div className="text-base md:text-lg">
+                                        <div className="text-base md:text-lg mb-1">
                                             <span className="text-purple-300 font-bold font-mono mr-2">14:30</span> 
                                             <span className="font-bold tracking-tight">KWALIFIKACJE</span>
                                         </div>
-                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2 mt-1">
+                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-3 mt-1 mb-3 leading-relaxed">
                                             📺 Eurosport 1 / Max (14:20)
                                         </div>
+                                        {/* Linki pobierane z contestSun (ID 11) -> quali */}
+                                        {contestSun && contestSun.upcomingData && (
+                                            <LiveButtons data={contestSun.upcomingData.quali} />
+                                        )}
                                     </div>
+                                    
                                     {/* Konkurs */}
                                     <div>
-                                        <div className="text-base md:text-lg">
+                                        <div className="text-base md:text-lg mb-1">
                                             <span className="text-purple-400 font-bold font-mono mr-2">16:00</span> 
                                             <span className="font-bold tracking-tight">KONKURS INDYWIDUALNY</span>
                                         </div>
-                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-2 mt-1">
+                                        <div className="text-slate-400 text-xs md:text-sm pl-0 border-l border-slate-700 ml-2 pl-3 mt-1 mb-3 leading-relaxed">
                                             📺 TVN (15:40)
                                         </div>
+                                        {/* Linki pobierane z contestSun (ID 11) -> comp */}
+                                        {contestSun && contestSun.upcomingData && (
+                                            <LiveButtons data={contestSun.upcomingData.comp} />
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -2229,7 +2273,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
 
                     <div className="animate-fade-in">
                             {/* --- DODAJ TĘ LINIJKĘ --- */}
-                            {activeTab === 'schedule' && <Schedule />}
+                            {activeTab === 'schedule' && <Schedule contests={contests} />}
                             
                             {activeTab === 'standings' && (
                                 <>
