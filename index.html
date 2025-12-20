@@ -348,6 +348,15 @@ const handleDownloadJpg = async (elementId, fileName) => {
 
 // --- LISTA AKTUALIZACJI ---
         const APP_UPDATES = [
+			{
+                date: "20.12.2025 18:30",
+                version: "v1.10",
+                desc: `*** ENGELBERG (Sobota): Dodano oficjalne wyniki konkursu indywidualnego oraz kwalifikacji (protokół).
+                *** KWALIFIKACJE: Zwycięstwo Felix Hoffmann. 5 Polaków z awansem do konkursu, brak awansu Pawła Wąska (51 miejsce).
+                *** WYNIKI KONKURSU: 5 trium z rzędu Triumf Domena Prevca (SLO).
+                *** POLACY: Kacper Tomasiak najlepszy z Polaków (13. miejsce). Wyniki pozostałych Polaków: Piotr Żyła (17.), Kamil Stoch (22.). Brak awansu Macieja Kota (36.) oraz Dawida Kubackiego (44.).
+                `
+            },
         {
                 date: "15.12.2025 00:00",
                 version: "v1.9",
@@ -2232,7 +2241,7 @@ const handleDownloadJpg = async (elementId, fileName) => {
                             <div className="text-right">
                                 <div className="inline-block bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700 backdrop-blur-md">
                                     <span className="text-xs text-slate-400 font-mono">
-                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">15.12 godzina 00:00</span>
+                                        Ostatnia aktualizacja: <span className="text-yellow-400 font-bold">20.12 godzina 18:30</span>
                                     </span>
                                 </div>
                             </div>
@@ -2335,3 +2344,4 @@ const handleDownloadJpg = async (elementId, fileName) => {
 </body>
 
 </html>
+
