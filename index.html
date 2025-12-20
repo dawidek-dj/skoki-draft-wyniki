@@ -1003,42 +1003,75 @@ const handleDownloadJpg = async (elementId, fileName) => {
             {
                 id: 10,
                 date: "20.12.2025",
-                location: "Engelberg (SUI) - HS 140 (K-125)",
+                location: "Engelberg (SUI) - HS 140",
                 hill: "HS 140",
-                jury: {},
-                upcomingData: {
-                    quali: {
-                        time: "15:45 (Pt)", 
-                        fis: "https://live.fis-ski.com/jp-3096/results-pda.htm",
-                        berkutschi: "https://live.berkutschi.com/skijumping/3096"
-                    },
-                    comp: {
-                        time: "16:00 (Sb)",
-                        fis: "https://live.fis-ski.com/jp-3098/results-pda.htm",
-                        berkutschi: "https://live.berkutschi.com/skijumping/3098"
-                    },
-                    broadcast: [
-                        { 
-                            day: "Piątek, 19.12.2025", 
-                            events: [
-                                "13:45 - Oficjalny trening",
-                                "15:15 - Kwalifikacje (Eurosport 1)",
-                                "15:35 - Kwalifikacje (Max)",
-                                "15:45 - START KWALIFIKACJI"
-                            ] 
-                        },
-                        { 
-                            day: "Sobota, 20.12.2025", 
-                            events: [
-                                "15:30 - Konkurs (Eurosport 1)",
-                                "15:35 - Konkurs (TVN)",
-                                "15:50 - Konkurs (Max)",
-                                "16:00 - START KONKURSU"
-                            ] 
-                        }
-                    ]
+                jury: {A: "GER", B: "EST", C: "AUT", D: "JPN", E: "SUI"},
+                links: {
+                    quali: { label: "Kwalifikacje", fis: "https://live.fis-ski.com/jp-3096/results-pda.htm", pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3096/2026JP3096RLQ.pdf" },
+                    comp: { label: "Konkurs", fis: "https://live.fis-ski.com/jp-3097/results-pda.htm", pdf: "https://medias1.fis-ski.com/pdf/2026/JP/3097/2026JP3097RL.pdf" }
                 },
-                results: []
+                results: [
+                    // TOP 30 (II SERIA)
+                    { rank: 1, bib: "50", country: "SLO", name: "Domen Prevc", points: 330.2, r1_dist: "141.0", r1_note: "56.0", r1_wind: "-1.5", r1_total: "161.7", r2_dist: "142.0", r2_note: "55.5", r2_wind: "-1.4", r2_total: "168.5", r1_rank: 3, r2_rank: 1, r1_comp: "22.9", r2_comp: "22.4" },
+                    { rank: 2, bib: "41", country: "GER", name: "Felix Hoffmann", points: 326.4, r1_dist: "142.0", r1_note: "56.0", r1_wind: "-1.4", r1_total: "168.5", r2_dist: "138.5", r2_note: "55.5", r2_wind: "-1.2", r2_total: "157.9", r1_rank: 1, r2_rank: 4, r1_comp: "22.4", r2_comp: "19.1" },
+                    { rank: 3, bib: "46", country: "JPN", name: "Ren Nikaido", points: 318.1, r1_dist: "138.0", r1_note: "55.5", r1_wind: "-1.4", r1_total: "161.5", r2_dist: "141.5", r2_note: "57.0", r2_wind: "-1.1", r2_total: "156.6", r1_rank: 4, r2_rank: 2, r1_comp: "22.6", r2_comp: "16.8" },
+                    { rank: 4, bib: "47", country: "GER", name: "Philipp Raimund", points: 315.0, r1_dist: "141.0", r1_note: "55.5", r1_wind: "-2.0", r1_total: "164.9", r2_dist: "129.5", r2_note: "55.0", r2_wind: "-1.1", r2_total: "150.1", r1_rank: 2, r2_rank: 26, r1_comp: "31.0", r2_comp: "17.7" },
+                    { rank: 5, bib: "25", country: "AUT", name: "Jonas Schuster", points: 314.9, r1_dist: "139.0", r1_note: "55.0", r1_wind: "-1.1", r1_total: "163.5", r2_dist: "138.0", r2_note: "55.5", r2_wind: "-1.6", r2_total: "151.4", r1_rank: 5, r2_rank: 6, r1_comp: "13.9", r2_comp: "24.4" },
+                    { rank: 6, bib: "49", country: "JPN", name: "Ryoyu Kobayashi", points: 314.1, r1_dist: "134.0", r1_note: "55.5", r1_wind: "-0.9", r1_total: "154.6", r2_dist: "138.0", r2_note: "56.5", r2_wind: "-1.5", r2_total: "159.5", r1_rank: 7, r2_rank: 3, r1_comp: "24.0", r2_comp: "23.8" },
+                    { rank: 7, bib: "22", country: "USA", name: "Jason Colby", points: 313.9, r1_dist: "138.0", r1_note: "54.5", r1_wind: "-1.5", r1_total: "157.1", r2_dist: "134.0", r2_note: "55.5", r2_wind: "-1.5", r2_total: "156.8", r1_rank: 6, r2_rank: 11, r1_comp: "23.8", r2_comp: "24.1" },
+                    { rank: 8, bib: "43", country: "AUT", name: "Jan Hoerl", points: 306.8, r1_dist: "135.0", r1_note: "54.0", r1_wind: "-1.2", r1_total: "157.9", r2_dist: "134.0", r2_note: "54.5", r2_wind: "-1.4", r2_total: "148.9", r1_rank: 8, r2_rank: 5, r1_comp: "19.3", r2_comp: "21.3" },
+                    { rank: 9, bib: "48", country: "SLO", name: "Anze Lanisek", points: 301.4, r1_dist: "134.0", r1_note: "55.5", r1_wind: "-1.3", r1_total: "152.1", r2_dist: "131.0", r2_note: "55.0", r2_wind: "-1.5", r2_total: "149.3", r1_rank: 9, r2_rank: 13, r1_comp: "20.4", r2_comp: "23.5" },
+                    { rank: 10, bib: "28", country: "NOR", name: "Johann Andre Forfang", points: 299.6, r1_dist: "131.5", r1_note: "54.0", r1_wind: "-1.1", r1_total: "148.0", r2_dist: "133.5", r2_note: "55.0", r2_wind: "-1.4", r2_total: "151.6", r1_rank: 15, r2_rank: 9, r1_comp: "17.2", r2_comp: "21.3" },
+                    { rank: 11, bib: "34", country: "SLO", name: "Timi Zajc", points: 298.0, r1_dist: "122.5", r1_note: "51.5", r1_wind: "-2.3", r1_total: "148.0", r2_dist: "134.0", r2_note: "54.5", r2_wind: "-1.2", r2_total: "150.0", r1_rank: 15, r2_rank: 12, r1_comp: "35.9", r2_comp: "19.3" },
+                    { rank: 12, bib: "39", country: "FRA", name: "Valentin Foubert", points: 296.6, r1_dist: "128.0", r1_note: "52.5", r1_wind: "-1.5", r1_total: "141.1", r2_dist: "134.0", r2_note: "55.0", r2_wind: "-1.6", r2_total: "155.5", r1_rank: 27, r2_rank: 5, r1_comp: "23.2", r2_comp: "24.3" },
+                    { rank: 13, bib: "35", country: "POL", name: "Kacper Tomasiak", points: 295.7, r1_dist: "125.0", r1_note: "52.0", r1_wind: "-1.8", r1_total: "145.0", r2_dist: "133.0", r2_note: "54.5", r2_wind: "-1.4", r2_total: "150.7", r1_rank: 22, r2_rank: 10, r1_comp: "27.9", r2_comp: "21.8" },
+                    { rank: 14, bib: "44", country: "AUT", name: "Stefan Kraft", points: 291.3, r1_dist: "134.0", r1_note: "55.5", r1_wind: "-1.1", r1_total: "149.1", r2_dist: "128.0", r2_note: "53.5", r2_wind: "-1.5", r2_total: "142.2", r1_rank: 13, r2_rank: 19, r1_comp: "17.4", r2_comp: "23.3" },
+                    { rank: 15, bib: "31", country: "GER", name: "Pius Paschke", points: 290.4, r1_dist: "123.0", r1_note: "51.0", r1_wind: "-2.0", r1_total: "143.2", r2_dist: "130.0", r2_note: "53.0", r2_wind: "-1.6", r2_total: "147.2", r1_rank: 25, r2_rank: 15, r1_comp: "30.7", r2_comp: "25.2" },
+                    { rank: 16, bib: "45", country: "AUT", name: "Daniel Tschofenig", points: 290.0, r1_dist: "134.0", r1_note: "54.5", r1_wind: "-1.2", r1_total: "149.3", r2_dist: "127.0", r2_note: "52.5", r2_wind: "-1.6", r2_total: "140.7", r1_rank: 12, r2_rank: 21, r1_comp: "18.6", r2_comp: "24.6" },
+                    { rank: 17, bib: "27", country: "POL", name: "Piotr Zyla", points: 287.3, r1_dist: "131.5", r1_note: "53.0", r1_wind: "-1.0", r1_total: "145.0", r2_dist: "126.5", r2_note: "52.5", r2_wind: "-1.7", r2_total: "142.3", r1_rank: 22, r2_rank: 18, r1_comp: "15.2", r2_comp: "27.1" },
+                    { rank: 18, bib: "24", country: "EST", name: "Artti Aigro", points: 287.1, r1_dist: "131.5", r1_note: "53.5", r1_wind: "-1.0", r1_total: "146.1", r2_dist: "129.5", r2_note: "52.5", r2_wind: "-1.3", r2_total: "141.0", r1_rank: 20, r2_rank: 20, r1_comp: "15.8", r2_comp: "20.4" },
+                    { rank: 19, bib: "32", country: "NOR", name: "Halvor Egner Granerud", points: 286.2, r1_dist: "123.5", r1_note: "51.5", r1_wind: "-2.2", r1_total: "147.6", r2_dist: "127.5", r2_note: "53.0", r2_wind: "-1.4", r2_total: "138.6", r1_rank: 17, r2_rank: 23, r1_comp: "33.7", r2_comp: "21.1" },
+                    { rank: 20, bib: "12", country: "SUI", name: "Simon Ammann", points: 285.1, r1_dist: "133.0", r1_note: "47.5", r1_wind: "-0.9", r1_total: "141.4", r2_dist: "133.0", r2_note: "51.0", r2_wind: "-1.2", r2_total: "143.7", r1_rank: 26, r2_rank: 16, r1_comp: "14.4", r2_comp: "18.3" },
+                    { rank: 21, bib: "19", country: "JPN", name: "Sakutaro Kobayashi", points: 284.3, r1_dist: "128.0", r1_note: "52.0", r1_wind: "-1.6", r1_total: "147.1", r2_dist: "127.5", r2_note: "52.5", r2_wind: "-1.3", r2_total: "137.2", r1_rank: 19, r2_rank: 24, r1_comp: "24.6", r2_comp: "20.2" },
+                    { rank: 22, bib: "29", country: "POL", name: "Kamil Stoch", points: 283.4, r1_dist: "126.5", r1_note: "52.5", r1_wind: "-1.5", r1_total: "143.5", r2_dist: "125.0", r2_note: "52.5", r2_wind: "-1.8", r2_total: "139.9", r1_rank: 24, r2_rank: 22, r1_comp: "23.2", r2_comp: "27.4" },
+                    { rank: 23, bib: "37", country: "NOR", name: "Kristoffer Eriksen Sundal", points: 282.6, r1_dist: "124.5", r1_note: "50.0", r1_wind: "-1.7", r1_total: "135.3", r2_dist: "132.5", r2_note: "52.5", r2_wind: "-1.4", r2_total: "147.3", r1_rank: 30, r2_rank: 14, r1_comp: "26.2", r2_comp: "21.3" },
+                    { rank: 23, bib: "21", country: "JPN", name: "Yukiya Sato", points: 282.6, r1_dist: "133.0", r1_note: "52.5", r1_wind: "-1.1", r1_total: "149.1", r2_dist: "124.0", r2_note: "51.0", r2_wind: "-1.6", r2_total: "133.5", r1_rank: 13, r2_rank: 27, r1_comp: "17.1", r2_comp: "24.3" },
+                    { rank: 25, bib: "1", country: "SUI", name: "Felix Trunz", points: 281.8, r1_dist: "132.5", r1_note: "53.5", r1_wind: "-1.2", r1_total: "146.1", r2_dist: "126.5", r2_note: "51.5", r2_wind: "-1.4", r2_total: "135.7", r1_rank: 20, r2_rank: 25, r1_comp: "19.1", r2_comp: "21.5" },
+                    { rank: 26, bib: "9", country: "SUI", name: "Sandro Hauswirth", points: 281.6, r1_dist: "136.5", r1_note: "54.5", r1_wind: "-0.8", r1_total: "147.3", r2_dist: "126.0", r2_note: "52.5", r2_wind: "-1.3", r2_total: "134.3", r1_rank: 18, r2_rank: 26, r1_comp: "12.1", r2_comp: "20.0" },
+                    { rank: 27, bib: "33", country: "NOR", name: "Marius Lindvik", points: 280.5, r1_dist: "121.0", r1_note: "51.0", r1_wind: "-1.8", r1_total: "137.6", r2_dist: "128.5", r2_note: "53.0", r2_wind: "-1.5", r2_total: "142.9", r1_rank: 28, r2_rank: 17, r1_comp: "28.7", r2_comp: "23.6" },
+                    { rank: 27, bib: "23", country: "JPN", name: "Tomofumi Naito", points: 280.5, r1_dist: "133.0", r1_note: "54.0", r1_wind: "-1.1", r1_total: "149.9", r2_dist: "122.0", r2_note: "48.0", r2_wind: "-1.8", r2_total: "130.6", r1_rank: 10, r2_rank: 29, r1_comp: "16.4", r2_comp: "28.0" },
+                    { rank: 29, bib: "5", country: "SUI", name: "Killian Peier", points: 269.0, r1_dist: "130.0", r1_note: "53.0", r1_wind: "-1.0", r1_total: "137.5", r2_dist: "124.0", r2_note: "52.0", r2_wind: "-1.4", r2_total: "131.5", r1_rank: 29, r2_rank: 28, r1_comp: "15.5", r2_comp: "21.3" },
+                    { rank: 30, bib: "26", country: "FIN", name: "Niko Kytosaho", points: 268.0, r1_dist: "133.0", r1_note: "52.5", r1_wind: "-1.1", r1_total: "149.4", r2_dist: "117.0", r2_note: "49.0", r2_wind: "-1.5", r2_total: "118.6", r1_rank: 11, r2_rank: 30, r1_comp: "17.4", r2_comp: "24.0" },
+                    
+                    // ODPADLI W 1. SERII (31-50)
+                    { rank: 31, bib: "30", country: "SUI", name: "Gregor Deschwanden", points: 135.0, r1_dist: "126.0", r1_note: "49.5", r1_wind: "-1.2", r1_total: "135.0", r1_rank: 31, r1_comp: "18.6" },
+                    { rank: 32, bib: "15", country: "USA", name: "Kevin Bickner", points: 134.3, r1_dist: "124.0", r1_note: "48.0", r1_wind: "-1.5", r1_total: "134.3", r1_rank: 32, r1_comp: "23.0" },
+                    { rank: 33, bib: "40", country: "BUL", name: "Vladimir Zografski", points: 134.1, r1_dist: "124.5", r1_note: "51.0", r1_wind: "-1.5", r1_total: "134.1", r1_rank: 33, r1_comp: "24.0" },
+                    { rank: 34, bib: "2", country: "SUI", name: "Yanick Wasser", points: 132.7, r1_dist: "127.5", r1_note: "51.0", r1_wind: "-1.1", r1_total: "132.7", r1_rank: 34, r1_comp: "17.2" },
+                    { rank: 35, bib: "36", country: "JPN", name: "Naoki Nakamura", points: 132.3, r1_dist: "118.0", r1_note: "50.0", r1_wind: "-1.9", r1_total: "132.3", r1_rank: 35, r1_comp: "29.8" },
+                    { rank: 36, bib: "17", country: "POL", name: "Maciej Kot", points: 131.6, r1_dist: "122.0", r1_note: "49.5", r1_wind: "-1.4", r1_total: "131.6", r1_rank: 36, r1_comp: "22.4" },
+                    { rank: 37, bib: "10", country: "USA", name: "Tate Frantz", points: 131.5, r1_dist: "126.5", r1_note: "51.5", r1_wind: "-0.8", r1_total: "131.5", r1_rank: 37, r1_comp: "12.2" },
+                    { rank: 38, bib: "6", country: "GER", name: "Ben Bayer", points: 131.2, r1_dist: "127.0", r1_note: "51.5", r1_wind: "-1.0", r1_total: "131.2", r1_rank: 38, r1_comp: "16.1" },
+                    { rank: 39, bib: "8", country: "CZE", name: "Roman Koudelka", points: 131.0, r1_dist: "128.0", r1_note: "52.0", r1_wind: "-0.9", r1_total: "131.0", r1_rank: 39, r1_comp: "13.6" },
+                    { rank: 40, bib: "18", country: "SLO", name: "Rok Oblak", points: 129.5, r1_dist: "121.5", r1_note: "50.5", r1_wind: "-1.3", r1_total: "129.5", r1_rank: 40, r1_comp: "20.2" },
+                    { rank: 41, bib: "11", country: "USA", name: "Andrew Urlaub", points: 129.3, r1_dist: "124.0", r1_note: "48.5", r1_wind: "-1.1", r1_total: "129.3", r1_rank: 41, r1_comp: "17.5" },
+                    { rank: 42, bib: "16", country: "KAZ", name: "Danil Vassilyev", points: 128.9, r1_dist: "123.0", r1_note: "47.0", r1_wind: "-1.3", r1_total: "128.9", r1_rank: 42, r1_comp: "20.4" },
+                    { rank: 43, bib: "4", country: "FIN", name: "Vilho Palosaari", points: 125.3, r1_dist: "124.5", r1_note: "49.0", r1_wind: "-1.1", r1_total: "125.3", r1_rank: 43, r1_comp: "17.2" },
+                    { rank: 44, bib: "20", country: "POL", name: "Dawid Kubacki", points: 122.9, r1_dist: "118.5", r1_note: "49.5", r1_wind: "-1.3", r1_total: "122.9", r1_rank: 44, r1_comp: "20.0" },
+                    { rank: 45, bib: "14", country: "ITA", name: "Giovanni Bresadola", points: 122.5, r1_dist: "118.5", r1_note: "48.0", r1_wind: "-1.4", r1_total: "122.5", r1_rank: 45, r1_comp: "21.1" },
+                    { rank: 46, bib: "42", country: "AUT", name: "Stephan Embacher", points: 122.0, r1_dist: "134.0", r1_note: "30.5", r1_wind: "-1.0", r1_total: "122.0", r1_rank: 46, r1_comp: "15.3" },
+                    { rank: 47, bib: "38", country: "AUT", name: "Manuel Fettner", points: 113.9, r1_dist: "116.5", r1_note: "44.0", r1_wind: "-1.6", r1_total: "113.9", r1_rank: 47, r1_comp: "25.2" },
+                    { rank: 48, bib: "7", country: "FRA", name: "Enzo Milesi", points: 111.5, r1_dist: "117.5", r1_note: "49.5", r1_wind: "-1.0", r1_total: "111.5", r1_rank: 48, r1_comp: "15.5" },
+                    
+                    // DSQ w Konkursie
+                    { rank: "DSQ", bib: "13", country: "ITA", name: "Alex Insam", points: 0, r1_dist: "DSQ", r1_total: "0", r1_note: "-" },
+                    { rank: "DSQ", bib: "3", country: "CAN", name: "Mackenzie Boyd-Clowes", points: 0, r1_dist: "DSQ", r1_total: "0", r1_note: "-" }
+                ],
+                // NQ z Kwalifikacji (miejsca 51-63)
+                nq: ["Pawel Wasek", "Isak Andreas Langmo", "Lovro Kos", "Luca Roth", "David Rygl", "Erik Belshaw", "Juri Kesseli", "Remo Imhof", "Hektor Kapustik", "Jules Chervet", "Svyatoslav Nazarenko", "Song Qiwu", "Heung Chul Choi"],
+                // DSQ w Kwalifikacjach
+                dsq_nq: ["Antti Aalto", "Ilya Mizernykh", "Yixin Lyu", "Daniel Andrei Cacina", "Mihnea Alexandru Spulber"],
+                dns_nq: []
             },
             {
                 id: 11,
@@ -2300,4 +2333,5 @@ const handleDownloadJpg = async (elementId, fileName) => {
         root.render(<App />);
     </script>
 </body>
+
 </html>
